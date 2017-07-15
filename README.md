@@ -12,6 +12,8 @@ Developed using CCS 7.2 and HALCoGen 04.06.01.
 TM4C_RTC_trim_overflow
 ======================
 
+For https://e2e.ti.com/support/microcontrollers/tiva_arm/f/908/t/610515
+
 Developed using CCS 7.2 and TivaWare 2.1.4.178.
 
 

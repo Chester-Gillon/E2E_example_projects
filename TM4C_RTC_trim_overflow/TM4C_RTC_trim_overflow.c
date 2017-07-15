@@ -506,14 +506,14 @@ int main(void)
 
     UARTprintf ("5) Test match for sub-seconds of 0x7FFC, along with a trim value of 0x8002.\n");
     UARTprintf ("The trim value causes the sub-seconds to go backwards, such that only match interrupt occurs.\n");
-    UARTprintf ("Since a RTC trim is applied two discontinuities are reported.\n");
+    UARTprintf ("Since a RTC trim is applied which causes the time to go backwards two discontinuities are reported.\n");
     HibernateRTCTrimSet (0x8002);
     test_rtc_match_near_trim_update (0x7FFC, workaround_HIB02_errata, false);
 
     UARTprintf ("6) Test match for sub-seconds of 0x7FFD, along with a trim value of 0x8002.\n");
     UARTprintf ("The trim value causes the sub-seconds to go backwards, such that according to the datasheet the\n");
     UARTprintf ("the match interrupt should occur twice. However, only one match interrupt occurs.\n");
-    UARTprintf ("Since a RTC trim is applied two discontinuities are reported.\n");
+    UARTprintf ("Since a RTC trim is applied which causes the time to go backwards two discontinuities are reported.\n");
     HibernateRTCTrimSet (0x8002);
     test_rtc_match_near_trim_update (0x7FFD, workaround_HIB02_errata, false);
 
@@ -525,13 +525,13 @@ int main(void)
 
     UARTprintf ("8) Test match for sub-seconds of 0x2, along with a trim value of 0x7FFC.\n");
     UARTprintf ("The trim value causes the sub-seconds to advance, such that no RTC match interrupt occurs.\n");
-    UARTprintf ("Since a RTC trim is applied two discontinuities are reported.\n");
+    UARTprintf ("Since a RTC trim is applied which makes the time go forwards one discontinuity is reported.\n");
     HibernateRTCTrimSet (0x7FFC);
     test_rtc_match_near_trim_update (0x2, workaround_HIB02_errata, false);
 
     UARTprintf ("9) Test match for sub-seconds of 0x3, along with a trim value of 0x7FFC.\n");
     UARTprintf ("The trim value causes the sub-seconds to advance, such that a RTC match interrupt is seen.\n");
-    UARTprintf ("Since a RTC trim is applied two discontinuities are reported.\n");
+    UARTprintf ("Since a RTC trim is applied which makes the time go forwards one discontinuity is reported.\n");
     HibernateRTCTrimSet (0x7FFC);
     test_rtc_match_near_trim_update (0x3, workaround_HIB02_errata, false);
 

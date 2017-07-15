@@ -1,0 +1,76 @@
+
+Running on Device Class=0xa Major Revision=0x0 Minor Revision=0x2
+DID0=0x100a0002 DID1=0x102dc06e
+
+Starting RTC time rollover tests
+================================
+
+Tests 1 to 3 not applicable for TM4C129 class, as errata HIB#01 and HIB#02 not present.
+
+4) Test match for sub-seconds of zero with the default RTC trim
+This will result in one interrupt and no discontinuities.
+Tested RTC with HIBRTCM0=0x2c1 HIBRTCSS=0x0 HIBRTCT=0x7fff
+HIB#02 workaround : Yes  Reset RTC time on first match interrupt : No
+Num RTC match interrupts=1
+   RTC match interrupt around times (0x2c0,0x7ffc) (0x2c0,0x7ffd) (0x2c0,0x7ffe) (0x2c0,0x7fff) (0x2c1,0x0) *interrupt* (0x2c1,0x1)
+Num RTC time discontinuities=0
+
+5) Test match for sub-seconds of 0x7FFC, along with a trim value of 0x8002.
+The trim value causes the sub-seconds to go backwards, such that only match interrupt occurs.
+Since a RTC trim is applied which causes the time to go backwards two discontinuities are reported.
+Tested RTC with HIBRTCM0=0x2c1 HIBRTCSS=0x7ffc HIBRTCT=0x8002
+HIB#02 workaround : No  Reset RTC time on first match interrupt : No
+Num RTC match interrupts=1
+   RTC match interrupt around times (0x2c1,0x7ff8) (0x2c1,0x7ff9) (0x2c1,0x7ffa) (0x2c1,0x7ffb) (0x2c1,0x7ffc) *interrupt* (0x2c1,0x7ffd)
+Num RTC time discontinuities=2
+   RTC time discontinuity (0x2c0,0x7fff) -> (0x2c1,0x7ffd)
+   RTC time discontinuity (0x2c1,0x7fff) -> (0x2c1,0x0)
+
+6) Test match for sub-seconds of 0x7FFD, along with a trim value of 0x8002.
+The trim value causes the sub-seconds to go backwards, such that according to the datasheet the
+the match interrupt should occur twice. However, only one match interrupt occurs.
+Since a RTC trim is applied which causes the time to go backwards two discontinuities are reported.
+Tested RTC with HIBRTCM0=0x2c1 HIBRTCSS=0x7ffd HIBRTCT=0x8002
+HIB#02 workaround : No  Reset RTC time on first match interrupt : No
+Num RTC match interrupts=1
+   RTC match interrupt around times (0x2c1,0x7ff9) (0x2c1,0x7ffa) (0x2c1,0x7ffb) (0x2c1,0x7ffc) (0x2c1,0x7ffd) *interrupt* (0x2c1,0x7ffe)
+Num RTC time discontinuities=2
+   RTC time discontinuity (0x2c0,0x7fff) -> (0x2c1,0x7ffd)
+   RTC time discontinuity (0x2c1,0x7fff) -> (0x2c1,0x0)
+
+7) Same match value and RTC trim as previous test, but the RTC is reset to the initial value
+RTC match interrupt occurs, which leads to a total of two match interrupts.
+This shows the test function can report more than one RTC match interrupt per call.
+Tested RTC with HIBRTCM0=0x2c1 HIBRTCSS=0x7ffd HIBRTCT=0x8002
+HIB#02 workaround : No  Reset RTC time on first match interrupt : Yes
+Num RTC match interrupts=2
+   RTC match interrupt around times (0x2c1,0x7ff9) (0x2c1,0x7ffa) (0x2c1,0x7ffb) (0x2c1,0x7ffc) (0x2c1,0x7ffd) *interrupt* (0x2c0,0x0)
+   RTC match interrupt around times (0x2c1,0x7ff9) (0x2c1,0x7ffa) (0x2c1,0x7ffb) (0x2c1,0x7ffc) (0x2c1,0x7ffd) *interrupt* (0x2c1,0x7ffe)
+Num RTC time discontinuities=5
+   RTC time discontinuity (0x2c0,0x7fff) -> (0x2c1,0x7ffd)
+   RTC time discontinuity (0x2c1,0x7fff) -> (0x2c1,0x0)
+   RTC time discontinuity (0x2c1,0x7ffd) -> (0x2c0,0x0)
+   RTC time discontinuity (0x2c0,0x7fff) -> (0x2c1,0x7ffd)
+   RTC time discontinuity (0x2c1,0x7fff) -> (0x2c1,0x0)
+
+8) Test match for sub-seconds of 0x2, along with a trim value of 0x7FFC.
+The trim value causes the sub-seconds to advance, such that no RTC match interrupt occurs.
+Since a RTC trim is applied which makes the time go forwards one discontinuity is reported.
+Tested RTC with HIBRTCM0=0x2c1 HIBRTCSS=0x2 HIBRTCT=0x7ffc
+HIB#02 workaround : No  Reset RTC time on first match interrupt : No
+Num RTC match interrupts=0
+Num RTC time discontinuities=1
+   RTC time discontinuity (0x2c0,0x7fff) -> (0x2c1,0x3)
+
+9) Test match for sub-seconds of 0x3, along with a trim value of 0x7FFC.
+The trim value causes the sub-seconds to advance, such that a RTC match interrupt is seen.
+Since a RTC trim is applied which makes the time go forwards one discontinuity is reported.
+Tested RTC with HIBRTCM0=0x2c1 HIBRTCSS=0x3 HIBRTCT=0x7ffc
+HIB#02 workaround : No  Reset RTC time on first match interrupt : No
+Num RTC match interrupts=1
+   RTC match interrupt around times (0x2c0,0x7ffc) (0x2c0,0x7ffd) (0x2c0,0x7ffe) (0x2c0,0x7fff) (0x2c1,0x3) *interrupt* (0x2c1,0x4)
+Num RTC time discontinuities=1
+   RTC time discontinuity (0x2c0,0x7fff) -> (0x2c1,0x3)
+
+Tests complete
+
