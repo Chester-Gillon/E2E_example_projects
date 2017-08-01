@@ -37,3 +37,9 @@ which in theory is performing 26.8 Mbytes/sec read and 26.8 Mbytes/sec write.
 
 The device in the target confguration has been set to TCI6638K2K due to the 66AK2H12 device file not containing
 all required entries for tracing (https://e2e.ti.com/support/development_tools/code_composer_studio/f/81/t/511744)
+
+
+66AK2H14_A15_system_trace_TCI6638K2K_device_file
+================================================
+
+As per 66AK2H14_C66_system_trace_TCI6638K2K_device_file, but run on the A15_0 core.
