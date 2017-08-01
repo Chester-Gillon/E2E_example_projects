@@ -43,3 +43,20 @@ all required entries for tracing (https://e2e.ti.com/support/development_tools/c
 ================================================
 
 As per 66AK2H14_C66_system_trace_TCI6638K2K_device_file, but run on the A15_0 core.
+
+
+66AK2H14_SMPExample1_CortexA15
+==============================
+
+For https://e2e.ti.com/support/development_tools/code_composer_studio/f/81/t/609173
+
+Developed using CCS 7.2, SYS/BIOS 6.46.4.53 and XDCtools 3.30.3.47
+
+Version of SYS/BIOS SMP example project 1 from http://processors.wiki.ti.com/index.php/SMP/BIOS#Example_CCS_Projects
+which has been changed to run on the 4 Cortex-A15 cores of a 66AK2H14.
+
+For testing the EVMK2H was set to "DSP no boot mode" and the ..\..\emulation\boards\xtcievmk2x\gel\xtcievmk2x_arm.gel script
+used to configure the hardware.
+
+The device in the target confguration has been set to TCI6638K2K due to the 66AK2H12 device file not containing
+all required entries for tracing (https://e2e.ti.com/support/development_tools/code_composer_studio/f/81/t/511744)
