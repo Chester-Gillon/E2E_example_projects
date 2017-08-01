@@ -21,6 +21,8 @@ Developed using CCS 7.2 and TivaWare 2.1.4.178.
 66AK2H14_C66_system_trace_TCI6638K2K_device_file
 ================================================
 
+For https://e2e.ti.com/support/development_tools/code_composer_studio/f/81/t/614498
+
 Developed using CCS 7.2
 
 This is a program for running on the C66xx_0 core on a 66AK2H14 on an EVMK2H which repeatidly
