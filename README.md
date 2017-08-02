@@ -60,3 +60,11 @@ used to configure the hardware.
 
 The device in the target confguration has been set to TCI6638K2K due to the 66AK2H12 device file not containing
 all required entries for tracing (https://e2e.ti.com/support/development_tools/code_composer_studio/f/81/t/511744)
+
+
+MSP430FG4618_trig_stack_size
+============================
+
+For https://e2e.ti.com/support/development_tools/compiler/f/343/p/614929/2265167#2265167
+
+Developed using CCS 7.2
