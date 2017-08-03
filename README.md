@@ -68,3 +68,18 @@ MSP430FG4618_trig_stack_size
 For https://e2e.ti.com/support/development_tools/compiler/f/343/p/614929/2265167#2265167
 
 Developed using CCS 7.2
+
+
+MSP430G2553_tiny_printf and MSP430G2553_tiny_printf_HOSTwrite
+=============================================================
+
+For https://e2e.ti.com/support/development_tools/code_composer_studio/f/81/t/564568
+
+Developed using CCS 7
+
+Primary aim was to get a miniminal printf() which used CIO to fit into the memory of a MSP430G2553,
+since the overhead of trying to link the run time library exceeded the device memory.
+
+Secondary aim was to have a post-build rule which runs the cg_xml call_graph utility.
+
+The CG_XML_ROOT build variable is used to set the cg_xml installation directory.

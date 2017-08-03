@@ -1,0 +1,41 @@
+# _c_int00_noargs is reported as calling _auto_init, but the linker has changed to actually call _auto_init_hold_wdt instead
+# Therefore, fake an indirect call from _c_int00_noargs to _auto_init_hold_wdt to prevent _auto_init_hold_wdt from being
+# reported as orphaned.
+# call_graph will still report the non-existant _init_init as being called.
+# Ideally would be able to specify that _auto_init_hold_wdt is an alias of _auto_init, but call_graph doesn't allow
+# function aliases to be specified in the re-direct files.
+_c_int00_noargs : _auto_init_hold_wdt
+_c_int00_noargs_noexit : _auto_init_hold_wdt
+
+# The table de-compression handler functions called during run time initialisation
+# (__TI_decompress_none doesn't actually get called for this program, but included since in the __TI_handler_table)
+_auto_init_hold_wdt : __TI_decompress_lzss __TI_zero_init __TI_decompress_none
+
+# While copy_in makes indirect calls, it is not actually called in this example
+copy_in :
+
+# Hooks installed by the run time library
+exit :  __TI_cleanup
+
+# Allows for __TI_closefile performing a lock when closing a temporary file
+__TI_closefile : __nop
+
+# Allows for file lock
+setvbuf : __nop
+
+# While fseek makes indirect calls, it is not actually called in this example
+fseek : 
+
+# Allows for lock
+fputc : __nop
+
+# The following orphan functions are reported, but they are not called in this example
+# - HOSTopen
+# - HOSTread
+# - HOSTrename
+# - __mspabi_func_epilog
+# - __mspabi_mpyi_hw
+# - __mspabi_slli
+# - __mspabi_slll_15
+# - __mspabi_sral_15
+# - __mspabi_srli
