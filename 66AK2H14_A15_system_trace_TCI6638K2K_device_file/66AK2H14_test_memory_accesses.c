@@ -13,12 +13,13 @@ int main (void)
 
     for (;;)
     {
-        start_time = time (NULL);
+        start_time = clock ();
         for (index = 0; index < BUFFER_SIZE_WORDS; index++)
         {
             buffer[index]++;
         }
-        stop_time = time (NULL);
-        printf ("Updated %u bytes of memory in %lu seconds\n", BUFFER_SIZE_WORDS * sizeof (uint32_t), stop_time - start_time);
+        stop_time = clock ();
+        printf ("Updated %u bytes of memory in %.2f seconds\n", BUFFER_SIZE_WORDS * sizeof (uint32_t),
+                (double) (stop_time - start_time) / (double) CLOCKS_PER_SEC);
     }
 }
