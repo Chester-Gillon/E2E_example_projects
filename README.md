@@ -62,6 +62,46 @@ The device in the target confguration has been set to TCI6638K2K due to the 66AK
 all required entries for tracing (https://e2e.ti.com/support/development_tools/code_composer_studio/f/81/t/511744)
 
 
+
+66AK2H14_SMP_dhrystone_CortexA15
+================================
+
+For https://e2e.ti.com/support/development_tools/code_composer_studio/f/81/t/609173
+
+Created from the source files in ti-processor-sdk-rtos-am335x-evm-03.00.00.04\processor_sdk_rtos_am335x_3_00_00_04\demos\posix-smp
+and set to run on four Cortex-A15 cores of a 66AK2H14.
+This version uses SemiHosting to report the results, which avoids the need for board specific code to enable the UART.
+
+For testing the EVMK2H was set to "DSP no boot mode" and the ..\..\emulation\boards\xtcievmk2x\gel\xtcievmk2x_arm.gel script
+used to configure the hardware.
+
+The device in the target confguration has been set to TCI6638K2K due to the 66AK2H12 device file not containing
+all required entries for tracing (https://e2e.ti.com/support/development_tools/code_composer_studio/f/81/t/511744)
+
+The time64 clock frequency set in the app.cfg assumes the GEL script has set the SYSCLK1 PLL to 983.04 MHz;
+if the SYSCLK1 PLL frequency is different the timing results will be incorrect.
+
+Sample results when the Cortex-A15's are running at 1 GHz CPU frequency:
+[CortexA15_0] Starting BIOS...
+Dhrystone Benchmark, Version 2.1+Thread (Language: C)
+Stage 1: find good iteration count without threads
+Attempting 100000 iterations
+Attempting 200000 iterations
+Attempting 400000 iterations
+dhrystones 5695045, dmips=3066
+Stage 2: find best number of threads
+400000 iterations * 1 threads
+[CortexA15_3] dhrystones 5813669, dmips=3130
+400000 iterations * 2 threads
+dhrystones 11124516, dmips=5990
+400000 iterations * 4 threads
+[CortexA15_2] dhrystones 22236792, dmips=11974
+400000 iterations * 8 threads
+[CortexA15_0] dhrystones 22483510, dmips=12107
+dhrystone benchmark complete
+
+
+
 MSP430FG4618_trig_stack_size
 ============================
 
