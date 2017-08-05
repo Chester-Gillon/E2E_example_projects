@@ -131,3 +131,11 @@ TM4C129_integer_divide_by_zero
 For https://e2e.ti.com/support/development_tools/compiler/f/343/t/615449
 
 Developed using CCS 7.2
+
+
+TM4C129_selftest
+================
+
+For https://e2e.ti.com/support/development_tools/compiler/f/343/t/590562
+
+Developed using CCS 7.1
