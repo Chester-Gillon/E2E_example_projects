@@ -176,3 +176,11 @@ or flash, assuming the error allows the program to run for long enough to report
 The program should be able to be run on any TM4C129 series device with 256 Kbytes of SRAM and 1 Mbyte of flash.
 The PROGRESS_LED_PERIPHERAL, PROGRESS_LED_PORT and PROGRESS_LED_PIN macros in the TM4C129_self_test.c need
 to changed to select which GPIO pin is toggled to indicate the test is still running.
+
+
+TM4C129_CPP_calls_returning_pointer
+===================================
+
+A failed attempt to re-create the compiler problem reported in https://e2e.ti.com/support/development_tools/compiler/f/343/t/615255
+
+Developed using CCS 7.2 and TI ARM compiler v5.2.6
