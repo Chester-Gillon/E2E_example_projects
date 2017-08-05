@@ -182,7 +182,7 @@ static void verify_crc_table (const CRC_TABLE *const table)
 /**
  * @brief Verify the constant data in flash contains the expected pseudo-random sequence
  */
-static void verify_flash_contant_data (void)
+static void verify_flash_constant_data (void)
 {
     uint32_t seed = FLASH_DATA_INITIAL_SEED;
     uint32_t word_index;
@@ -230,7 +230,7 @@ int main(void)
         verify_crc_table (&intvecs_crc_table);
         verify_crc_table (&text_crc_table);
         verify_crc_table (&const_crc_table);
-        verify_flash_contant_data ();
+        verify_flash_constant_data ();
         verify_ram_test_pattern ();
         num_test_iterations++;
 

@@ -136,6 +136,43 @@ Developed using CCS 7.2
 TM4C129_selftest
 ================
 
-For https://e2e.ti.com/support/development_tools/compiler/f/343/t/590562
+For https://e2e.ti.com/support/development_tools/compiler/f/343/t/590562 and
+https://e2e.ti.com/support/development_tools/code_composer_studio/f/81/p/589919/2169517
 
 Developed using CCS 7.1
+
+This was created as self-test program for a TM4C129 device.
+When created also found a problem where the TI ARM v16.9.2.LTS compiler at optimization level 2 unexpectedly
+eliminated function where only side-effect is use of the RTS assert macro.
+
+The compiler bug was fixed in the TI ARM v16.9.4.LTS compiler, and the project has been changed to use
+the later fixed compiler.
+
+The program sets the clock frequency to the maximum of 120 MHz and then repeatedly performs tests on the flash and SRAM by:
+
+a) Writing a test pattern to 90% of SRAM, which changes for every iteration.
+
+b) Verifying the contents of flash by using a CRC inserted by the linker,
+where the CRC hardware module is used to calculate the actual CRC which is compared
+against the expected CRC created by the linker.
+
+c) Checking a test pattern in 90% of flash.
+
+d) Checking the test pattern which was written to SRAM.
+
+The only external hardware resource required is one GPIO which is toggled at 1Hz to indicate the program is still running;
+the internal 16 MHz PIOSC is used for the clock source to avoid the need for an external crystal.
+Every minute the total number of test iterations to far is reported to the CCS CIO console,
+as another way of checking the program is still running.
+The program is a bare-metal example using TivaWare, and there are therefore no tasks or interrupts.
+
+A test failure will be reported by either:
+
+- The LED stops flashing if the program encounters a hard fault.
+
+- An error message in the CCS CIO console if the program is aborted after detecting an error in the test patterns in SRAM
+or flash, assuming the error allows the program to run for long enough to report the error as opposed to getting a hard fault.
+
+The program should be able to be run on any TM4C129 series device with 256 Kbytes of SRAM and 1 Mbyte of flash.
+The PROGRESS_LED_PERIPHERAL, PROGRESS_LED_PORT and PROGRESS_LED_PIN macros in the TM4C129_self_test.c need
+to changed to select which GPIO pin is toggled to indicate the test is still running.
