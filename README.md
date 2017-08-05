@@ -184,3 +184,14 @@ TM4C129_CPP_calls_returning_pointer
 A failed attempt to re-create the compiler problem reported in https://e2e.ti.com/support/development_tools/compiler/f/343/t/615255
 
 Developed using CCS 7.2 and TI ARM compiler v5.2.6
+
+
+AM3352_gcc_hello_segger_jlink_linux_failure
+===========================================
+
+For https://e2e.ti.com/support/development_tools/code_composer_studio/f/81/t/610504
+
+Developed with CCS 7.2
+
+Simple example which shows Segger J-Link under Linux causing CCS to crash when start a debug session.
+
