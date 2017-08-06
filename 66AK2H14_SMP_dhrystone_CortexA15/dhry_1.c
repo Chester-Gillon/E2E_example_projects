@@ -63,7 +63,7 @@
 #include <xdc/runtime/Types.h>
 
 #include <ti/sysbios/posix/pthread.h>
-//@todo #include "ti/board/board.h"
+#include "ti/board/board.h"
 #else
 #include <pthread.h>
 #include <sys/time.h>
@@ -98,9 +98,6 @@ uint64_t read_time()
 
     return result;
 }
-
-#include <time.h>
-
 #endif
 #endif
 
@@ -147,7 +144,6 @@ int DHRY_printf(const char *format, ...)
     }
 #else
     retval = System_vprintf(format, args);
-    System_flush ();
 #endif
 #else
     retval = vprintf(format, args);
@@ -156,38 +152,6 @@ int DHRY_printf(const char *format, ...)
     
     va_end(args);
     return retval;
-}
-
-/**
- * @details Use the timestamp source to perform a busy-delay for a number of seconds, and report the
- *          delay as measured by the host as a way of sanity check the timestamp frequency accuracy.
- *          The host timestamp has only second resolution and is slow to read.
- */
-static void sanity_check_clock (void)
-{
-    clock_t host_start_time;
-    clock_t host_stop_time;
-    const uint32_t delay_seconds = 120;
-    uint32_t iteration;
-    Types_FreqHz timer_freq; /* Timestamp frequency */
-
-    Timestamp_getFreq (&timer_freq);
-    host_start_time = clock ();
-    for (iteration = 0; iteration < delay_seconds; iteration++)
-    {
-        uint32_t delay_start_time_ls;
-        uint32_t now;
-
-        delay_start_time_ls = (uint32_t) read_time ();
-        do
-        {
-            now = (uint32_t) read_time ();
-        } while ((now - delay_start_time_ls) < timer_freq.lo);
-    }
-    host_stop_time = clock ();
-
-    DHRY_printf ("Target delay of %u seconds took %f seconds as measured by host (timer_freq=%u Hz)\n",
-                 delay_seconds, (double) (host_stop_time - host_start_time) / (double) CLOCKS_PER_SEC, timer_freq.lo);
 }
 
 /* end of variables for time measurement */
@@ -220,10 +184,8 @@ void *dhryThread (void *arg)
 long            Begin_Time,
                 End_Time,
                 User_Time;
-#ifdef TIME
-float           Microseconds;
-#endif
-float           Dhrystones_Per_Second = -1;
+float           Microseconds,
+                Dhrystones_Per_Second = -1;
   dhryInstance_t inst;
   int error = 0;
   int err;
@@ -774,7 +736,6 @@ void *dhryMainThread(void *arg)
   float result, prevResult = 1;
   threadData_t threadData[MAX_THREADS];
 
-  //sanity_check_clock ();
   DHRY_printf ("Dhrystone Benchmark, Version 2.1+Thread (Language: C)\n");
 
   DHRY_printf ("Stage 1: find good iteration count without threads\n");
@@ -813,12 +774,13 @@ int main(int argc, char *argv[])
     pthread_t threadId;
 
 #ifdef BIOS_POSIX
-    //@todo Board_initCfg boardCfg;
-    //@todo boardCfg = BOARD_INIT_UNLOCK_MMR
+    Board_STATUS boardStatus;
+    Board_initCfg boardCfg;
+    boardCfg = BOARD_INIT_UNLOCK_MMR
 #ifndef IO_CONSOLE
                | BOARD_INIT_UART_STDIO
                | BOARD_INIT_MODULE_CLOCK
-#if !defined(DEVICE_K2E) && !defined(SOC_K2E)
+#if !defined(k2e) && !defined(C6678)
                | BOARD_INIT_PINMUX_CONFIG
 #endif
 #endif
@@ -826,7 +788,11 @@ int main(int argc, char *argv[])
 #ifdef DEVICE_KEYSTONE
     BOARD_initPerfCounters();
 #endif
-    //@todo Board_init(boardCfg);
+    boardStatus = Board_init(boardCfg);
+    if (boardStatus < 0) {
+        /*NOTE: DHRY_printf may not work, so just exit */
+        exit(1);
+    }
     if ((err = thread_create(dhryMainThread, NULL, &threadId)))
     {
        DHRY_printf("thread_create failed: %d\n", err);
