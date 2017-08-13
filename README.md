@@ -109,6 +109,23 @@ dhrystones 21319712, dmips=11480
 dhrystone benchmark complete
 
 
+AM5728_SMP_dhrystone_CortexA15
+==============================
+
+For https://e2e.ti.com/support/development_tools/code_composer_studio/f/81/t/609173
+
+Developed using CCS 7.2 and ti-processor-sdk-rtos-am57xx-evm-04.00.00.04
+
+From ti-processor-sdk-rtos-am57xx-evm-04.00.00.04 used:
+- SYS/BIOS 6.46.5.55
+- am57xx PDK 1.0.7
+- XDCtools 3.32.1.22
+
+A version of 66AK2H14_SMP_dhrystone_CortexA15, but for running on a dual-core Cortex-A15 in a Beagleboard-X15
+
+For testing halt U-boot and GEL scripts are used to configure the target.
+This version uses SemiHosting at read the host time as a sanity check of the clock frequency.
+
 
 MSP430FG4618_trig_stack_size
 ============================
