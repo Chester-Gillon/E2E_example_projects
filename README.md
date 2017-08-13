@@ -124,7 +124,34 @@ From ti-processor-sdk-rtos-am57xx-evm-04.00.00.04 used:
 A version of 66AK2H14_SMP_dhrystone_CortexA15, but for running on a dual-core Cortex-A15 in a Beagleboard-X15
 
 For testing halt U-boot and GEL scripts are used to configure the target.
-This version uses SemiHosting at read the host time as a sanity check of the clock frequency.
+This version uses the UART to report the results, and doesn't use SemiHosting.
+This avoids any SemiHosting breakpoints occurring when running the program.
+
+Sample results when the Cortex-A15's are running at 1 GHz CPU frequency:
+Dhrystone Benchmark, Version 2.1+Thread (Language: C)
+Stage 1: find good iteration count without threads
+Attempting 100000 iterations
+Attempting 200000 iterations
+Attempting 400000 iterations
+Attempting 800000 iterations
+Attempting 1600000 iterations
+Attempting 3200000 iterations
+Attempting 6400000 iterations
+Attempting 12800000 iterations
+dhrystones 5797101, dmips=3121
+Stage 2: find best number of threads
+12800000 iterations * 1 threads
+dhrystones 5678793, dmips=3058
+12800000 iterations * 2 threads
+dhrystones 11111112, dmips=5983
+12800000 iterations * 4 threads
+dhrystones 11108700, dmips=5982
+dhrystone benchmark complete
+
+Note that while the reported dmips for a single Cortex-A15 core is similar to that for the 66AK2H14 also
+with a 1 GHz CPU frequency the number of iterations is ~3.5 larger. That suggests there is an issue in one
+of the programs with the CPU and/or timer frequencies actually in use.
+
 
 
 MSP430FG4618_trig_stack_size

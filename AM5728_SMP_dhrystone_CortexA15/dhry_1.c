@@ -154,39 +154,6 @@ int DHRY_printf(const char *format, ...)
     return retval;
 }
 
-/**
- * @details Use the timestamp source to perform a busy-delay for a number of seconds, and report the
- *          delay as measured by the host as a way of sanity check the timestamp frequency accuracy.
- *          The host timestamp has only second resolution and is slow to read.
- */
-static void sanity_check_clock (void)
-{
-    clock_t host_start_time;
-    clock_t host_stop_time;
-    const uint32_t delay_seconds = 120;
-    uint32_t iteration;
-    Types_FreqHz timer_freq; /* Timestamp frequency */
-
-    Timestamp_getFreq (&timer_freq);
-    host_start_time = clock ();
-    for (iteration = 0; iteration < delay_seconds; iteration++)
-    {
-        uint32_t delay_start_time_ls;
-        uint32_t now;
-
-        delay_start_time_ls = (uint32_t) read_time ();
-        do
-        {
-            now = (uint32_t) read_time ();
-        } while ((now - delay_start_time_ls) < timer_freq.lo);
-    }
-    host_stop_time = clock ();
-
-    DHRY_printf ("Target delay of %u seconds took %f seconds as measured by host",
-                 delay_seconds, (double) (host_stop_time - host_start_time) / (double) CLOCKS_PER_SEC);
-    DHRY_printf (" (timer_freq=%u Hz)\n", timer_freq.lo);
-}
-
 /* end of variables for time measurement */
 void check (const char *str, int err)
 {
@@ -769,7 +736,6 @@ void *dhryMainThread(void *arg)
   float result, prevResult = 1;
   threadData_t threadData[MAX_THREADS];
 
-  sanity_check_clock ();
   DHRY_printf ("Dhrystone Benchmark, Version 2.1+Thread (Language: C)\n");
 
   DHRY_printf ("Stage 1: find good iteration count without threads\n");
