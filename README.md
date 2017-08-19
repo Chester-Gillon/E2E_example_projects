@@ -247,3 +247,10 @@ Developed with CCS 7.2
 
 Simple example which shows Segger J-Link under Linux causing CCS to crash when start a debug session.
 
+
+TMS320F28379D_vla
+=================
+
+For https://e2e.ti.com/support/development_tools/compiler/f/343/t/618973
+
+Developed with CCS 7.2
