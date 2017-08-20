@@ -254,3 +254,26 @@ TMS320F28379D_vla
 For https://e2e.ti.com/support/development_tools/compiler/f/343/t/618973
 
 Developed with CCS 7.2
+
+
+NIMU_emacExample_EVMK2H_armBiosExample
+======================================
+
+For https://e2e.ti.com/support/development_tools/code_composer_studio/f/81/t/619005
+
+Developed using CCS 7.2 and ti-processor-sdk-rtos-k2hk-evm-04.00.00.04
+
+This is an unmodified version of the NIMU_emacExample_EVMK2H_armBiosExample example, which links to the source files
+in the ti-processor-sdk-rtos-k2hk-evm.
+
+From ti-processor-sdk-rtos-k2hk-evm-04.00.00.04 used:
+- SYS/BIOS 6.46.5.55
+- k2hk PDK 4.0.6
+- NDK 2.25.01.11
+- XDCtools 3.32.1.22
+
+For testing the EVMK2H was set to "DSP no boot mode" and the ..\..\emulation\boards\xtcievmk2x\gel\xtcievmk2x_arm.gel script
+used to configure the hardware.
+
+The device in the target confguration has been set to TCI6638K2K due to the 66AK2H12 device file not containing
+all required entries for tracing (https://e2e.ti.com/support/development_tools/code_composer_studio/f/81/t/511744)
