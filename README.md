@@ -259,7 +259,8 @@ Developed with CCS 7.2
 NIMU_emacExample_EVMK2H_armBiosExample
 ======================================
 
-For https://e2e.ti.com/support/development_tools/code_composer_studio/f/81/t/619005
+For https://e2e.ti.com/support/development_tools/code_composer_studio/f/81/t/619005 and
+https://e2e.ti.com/support/development_tools/code_composer_studio/f/81/t/619132
 
 Developed using CCS 7.2 and ti-processor-sdk-rtos-k2hk-evm-04.00.00.04
 
@@ -277,3 +278,20 @@ used to configure the hardware.
 
 The device in the target confguration has been set to TCI6638K2K due to the 66AK2H12 device file not containing
 all required entries for tracing (https://e2e.ti.com/support/development_tools/code_composer_studio/f/81/t/511744)
+
+
+NIMU_BasicExample_evmAM572x_armExampleproject
+=============================================
+
+Developed using CCS 7.2 and ti-processor-sdk-rtos-am57xx-evm-04.00.00.04
+
+This is an unmodified version of the NIMU_BasicExample_evmAM572x_armExampleproject example, which links to the source files
+in the ti-processor-sdk-rtos-am57xx-evm. This example is pingable, but doesn't have an echo server.
+
+From ti-processor-sdk-rtos-am57xx-evm-04.00.00.04 used:
+- SYS/BIOS 6.46.5.55
+- am5728xx PDK 1.0.7
+- NDK 2.25.01.11
+- XDCtools 3.32.1.22
+
+For testing halt U-boot and GEL scripts are used to configure the target.
