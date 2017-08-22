@@ -295,3 +295,11 @@ From ti-processor-sdk-rtos-am57xx-evm-04.00.00.04 used:
 - XDCtools 3.32.1.22
 
 For testing halt U-boot and GEL scripts are used to configure the target.
+
+
+CC2650F128_ccs_hello_world
+==========================
+
+For https://e2e.ti.com/support/development_tools/compiler/f/343/t/619549
+
+Developed using CCS 7.2
