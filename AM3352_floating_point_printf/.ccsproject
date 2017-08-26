@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?ccsproject version="1.0"?>
+<projectOptions>
+	<ccsVersion value="7.2.0"/>
+	<deviceVariant value="Cortex A.AM3352"/>
+	<deviceFamily value="TMS470"/>
+	<deviceEndianness value="little"/>
+	<codegenToolVersion value="16.9.4.LTS"/>
+	<isElfFormat value="true"/>
+	<linkerCommandFile value="AM335x.cmd"/>
+	<rts value="libc.a"/>
+	<createSlaveProjects value=""/>
+	<templateProperties value="id=com.ti.ccstudio.project.templates.helloWorld,"/>
+	<filesToOpen value="hello.c,"/>
+	<connection value="common/targetdb/connections/BH-USB560m_20pin_Connection.xml"/>
+	<isTargetManual value="false"/>
+</projectOptions>

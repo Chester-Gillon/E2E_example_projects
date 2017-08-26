@@ -303,3 +303,11 @@ CC2650F128_ccs_hello_world
 For https://e2e.ti.com/support/development_tools/compiler/f/343/t/619549
 
 Developed using CCS 7.2
+
+
+AM3352_floating_point_printf
+============================
+
+For https://e2e.ti.com/support/development_tools/compiler/f/343/t/620465
+
+Developed using CCS 7.2

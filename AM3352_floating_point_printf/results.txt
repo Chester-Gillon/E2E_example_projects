@@ -1,0 +1,35 @@
+TI_nofloat_printf_support
+=========================
+
+[CortxA8] Truncated result=351
+sqrt()=
+
+TI_full_printf_support
+======================
+
+[CortxA8] Truncated result=351
+sqrt(123456.789)=351.3641829
+
+GCC_4.9.3_libc_nano
+===================
+
+[CortxA8] Truncated result=351
+sqrt()=
+
+GCC_4.9.3_libc
+==============
+
+[CortxA8] Truncated result=351
+sqrt(123456.789)=351.3641829
+
+GCC_6.3.1_libc_nano
+===================
+
+[CortxA8] Truncated result=351
+sqrt()=
+
+GCC_6.3.1_libc
+==============
+
+[CortxA8] Truncated result=351
+sqrt(123456.789)=351.3641829
