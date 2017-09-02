@@ -311,3 +311,12 @@ AM3352_floating_point_printf
 For https://e2e.ti.com/support/development_tools/compiler/f/343/t/620465
 
 Developed using CCS 7.2
+
+
+TMS320C6678_main_with_arguments
+===============================
+
+For https://e2e.ti.com/support/development_tools/code_composer_studio/f/81/t/622142
+
+Developed using CCS 7.2
+
