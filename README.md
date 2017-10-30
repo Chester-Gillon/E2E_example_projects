@@ -321,8 +321,8 @@ For https://e2e.ti.com/support/development_tools/code_composer_studio/f/81/t/622
 Developed using CCS 7.2
 
 
-66AK2H14_GCC_class_variables
-============================
+66AK2H14_GCC_class_variables and 66AK2H14_C66_class_variables
+=============================================================
 
 For https://e2e.ti.com/support/development_tools/code_composer_studio/f/81/t/629959
 
