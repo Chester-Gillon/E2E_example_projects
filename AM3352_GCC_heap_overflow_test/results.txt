@@ -1,0 +1,48 @@
+This program was created to keep calling malloc() until got a NULL pointer to detect at which point
+detected an allocation failure.
+
+It was run on an Olimex AM3352-SOM-EVB, but should also run on a BeagleBoard Black.
+
+The same program is tested with different configurations which tests combinations of
+GCC compiler version and linking against rdimon (semihosting) or nosys.
+
+This program was created since when started using GNU ARM compiler v6.3.1 initially thought that
+the change from v4.9.3 to v6.3.1 caused malloc() to no longer detect heap overflow once the heap grew
+up to the stack pointer.
+
+In fact, the results show that linking with rdimon (for semihosting support) checks when the heap overflows
+by reaching the stack. Whereas when linking with nosys no such check is performed and if the program exceeds the
+allocated heap size can end up crashing.
+
+Think that a custom _sbrk() function which checked against the upper heap size specified in the linker script
+would be a robust way of checking if the program had exceeded the allocated heap size.
+
+
+
+The results of test are:
+
+Debug_GNU_4.9.3_nosys
+=====================
+
+Heap overflow wasn't detected.
+Program crashed with a data abort inside malloc_r() after making 520193 allocations.
+The allocations have wrapped around the 512M of memory, and corrupted the start of the program, based upon verifying the program after the crash.
+
+Debug_GNU_4.9.3_rdimon
+======================
+
+Heap overflow was detected after 1124 successful allocations.
+Last successful allocation was at address 0x80123a68 which is above the allocated heap and inside the stack.
+
+Debug_GNU_6.3.1_nosys
+=====================
+
+Heap overflow wasn't detected.
+Program crashed with a data abort inside malloc_r() after making 520194 allocations.
+The allocations have wrapped around the 512M of memory, and corrupted the start of the program, based upon verifying the program after the crash.
+
+Debug_GNU_6.3.1_rdimon
+======================
+
+Heap overflow was detecetd after 1123 successful allocations.
+Last successful allocation was at address 0x80123990 which is above the allocated heap and inside the stack.
