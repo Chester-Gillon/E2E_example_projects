@@ -1,0 +1,26 @@
+Test of trying to get errors from CCS which halt the target after starting a debug session.
+After starting the debug session started refreshing the UART0 register in the debugger and waited for about one minute
+to see if any errors were reported.
+
+Using software:
+- CCS 7.3.0.00019 under Windows 10
+- TI Emulators 7.0.48.0
+- SEGGER J-Link Support (Windows) 6.20.9.0
+
+1) Using a Stellaris-ICDI and the Stellaris Virtual Serial Port connected to the CCS Terminal
+
+Got "CORTEX_M4_0: Error: Timed out while waiting for target powerup/polling a hardware resource" error when debugging:
+IIIII IIIII IIII
+
+Didn't get error:
+IIIII I
+
+2) Using a Segger J-Link and the Stellaris Virtual Serial Port connected to the CCS Terminal
+
+Didn't get error:
+IIIII IIIII IIIII IIIII
+
+3) Using a Stellaris-ICDI and the Stellaris Virtual Serial Port NOT connected
+
+Didn't get error:
+IIIII IIIII IIIII IIIII
