@@ -17,6 +17,9 @@
 
 static const char text[] = "abcdefghijklmonpqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ\"#$%^&*()\n\r";
 
+/** Can be watched while program is running to generate DAP accesses */
+volatile uint32_t num_iterations;
+
 int main (void)
 {
     uint32_t cpu_clock_freq;
@@ -58,5 +61,6 @@ int main (void)
         {
             UARTCharPut (UART0_BASE, text[text_index]);
         }
+        num_iterations++;
     }
 }
