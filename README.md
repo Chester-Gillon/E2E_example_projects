@@ -279,6 +279,17 @@ used to configure the hardware.
 The device in the target confguration has been set to TCI6638K2K due to the 66AK2H12 device file not containing
 all required entries for tracing (https://e2e.ti.com/support/development_tools/code_composer_studio/f/81/t/511744)
 
+Running the testudp program reports a failure on size 1455:
+C:\ti\ti-processor-sdk-rtos-k2hk-evm-04.01.00.06\ndk_2_25_01_11\packages\ti\ndk\winapps>testudp.exe 192.168.1.4
+IPv4 address
+
+Testing target client at 192.168.1.4:7
+Testing UDP packet payloads from 1 to 1472 bytes...
+testudp.exe: failed on size 1455
+
+When the testudp test fails the Oversize Receive Frames Register (RXOVERSIZEDFRAMES) at address 0x02090C18
+is incrementing.
+
 
 NIMU_emacExample_EVMK2HC66BiosExampleProject
 ============================================
@@ -287,15 +298,6 @@ Developed using CCS 7.2 and ti-processor-sdk-rtos-k2hk-evm-04.01.00.06
 
 This is a modified version of the NIMU_emacExample_EVMK2HC66BiosExampleProject example, which links to the source files
 in the ti-processor-sdk-rtos-k2hk-evm.
-
-The modifications added the following to the .cfg file to suppress "creating output section "xxx" without a SECTIONS specification" warnings:
-
-Program.sectMap[".sharedGRL"] = new Program.SectionSpec();
-Program.sectMap[".sharedGRL"] = "L2SRAM";
-
-Program.sectMap[".sharedPolicy"] = new Program.SectionSpec();
-Program.sectMap[".sharedPolicy"] = "L2SRAM";
-
 
 From ti-processor-sdk-rtos-k2hk-evm-04.00.00.04 used:
 - SYS/BIOS 6.46.5.55
@@ -306,8 +308,43 @@ From ti-processor-sdk-rtos-k2hk-evm-04.00.00.04 used:
 For testing the EVMK2H was set to "DSP no boot mode" and the ..\..\emulation\boards\xtcievmk2x\gel\xtcievmk2x_arm.gel script
 used to configure the hardware.
 
-The device in the target confguration has been set to TCI6638K2K due to the 66AK2H12 device file not containing
-all required entries for tracing (https://e2e.ti.com/support/development_tools/code_composer_studio/f/81/t/511744)
+The modifications:
+1) Added the following to the .cfg file to suppress "creating output section "xxx" without a SECTIONS specification" warnings:
+
+     Program.sectMap[".sharedGRL"] = new Program.SectionSpec();
+     Program.sectMap[".sharedGRL"] = "L2SRAM";
+
+     Program.sectMap[".sharedPolicy"] = new Program.SectionSpec();
+     Program.sectMap[".sharedPolicy"] = "L2SRAM";
+
+2) Added a modified version of pdk_k2hk_4_0_7\packages\ti\transport\ndk\nimu\src\v2\nimu_eth.c in which the Init_MAC()
+   has been changed to set the receive maximum length to the correct maximum length of 1518 rather than 1500.
+
+As a result of the the modification the testudp program now passes:
+C:\ti\ti-processor-sdk-rtos-k2hk-evm-04.01.00.06\ndk_2_25_01_11\packages\ti\ndk\winapps>testudp.exe 192.168.1.4
+IPv4 address
+
+Testing target client at 192.168.1.4:7
+Testing UDP packet payloads from 1 to 1472 bytes...
+Test loop passed - resetting
+Test loop passed - resetting
+Test loop passed - resetting
+Test loop passed - resetting
+Test loop passed - resetting
+
+And ping can now work up the maximum data length of 3012 (imposed by the value of MMALLOC_MAXSIZE in the NDK):
+C:\ti\ti-processor-sdk-rtos-k2hk-evm-04.01.00.06\ndk_2_25_01_11\packages\ti\ndk\winapps>ping 192.168.1.4 -l 3012
+
+Pinging 192.168.1.4 with 3012 bytes of data:
+Reply from 192.168.1.4: bytes=3012 time=1ms TTL=255
+Reply from 192.168.1.4: bytes=3012 time=1ms TTL=255
+Reply from 192.168.1.4: bytes=3012 time=1ms TTL=255
+Reply from 192.168.1.4: bytes=3012 time=1ms TTL=255
+
+Ping statistics for 192.168.1.4:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 1ms, Maximum = 1ms, Average = 1ms
 
 
 NIMU_BasicExample_evmAM572x_armExampleproject
@@ -357,3 +394,27 @@ Developed using CCS 7.2
 For https://e2e.ti.com/support/development_tools/code_composer_studio/f/81/t/629959
 
 Developed using CCS 7.3
+
+
+AM3352_GCC_heap_overflow_test
+=============================
+
+Developed using CCS 7.3
+
+
+
+MSP430FW423_right_shift
+=======================
+
+For https://e2e.ti.com/support/development_tools/compiler/f/343/t/639628
+
+Developed using CCS 7.3
+
+
+TM4C129_peripheral_poll_tight_loop
+==================================
+
+For https://e2e.ti.com/support/microcontrollers/tiva_arm/f/908/t/639575
+
+Developed using CCS 7.3
+
