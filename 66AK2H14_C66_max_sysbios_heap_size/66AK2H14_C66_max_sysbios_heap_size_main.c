@@ -24,15 +24,18 @@ Void taskFxn(UArg a0, UArg a1)
     size_t last_successfull_allocation_size;
     size_t allocation_size;
     char *data;
+    char *last_successfull_allocation;
     uint8_t fill;
 
     last_successfull_allocation_size = 0;
+    last_successfull_allocation = NULL;
     fill = 0;
     allocation_size = allocation_increment;
     data = malloc (allocation_size);
     while (data != NULL)
     {
         last_successfull_allocation_size = allocation_size;
+        last_successfull_allocation = data;
         fill++;
         memset (&data[allocation_size - allocation_increment], fill, allocation_increment);
         free (data);
@@ -40,7 +43,8 @@ Void taskFxn(UArg a0, UArg a1)
         data = malloc (allocation_size);
     }
 
-    System_printf ("last_successfull_allocation_size=%u\n", last_successfull_allocation_size);
+    System_printf ("last_successfull_allocation=%p last_successfull_allocation_size=%x\n",
+                   last_successfull_allocation, last_successfull_allocation_size);
     System_flush(); /* force SysMin output to console */
     BIOS_exit(0);
 }
