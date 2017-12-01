@@ -1,0 +1,34 @@
+_66AK2H14_C66.zip: Platform.xdc
+Platform.xdc:
+_66AK2H14_C66.zip: Platform.xs
+Platform.xs:
+_66AK2H14_C66.zip: config.bld
+config.bld:
+_66AK2H14_C66.zip: package/.vers_b200
+package/.vers_b200:
+_66AK2H14_C66.zip: package/.vers_g200
+package/.vers_g200:
+_66AK2H14_C66.zip: package/.vers_r200
+package/.vers_r200:
+_66AK2H14_C66.zip: package/.xdc-D20
+package/.xdc-D20:
+_66AK2H14_C66.zip: package/_66AK2H14_C66.ccs
+package/_66AK2H14_C66.ccs:
+_66AK2H14_C66.zip: package/_66AK2H14_C66.class
+package/_66AK2H14_C66.class:
+_66AK2H14_C66.zip: package/_66AK2H14_C66.java
+package/_66AK2H14_C66.java:
+_66AK2H14_C66.zip: package/_66AK2H14_C66.sch
+package/_66AK2H14_C66.sch:
+_66AK2H14_C66.zip: package/build.cfg
+package/build.cfg:
+_66AK2H14_C66.zip: package/package.bld.xml
+package/package.bld.xml:
+_66AK2H14_C66.zip: package/package.defs.h
+package/package.defs.h:
+_66AK2H14_C66.zip: package/package__66AK2H14_C66.c
+package/package__66AK2H14_C66.c:
+_66AK2H14_C66.zip: package.bld
+package.bld:
+_66AK2H14_C66.zip: package.xdc
+package.xdc:

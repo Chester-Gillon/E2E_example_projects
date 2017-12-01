@@ -418,3 +418,11 @@ For https://e2e.ti.com/support/microcontrollers/tiva_arm/f/908/t/639575
 
 Developed using CCS 7.3
 
+
+
+66AK2H14_C66_max_sysbios_heap_size
+==================================
+
+For https://e2e.ti.com/support/development_tools/compiler/f/343/t/646784
+
+Developed using CCS 7.3 and SYS/BIOS 6.50.1.12

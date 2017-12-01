@@ -1,0 +1,13 @@
+package.xdc
+Platform.xdc
+Platform.xs
+package/_66AK2H14_C66.sch
+package/.vers_g200
+package/.vers_r200
+package/.vers_b200
+package/.xdc-D20
+package/_66AK2H14_C66.java
+package/_66AK2H14_C66.class
+package/package__66AK2H14_C66.c
+package/package.defs.h
+package/_66AK2H14_C66.ccs
