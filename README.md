@@ -433,6 +433,14 @@ Developed using CCS 7.3 and SYS/BIOS 6.50.1.12
 event_EK_TM4C1294XL_TI_TivaTM4C1294NCPDT
 ========================================
 
-For https://e2e.ti.com/support/microcontrollers/tiva_arm/f/908/p/651797/2396165
+For https://e2e.ti.com/support/microcontrollers/tiva_arm/f/908/t/651797
 
 Developed using tirtos_tivac_2_16_01_14(bios_6_45_02_31), xdctools_3_32_00_06_core and ti-cgt-arm_15.12.1.LTS
+
+
+MSP430F5335_asm_absolute_address
+================================
+
+For https://e2e.ti.com/support/microcontrollers/msp430/f/166/t/652804
+
+Devleoped using CCS 7.4 and TI MSP430 v16.9.6.LTS 
