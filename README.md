@@ -444,3 +444,14 @@ MSP430F5335_asm_absolute_address
 For https://e2e.ti.com/support/microcontrollers/msp430/f/166/t/652804
 
 Devleoped using CCS 7.4 and TI MSP430 v16.9.6.LTS 
+
+66AK2H14_A15_sys_bios_heap_track
+================================
+
+For https://e2e.ti.com/support/microcontrollers/tiva_arm/f/908/t/651797
+
+Developed using:
+- CCS 7.4
+- SYS/BIOS 6.50.1.12
+- XDCtools 3.50.4.43
+- GNU v4.9.3
