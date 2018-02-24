@@ -1,0 +1,133 @@
+This program tests malloc() to investgiate the maximum heap size possible in a MSP430F6659,
+which has 66K of RAM.
+The linker script is set to allow:
+- Up to 64K for the heap by using RAM sectors 0 to 3 which have a contiguous address
+  range from 0xF0000 - 0xFFFFF (using the fact that RAM sector 0 is mirrored as high and low addresses).
+- The 2K of USB RAM is used for the stack, data and bss.
+
+The program tests the heap in two ways:
+- The number of small 6 byte structures which can be allocated.
+- The maximum size allocation which can be made.
+
+The amount of data allocation from the heap is determined by running the program until the end of main() in the debugger,
+and inspecting the variables.
+
+The following test conditions were tried, using different build configurations:
+- MSP430 compiler TI v17.9.0 and v18.1.0
+- A heap size of 32K or 64K.
+- The data model set to restricted or large.
+
+The conclusions are:
+1) When the data model is restricted no memory allocations when the heap size is > 32K.
+   This is because the malloc() implementation in the RTS memory.c uses the signed type ptrdiff_t
+   to store packet size in the heap, where a negative size indicates a free packet.
+   ptrdiff_t is 16-bits in the resticted data model, and 32-bits in the large data model.
+   
+   Therefore, when 32K < heap size <= 64K in the restricted data model when the heap is initialised
+   it is considered that there is no free space.
+
+2) With a 64K heap and the large data model:
+   - The TI v17.9.0 compiler allows a maximum heap allocation of 32758 bytes which is about half the expected value.
+   - The TI v18.1.0 compiler allows a maximum heap allocation of 65532 bytes which is the expected value (allowing for 4 bytes of bookkeeping) 
+
+   The RTS memory.c from both compiler versions has the following test of the size at the start of the malloc() function:
+/*****************************************************************************/
+/*                                                                           */
+/*  CHECK_ALLOC_SIZE - Verify that an allocation of the requested size is    */
+/*                     possible without an overflow during the process.      */
+/*                                                                           */
+/*****************************************************************************/
+inline static int check_alloc_size(size_t size)
+{
+    /*-----------------------------------------------------------------------*/
+    /* Make sure the value of size is small enough that we will not overflow */
+    /* the memsz_t type in the malloc/realloc calculations.  SDSCM00049633.  */
+    /*-----------------------------------------------------------------------*/
+    if (size > (MEMSZ_MAX - OVERHEAD - MINSIZE - 1))
+        return 0;
+    return 1;
+}
+
+void *malloc(size_t size)
+{
+    memsz_t allocsize;
+    PACKET *current, *next, *prev;
+
+    if (check_alloc_size(size) == 0) return 0;
+
+  The TV v17.9.0 compiler generates the following for check_alloc_size():
+        malloc():
+010000:   144A                PUSHM.A #5,R10
+209         if (size > (MEMSZ_MAX - OVERHEAD - MINSIZE - 1))
+010002:   930D                TST.W   R13
+010004:   2029                JNE     (0x0058)
+010006:   903C 7FF7           CMP.W   #0x7ff7,R12
+01000a:   2C26                JHS     (0x0058)
+
+  Whereas the TI v18.1..0 compiler generates the following for check_alloc_size():
+        malloc():
+010000:   144A                PUSHM.A #5,R10
+209         if (size > (MEMSZ_MAX - OVERHEAD - MINSIZE - 1))
+010002:   903D 7FFF           CMP.W   #0x7fff,R13
+010006:   2804                JLO     (0x0010)
+010008:   2029                JNE     (0x005c)
+01000a:   903C FFF7           CMP.W   #0xfff7,R12
+01000e:   2C26                JHS     (0x005c)
+
+  The TI v17.9.0 compiler generated incorrect code for check_alloc_size(), in that it is checking for a maximum of 0x7FF6 rather than 0x7FFFFFF6
+
+
+TI17.9.0_32K_heap_restricted
+============================
+
+last_successfull_allocation_size = 32760
+num_allocs = 4096 ; which with 6 byte node and 2 bytes bookkeeping is 32768 bytes allocated
+
+
+TI17.9.0_32K_heap_large
+=======================
+
+last_successfull_allocation_size = 32758
+num_allocs = 3276 ; which with 6 byte node and 4 bytes bookkeeping is 32760 bytes allocated
+
+
+TI17.9.0_64K_heap_restricted
+============================
+
+last_successfull_allocation_size = 0
+num_allocs = 0
+
+
+TI17.9.0_64K_heap_large
+=======================
+
+last_successfull_allocation_size = 32758
+num_allocs = 6553 ; which with 6 byte node and 4 bytes bookkeeping is 65530 bytes allocated
+
+
+TI18.1.0_32K_heap_restricted
+============================
+
+last_successfull_allocation_size = 32760
+num_allocs = 4096 ; which with a 6 byte node and 2 bytes bookkeeping is 32768 bytes allocated
+
+
+TI18.1.0_32K_heap_large
+=======================
+
+last_successfull_allocation_size = 32764
+num_allocs = 3276 ; which with a 6 byte node and 4 bytes bookkeeping is 32760 bytes allocated
+
+
+TI18.1.0_64K_heap_restricted
+============================
+
+last_successfull_allocation_size = 0
+num_allocs = 0
+
+
+TI18.1.0_64K_heap_large
+=======================
+
+last_successfull_allocation_size = 65532
+num_allocs = 6553 ; which with a 6 byte node and 4 bytes bookkeeping is 65530 bytes allocated
