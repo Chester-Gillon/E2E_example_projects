@@ -188,8 +188,9 @@ Developed using CCS 7.2
 TM4C129_selftest
 ================
 
-For https://e2e.ti.com/support/development_tools/compiler/f/343/t/590562 and
-https://e2e.ti.com/support/development_tools/code_composer_studio/f/81/p/589919/2169517
+For https://e2e.ti.com/support/development_tools/compiler/f/343/t/590562,
+https://e2e.ti.com/support/development_tools/code_composer_studio/f/81/p/589919/2169517 and
+https://e2e.ti.com/support/development_tools/code_composer_studio/f/81/t/660958
 
 Developed using CCS 7.1
 

@@ -1,0 +1,25 @@
+Tests using CCS 7.4 running under Windows 10
+============================================
+
+Windows 10 Pro version 1709 OS Build 16299.248
+CCS 7.4.0.00015
+TI Emulators 7.0.100.1
+SEGGER J-Link Support (Windows) 6.30.3.0
+
+1) Using Stellaris ICDI with JTAG frequency of 1MHz:
+Average step time of 44 milliseconds over 1000 steps.
+
+2) Using Segger J-Link with auto JTAG frequency of 4MHz
+Average step time of 9 milliseconds over 10000 steps. 
+
+3) Using Segger J-Link with auto SWD frequency of 2MHz
+Average step time of 11 milliseconds over 10000 steps.
+
+4) Using XDS110 with JTAG and fixed frequency of 2.5MHz:
+Average step time of 136 milliseconds over 1000 steps.
+
+5) Using XDS110 with SWD and fixed frequency of 2.5MHz:
+Average step time of 140 milliseconds over 1000 steps.
+
+Note that when attempted to download the program got SWD errors.
+Had to attach to a running target without resetting it to be able to step using the XDS110 SWD.
