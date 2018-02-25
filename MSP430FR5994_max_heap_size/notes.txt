@@ -1,0 +1,70 @@
+This program tests malloc() to investgiate the maximum heap size possible in a MSP430FR5994,
+using the 208K of FRAM2 with the data_model set to large.
+
+The program tests the heap in two ways:
+- The number of small 6 byte structures which can be allocated.
+- The maximum size allocation which can be made.
+
+The amount of data allocation from the heap is determined by running the program until the end of main() in the debugger,
+and inspecting the variables.
+
+The program has been tested with the TI v17.9.0 and v18.1.0 compilers, using different build configurations
+
+TI17.9.0_Debug results:
+  last_successfull_allocation_size = 32758 ; this is part of the heap
+  num_allocs = 21299 ; which with a 6 byte node and 4 bytes of bookkeeping is 212990 bytes allocated
+
+TI18.1.0_Debug results:
+  last_successfull_allocation_size = 212988 ; this is all of the heap
+  num_allocs = 21299 ; which with a 6 byte node and 4 bytes of bookkeeping is 212990 bytes allocated
+
+The RTS memory.c from both compiler versions has the following test of the size at the start of the malloc() function:
+    /*****************************************************************************/
+    /*                                                                           */
+    /*  CHECK_ALLOC_SIZE - Verify that an allocation of the requested size is    */
+    /*                     possible without an overflow during the process.      */
+    /*                                                                           */
+    /*****************************************************************************/
+    inline static int check_alloc_size(size_t size)
+    {
+        /*-----------------------------------------------------------------------*/
+        /* Make sure the value of size is small enough that we will not overflow */
+        /* the memsz_t type in the malloc/realloc calculations.  SDSCM00049633.  */
+        /*-----------------------------------------------------------------------*/
+        if (size > (MEMSZ_MAX - OVERHEAD - MINSIZE - 1))
+            return 0;
+        return 1;
+    }
+    
+    void *malloc(size_t size)
+    {
+        memsz_t allocsize;
+        PACKET *current, *next, *prev;
+    
+        if (check_alloc_size(size) == 0) return 0;
+    
+        allocsize = (memsz_t)size;
+
+The TI v17.9.0 compiler generates the following for check_alloc_size():
+        malloc():
+004000:   144A                PUSHM.A #5,R10
+209         if (size > (MEMSZ_MAX - OVERHEAD - MINSIZE - 1))
+004002:   930D                TST.W   R13
+004004:   2029                JNE     ($C$L18)
+004006:   903C 7FF7           CMP.W   #0x7ff7,R12
+00400a:   2C26                JHS     ($C$L18)
+265         allocsize = (memsz_t)size;
+
+Whereas the TI v18.1..0 compiler generates the following for check_alloc_size():
+        malloc():
+004000:   144A                PUSHM.A #5,R10
+209         if (size > (MEMSZ_MAX - OVERHEAD - MINSIZE - 1))
+004002:   903D 7FFF           CMP.W   #0x7fff,R13
+004006:   2804                JLO     ($C$L11)
+004008:   2029                JNE     ($C$L19)
+00400a:   903C FFF7           CMP.W   #0xfff7,R12
+00400e:   2C26                JHS     ($C$L19)
+265         allocsize = (memsz_t)size;
+        $C$L11:
+
+The TI v17.9.0 compiler generated incorrect code for check_alloc_size(), in that it is checking for a maximum of 0x7FF6 rather than 0x7FFFFFF6

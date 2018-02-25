@@ -463,3 +463,11 @@ MSP430F6659_max_heap_size
 For https://e2e.ti.com/support/development_tools/compiler/f/343/t/666255
 
 Developed using CCS 7.4 and TI MSP430 v17.9.0 and v18.1.0
+
+
+MSP430FR5994_max_heap_size
+==========================
+
+For https://e2e.ti.com/support/development_tools/compiler/f/343/t/666898
+
+Developed using CCS 7.4 and TI MSP430 v17.9.0 and v18.1.0
