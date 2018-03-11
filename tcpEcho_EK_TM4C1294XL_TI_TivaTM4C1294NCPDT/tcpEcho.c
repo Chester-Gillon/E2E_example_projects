@@ -36,6 +36,7 @@
  */
 
 #include <string.h>
+#include <stdio.h>
 
 #include <xdc/std.h>
 #include <xdc/runtime/Error.h>
@@ -53,7 +54,6 @@
 /* Example/Board Header file */
 #include "Board.h"
 
-#define TCPPACKETSIZE 256
 #define NUMTCPWORKERS 3
 
 /*
@@ -66,19 +66,30 @@ Void tcpWorker(UArg arg0, UArg arg1)
     SOCKET  clientfd = (SOCKET)arg0;
     int  bytesRcvd;
     int  bytesSent;
-    char buffer[TCPPACKETSIZE];
+    void *buffer;
+    HANDLE handle;
+    Bits64 total_rx_bytes = 0;
+    Bits64 total_tx_bytes = 0;
+    char summary_text[128];
 
     System_printf("tcpWorker: start clientfd = 0x%x\n", clientfd);
     System_flush ();
 
-    while ((bytesRcvd = recv(clientfd, buffer, TCPPACKETSIZE, 0)) > 0) {
+    while ((bytesRcvd = recvnc(clientfd, &buffer, 0, &handle)) > 0)
+    {
+        total_rx_bytes += bytesRcvd;
         bytesSent = send(clientfd, buffer, bytesRcvd, 0);
+        recvncfree (handle);
         if (bytesSent < 0 || bytesSent != bytesRcvd) {
             System_printf("Error: send failed.\n");
             break;
         }
+        total_tx_bytes += bytesSent;
     }
-    System_printf("tcpWorker stop clientfd = 0x%x\n", clientfd);
+    snprintf (summary_text, sizeof (summary_text),
+            "tcpWorker stop clientfd=0x%x errno=%d total_rx_bytes=%llu total_tx_bytes=%llu\n",
+            clientfd, fdError (), total_rx_bytes, total_tx_bytes);
+    System_printf("%s", summary_text);
     System_flush ();
 
     fdClose(clientfd);
@@ -105,7 +116,7 @@ Void tcpHandler(UArg arg0, UArg arg1)
     int                dns_rc;
     char               dns_buffer[512];
 
-    server = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    server = socket(AF_INET, SOCK_STREAMNC, IPPROTO_TCP);
     if (server == INVALID_SOCKET) {
         System_printf("Error: socket not created.\n");
         goto shutdown;
@@ -170,7 +181,7 @@ Void tcpHandler(UArg arg0, UArg arg1)
     System_printf("Error: accept failed.\n");
 
 shutdown:
-    if (server > 0) {
+    if (server != INVALID_SOCKET) {
         fdClose(server);
     }
 }
