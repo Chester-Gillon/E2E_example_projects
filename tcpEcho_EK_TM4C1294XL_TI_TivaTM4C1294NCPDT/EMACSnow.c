@@ -156,6 +156,21 @@ const EMAC_FxnTable EMACSnow_fxnTable = {
 /* Application is required to provide this variable */
 extern EMAC_Config EMAC_config;
 
+//*****************************************************************************
+//
+// Combined valid abnormal interrupts.
+//
+//*****************************************************************************
+#define EMAC_ABNORMAL_INTS      (EMAC_INT_TX_STOPPED |                        \
+                                 EMAC_INT_TX_JABBER |                         \
+                                 EMAC_INT_RX_OVERFLOW |                       \
+                                 EMAC_INT_TX_UNDERFLOW |                      \
+                                 EMAC_INT_RX_NO_BUFFER |                      \
+                                 EMAC_INT_RX_STOPPED |                        \
+                                 EMAC_INT_RX_WATCHDOG |                       \
+                                 EMAC_INT_EARLY_TRANSMIT |                    \
+                                 EMAC_INT_BUS_ERROR)
+
 /*
  *  The struct is used to store the private data for the EMACSnow controller.
  */
@@ -167,7 +182,8 @@ typedef struct EMACSnow_Data {
     uint32_t         rxDropped;
     uint32_t         txSent;
     uint32_t         txDropped;
-    uint32_t         abnormalInts;
+    uint32_t         numAbnormalInts;
+    uint32_t         abnormalIntsOccurred;
     uint32_t         isrCount;
     uint32_t         linkUp;
     tDescriptorList *pTxDescList;
@@ -534,7 +550,8 @@ void EMACSnow_hwiIntFxn(UArg callbacks)
                      EMAC_INT_RX_STOPPED | EMAC_INT_PHY));
 
     if (status & EMAC_INT_ABNORMAL_INT) {
-        EMACSnow_private.abnormalInts++;
+        EMACSnow_private.numAbnormalInts++;
+        EMACSnow_private.abnormalIntsOccurred |= status & EMAC_ABNORMAL_INTS;
     }
 
     g_ulStatus = status;
@@ -906,7 +923,8 @@ int EMACSnow_NIMUInit(STKEVENT_Handle hEvent)
     EMACSnow_private.rxDropped    = 0;
     EMACSnow_private.txSent       = 0;
     EMACSnow_private.txDropped    = 0;
-    EMACSnow_private.abnormalInts = 0;
+    EMACSnow_private.numAbnormalInts = 0;
+    EMACSnow_private.abnormalIntsOccurred = 0;
     EMACSnow_private.isrCount = 0;
     EMACSnow_private.linkUp       = false;
 

@@ -5,8 +5,10 @@ A modified version of the tirtos_tivac_2_16_01_14 tcpEcho_EK_TM4C1294XL_TI_TivaT
 4) Increase the TCP transmit and receive buffer sizes.
 5) Use recvnc() and recvncfree() to remove uncessary copies on receive.
 6) When the TCP echo task stops reports the total bytes echoed and the reason for termination.
-7) Add modified EMACSnow.c to fix "TivaC NDK TCP: Can't receive large packets (>=1460 bytes)"
-   https://e2e.ti.com/support/embedded/tirtos/f/355/t/497052/
+7) Add modified EMACSnow.c to:
+   a) Fix "TivaC NDK TCP: Can't receive large packets (>=1460 bytes)"
+      https://e2e.ti.com/support/embedded/tirtos/f/355/t/497052/
+   b) Change 'EMACSnow_private to record which types of abnormal interrupts occur.
    
 @todo
 When start four of the following
@@ -84,3 +86,18 @@ tcpWorker stop clientfd=0x2003532c errno=60 total_rx_bytes=397315640 total_tx_by
 4) By the time the tcpWorker had reported a "Retransmit Timeout" the Tiva IP address was no longer shown by the Windows arp command.
    The tests failed after approx 5 or 9 minutes.
    If capture the Ethernet traffic is there a specific pattern prior to the failure?
+
+5) By capturing the traffic no immediate pattern. The PC gets into a state of performing TCP re-transmissions since the Tiva isn't ACKing previous transmissions.
+   After 5 seconds of re-transmissions which don't result in an ACK the PC then starts sending ARP requests for the Tiva IP address.
+   The first 3 ARP requests go to the Unicast MAC address of the TIVA.
+   When those Unicast ARP requests fail to get a response the PC then broadcasts the ARP requests.
+   
+   Thus the Tiva IP address no longer shown by the Windows arp command is a result of recovery action taken by the Windows network stack after
+   failed TCP re-transmissions.
+   
+ 6) The only type of abnormal interrupt which occurs is EMAC_INT_RX_NO_BUFFER, which is the "Receive Buffer Unavailable" bit in the
+    Ethernet MAC DMA Interrupt Status (EMACDMARIS) register.
+    
+    "Receive Buffer Unavailable" only occurs while the TCP is still being transferred, and given that after the failure packets can still be
+    received by the Tiva appears to be an indication of a temporary lack of receive buffers rather than the cause of the eventual failure
+    when the Tiva can't transmit.
