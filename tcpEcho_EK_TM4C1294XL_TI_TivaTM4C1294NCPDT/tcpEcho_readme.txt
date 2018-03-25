@@ -9,8 +9,23 @@ A modified version of the tirtos_tivac_2_16_01_14 tcpEcho_EK_TM4C1294XL_TI_TivaT
    a) Fix "TivaC NDK TCP: Can't receive large packets (>=1460 bytes)"
       https://e2e.ti.com/support/embedded/tirtos/f/355/t/497052/
    b) Change 'EMACSnow_private to record which types of abnormal interrupts occur.
+   c) Rather that using a global variable to communication the pending interrupts from the Hwi to Swi a "trigger" can be used to pass
+      the pending interrupts where Swi_or() can be used instead of Swi_post() to ensure if the Hwi gets called more than once before
+      Swi runs then no pending interrupts are lost by:
+      - Delete the g_ulStatus global variable.
+      - Make EMACSnow_handlePackets() call Swi_getTrigger() to get the pending interrupts, rather than reading a global variable.
+      - Make EMACSnow_hwiIntFxn() call Swi_or() to set the pending interrupts passed to the Swi.
+      - Can also delete the disabling of the interrupts from EMACSnow_hwiIntFxn() and the re-enabling of interrupts from EMACSnow_handlePackets().
+        This is because the use of the Swi trigger prevents pending interrupts from being lost.
+      
+      The above modifications for the communication between the Hwi and Swi are to prevent the test failing due to the Tiva NDK
+      due to be being unable to transmit. See below 
+
    
-@todo
+Problem investigation into resolve RTOS/EK-TM4C1294XL: NDK in TI-RTOS for TivaC 2.16.1.14 can get into a state where unable to transmit packets
+https://e2e.ti.com/support/microcontrollers/tiva_arm/f/908/t/674812
+===============================================================================================================================================
+
 When start four of the following
 tcpSendReceive mytiva. 1000 1 -l4380 -s0
 

@@ -89,8 +89,6 @@
                                  EMAC_PHY_AN_100B_T_FULL_DUPLEX)
 #endif
 
-uint32_t g_ulStatus;
-
 bool enablePrefetch = FALSE;
 
 /* The size of the CRC stored at the end of the received frames */
@@ -271,12 +269,14 @@ static void EMACSnow_processPendingTx()
  */
 static void EMACSnow_handlePackets(UArg arg0, UArg arg1)
 {
-    Log_print1(Diags_USER1, "EMACSnow_handlePackets handling packets status = 0x%x", g_ulStatus);
+    uint32_t pending_interrupts = Swi_getTrigger ();
+
+    Log_print1(Diags_USER1, "EMACSnow_handlePackets handling packets status = 0x%x", pending_interrupts);
 
     /* Process the transmit DMA list, freeing any buffers that have been
      * transmitted since our last interrupt.
      */
-    if (g_ulStatus & EMAC_INT_TRANSMIT) {
+    if (pending_interrupts & EMAC_INT_TRANSMIT) {
         Log_print0(Diags_USER1, "EMACSnow_handlePackets Tx ones...");
         EMACSnow_processTransmitted();
     }
@@ -287,16 +287,11 @@ static void EMACSnow_handlePackets(UArg arg0, UArg arg1)
      * stalled due to missing buffers since the receive function will attempt to
      * allocate new pbufs for descriptor entries which have none.
      */
-    if (g_ulStatus & (EMAC_INT_RECEIVE | EMAC_INT_RX_NO_BUFFER |
+    if (pending_interrupts & (EMAC_INT_RECEIVE | EMAC_INT_RX_NO_BUFFER |
         EMAC_INT_RX_STOPPED)) {
         Log_print0(Diags_USER1, "EMACSnow_handlePackets Rx ones...");
         EMACSnow_handleRx();
     }
-
-    Log_print0(Diags_USER1, "EMACSnow_handlePackets re-enable peripheral...");
-    EMACIntEnable(EMAC0_BASE, (EMAC_INT_RECEIVE | EMAC_INT_TRANSMIT |
-                        EMAC_INT_TX_STOPPED | EMAC_INT_RX_NO_BUFFER |
-                        EMAC_INT_RX_STOPPED | EMAC_INT_PHY));
 }
 
 /*
@@ -540,30 +535,19 @@ void EMACSnow_hwiIntFxn(UArg callbacks)
     status = EMACIntStatus(EMAC0_BASE, true);
     EMACIntClear(EMAC0_BASE, status);
 
-    /*
-     *  Disable the Ethernet interrupts.  Since the interrupts have not been
-     *  handled, they are not asserted.  Once they are handled by the Ethernet
-     *  interrupt, it will re-enable the interrupts.
-     */
-    EMACIntDisable(EMAC0_BASE, (EMAC_INT_RECEIVE | EMAC_INT_TRANSMIT |
-                     EMAC_INT_TX_STOPPED | EMAC_INT_RX_NO_BUFFER |
-                     EMAC_INT_RX_STOPPED | EMAC_INT_PHY));
-
     if (status & EMAC_INT_ABNORMAL_INT) {
         EMACSnow_private.numAbnormalInts++;
         EMACSnow_private.abnormalIntsOccurred |= status & EMAC_ABNORMAL_INTS;
     }
 
-    g_ulStatus = status;
-
     if (status & EMAC_INT_PHY) {
         EMACSnow_processPhyInterrupt();
     }
 
-    Log_print1(Diags_USER1, "EMACSnow_hwiIntFxn Posting Swi status = 0x%x", g_ulStatus);
+    Log_print1(Diags_USER1, "EMACSnow_hwiIntFxn Posting Swi status = 0x%x", status);
 
-    /* Have the Swi handle the incoming packets and re-enable peripheral */
-    Swi_post(object->swi);
+    /* Have the Swi handle the incoming packets */
+    Swi_or(object->swi, status);
 }
 
 /*
