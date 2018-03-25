@@ -95,9 +95,85 @@ tcpWorker stop clientfd=0x2003532c errno=60 total_rx_bytes=397315640 total_tx_by
    Thus the Tiva IP address no longer shown by the Windows arp command is a result of recovery action taken by the Windows network stack after
    failed TCP re-transmissions.
    
- 6) The only type of abnormal interrupt which occurs is EMAC_INT_RX_NO_BUFFER, which is the "Receive Buffer Unavailable" bit in the
-    Ethernet MAC DMA Interrupt Status (EMACDMARIS) register.
+6) The only type of abnormal interrupt which occurs is EMAC_INT_RX_NO_BUFFER, which is the "Receive Buffer Unavailable" bit in the
+   Ethernet MAC DMA Interrupt Status (EMACDMARIS) register.
     
-    "Receive Buffer Unavailable" only occurs while the TCP is still being transferred, and given that after the failure packets can still be
-    received by the Tiva appears to be an indication of a temporary lack of receive buffers rather than the cause of the eventual failure
-    when the Tiva can't transmit.
+   "Receive Buffer Unavailable" only occurs while the TCP is still being transferred, and given that after the failure packets can still be
+   received by the Tiva appears to be an indication of a temporary lack of receive buffers rather than the cause of the eventual failure
+   when the Tiva can't transmit.
+   
+7) EMACSnow.c is configured with 4 transmit descriptors.
+   After the failure condition, where there is no transmission from the Tiva and txDropped is increasing, the state of the transmit descriptors was:
+'EMACSnow.c'::EMACSnow_private.pTxDescList->pDescriptors[0].Desc.ui32CtrlStatus unsigned int    0x70100000 (Hex)    0x2003BAF4  
+'EMACSnow.c'::EMACSnow_private.pTxDescList->pDescriptors[1].Desc.ui32CtrlStatus unsigned int    0x70100000 (Hex)    0x2003BB18  
+'EMACSnow.c'::EMACSnow_private.pTxDescList->pDescriptors[2].Desc.ui32CtrlStatus unsigned int    0x70100000 (Hex)    0x2003BB3C  
+'EMACSnow.c'::EMACSnow_private.pTxDescList->pDescriptors[3].Desc.ui32CtrlStatus unsigned int    0x70100000 (Hex)    0x2003BB60  
+'EMACSnow.c'::EMACSnow_private.pTxDescList->pDescriptors[0].hPkt    void *  0x2003A9FC  0x2003BB14  
+'EMACSnow.c'::EMACSnow_private.pTxDescList->pDescriptors[1].hPkt    void *  0x2003A964  0x2003BB38  
+'EMACSnow.c'::EMACSnow_private.pTxDescList->pDescriptors[2].hPkt    void *  0x2003AB2C  0x2003BB5C  
+'EMACSnow.c'::EMACSnow_private.pTxDescList->pDescriptors[3].hPkt    void *  0x2003A918  0x2003BB80  
+
+   The ui32CtrlStatus value of 0x70100000 means the descriptor is owned by the host, and is the value when the descriptors
+   are idle at the start of the test.
+   However, the non-NULL hPkt field means the EMAC driver thinks the descriptor is in use by the DMA.
+   With the test running and data being transmitted, a continuous refresh of the descriptors show between 0 and 2 descriptors
+   at use at one time, until the failure occurs when all are in use.
+   i.e. doesn't appear a gradual resource leak.
+   
+8) After a failure the contents of the 'EMACSnow.c'::EMACSnow_private.pTxDescList->pDescriptors[].pvBuffer1 buffers match the
+   last 4 packets transmitted by the TIVA before the failure.
+   
+9) After a failure the following can be used to make the Tiva network stack active again:
+   a) Set a breakpoint in the EMACSnow_hwiIntFxn() function after has written to g_ulStatus with the interrupt status.
+   b) Cause the Tiva to receive an Ethernet packet, e.g. try and ping the Tiva.
+   c) Set the least significant bit in g_ulStatus (EMAC_INT_TRANSMIT)
+   d) Disable the breakpoint and continue.
+   e) Setting the EMAC_INT_TRANSMIT bit in g_ulStatus causes EMACSnow_processTransmitted() to be called.
+   f) EMACSnow_processTransmitted() detects that all transmit descriptors have completed transmission, and marks the transmit descriptors as free
+      by freeing the pbuf and setting hPkt to NULL.
+      
+   Therefore, the problem appear to be that a transmit interrupt gets "lost".
+
+10) Use Data Variable Tracing to watch acceses to g_ulStatus, with a breakpoint set when EMACSnow_private.txDropped is incremented.
+
+    The normal pattern for for g_ulStatus to be written in EMACSnow_hwiIntFxn() to give the interrupt mask and read twice in EMACSnow_handlePackets().
+    E.g. for a transmit interrupt which is handled:
+33800433840,Data_WP:Write:Comp0,Data value,0x10001,,,,,,
+33800433840,Data_WP Address Offset:Comp0,Value,0x2003BF8C,,,,,,
+33800434228,Data_WP:Read:Comp0,Data value,0x10001,,,,,,
+33800434228,Data_WP Address Offset:Comp0,Value,0x2003BF8C,,,,,,
+33800434720,Data_WP:Read:Comp0,Data value,0x10001,,,,,,
+33800434720,Data_WP Address Offset:Comp0,Value,0x2003BF8C,,,,,,
+
+    In the failure case g_ul_Status written the the value 0x10001 which means a transmit interurpt has occurred,
+    but is followed by a write of zero meaning no interrupts have occurred.
+    EMACSnow_handlePackets() reads g_ulStatus as zero, resulting in no transmit interrupt processing occurring:
+33800476528,Data_WP:Write:Comp0,Data value,0x10001,,,,,,
+33800476528,Data_WP Address Offset:Comp0,Value,0x2003BF8C,,,,,,
+33800481204,Data_WP:Write:Comp0,Data value,0x0,,,,,,                <--- transmit interrupt flag overwritten before read
+33800481204,Data_WP Address Offset:Comp0,Value,0x2003BF8C,,,,,,
+33800481708,Data_WP:Read:Comp0,Data value,0x0,,,,,,
+33800481708,Data_WP Address Offset:Comp0,Value,0x2003BF8C,,,,,,
+33800482084,Data_WP:Read:Comp0,Data value,0x0,,,,,,
+33800482084,Data_WP Address Offset:Comp0,Value,0x2003BF8C,,,,,,
+
+   Not sure why EMACSnow_hwiIntFxn() gets re-called with no interrupts pending, but this does show a timing condition under
+   which the history of pending interrupts in g_ulStatus get lost.
+   
+11) As an experiment, commented out the EMACIntDisable() in EMACSnow_hwiIntFxn() and the EMACIntEnable() in EMACSnow_handlePackets().
+    The test still failed with the Tiva unable to transmit due to all transmit descriptors being in use.
+    0x10001 was written to g_ulStatus meaning a transmit interrupt, but was overwritten by 0x10040() meaning a receive interrupt before being processed:
+8299507324,Data_WP:Write:Comp2,Data value,0x10001,,,,,,
+8299507324,Data_WP Address Offset:Comp2,Value,0x2003BF8C,,,,,,
+8299511972,Data_WP:Write:Comp2,Data value,0x10040,,,,,,                <--- transmit interrupt flag overwritten before read
+8299511972,Data_WP Address Offset:Comp2,Value,0x2003BF8C,,,,,,
+8299512504,Data_WP:Read:Comp2,Data value,0x10040,,,,,,
+8299512504,Data_WP Address Offset:Comp2,Value,0x2003BF8C,,,,,,
+8299512936,Data_WP:Read:Comp2,Data value,0x10040,,,,,,
+8299512936,Data_WP Address Offset:Comp2,Value,0x2003BF8C,,,,,,
+
+12) An unmodified tcpEcho from TI-RTOS for TivaC 2.16.1.14 was run with a hardware watchpoint triggered onto a write to g_ulStatus with a value of zero.
+    The watchpoint was hit when tcpSendReceive was run with:
+        ./tcpSendReceive tisoc 1000 1 -s0
+        
+    This shows that the unmodified example can show the condition where EMACSnow_hwiIntFxn() zeros g_ulStatus before the pending interrupts have been processed.
