@@ -30,6 +30,12 @@
 #include <driverlib/interrupt.h>
 #include <utils/uartstdio.h>
 
+#define SYSCTL_DID0_CLASS_MSP432E 0x000C0000
+
+#define CLASS_IS_MSP432E                                                     \
+        ((HWREG(SYSCTL_DID0) & (SYSCTL_DID0_VER_M | SYSCTL_DID0_CLASS_M)) == \
+         (SYSCTL_DID0_VER_1 | SYSCTL_DID0_CLASS_MSP432E))
+
 /** Port/Pin mappings common to all devices.
  *  This is instead of including <driverlib/pin_map.h> since determine the device class at run-time rather than at compile time */
 #define GPIO_PA0_U0RX           0x00000001
@@ -141,7 +147,7 @@ static void configure_UART(void)
  */
 static void configure_RTC (const uint32_t cpu_clock_freq)
 {
-    const uint32_t int_hibernate = CLASS_IS_TM4C129 ? INT_HIBERNATE_TM4C129 : INT_HIBERNATE_TM4C123;
+    const uint32_t int_hibernate = (CLASS_IS_TM4C129 | CLASS_IS_MSP432E) ? INT_HIBERNATE_TM4C129 : INT_HIBERNATE_TM4C123;
 
     /* Unlike other peripherals, the Hibernate module retains it state across a system reset.
      * If the Hibernate module is already enabled from a previous run of this program then
@@ -462,7 +468,7 @@ int main(void)
     uint32_t cpu_clock_freq;
     bool workaround_HIB02_errata;
 
-    if (CLASS_IS_TM4C129)
+    if (CLASS_IS_TM4C129 || CLASS_IS_MSP432E)
     {
         /* Set the system clock to run at 120 MHz off the PLL with external crystal as reference. */
         cpu_clock_freq = SysCtlClockFreqSet((SYSCTL_XTAL_25MHZ | SYSCTL_OSC_MAIN | SYSCTL_USE_PLL | SYSCTL_CFG_VCO_480), 120000000);
@@ -497,7 +503,7 @@ int main(void)
     }
     else
     {
-        UARTprintf ("Tests 1 to 3 not applicable for TM4C129 class, as errata HIB#01 and HIB#02 not present.\n\n");
+        UARTprintf ("Tests 1 to 3 not applicable for TM4C129 or MSP432E classes, as errata HIB#01 and HIB#02 not present.\n\n");
 
         UARTprintf ("4) Test match for sub-seconds of zero with the default RTC trim\n");
         UARTprintf ("This will result in one interrupt and no discontinuities.\n");
