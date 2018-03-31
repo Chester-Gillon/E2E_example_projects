@@ -1,0 +1,28 @@
+With a MSP432E401Y rev A2
+=========================
+
+Using ROM_FlashErase and ROM_FlashProgram changing the number of NOPs between dsb and isb in xPortPendSVHandler
+0, 1, 2, 3, 4, 10, 11, 12, 13, 14, 15 : Completes
+5, 6, 7, 8, 9 : Crashes
+
+Using FlashErase and ROM_FlashProgram changing the number of NOPs between dsb and isb in xPortPendSVHandler
+0, 1, 2, 3, 4, 10, 11, 12, 13, 14, 15 : Completes
+5, 6, 7, 8, 9 : Crashes
+
+Using ROM_FlashErase and FlashProgram changing the number of NOPs between dsb and isb in xPortPendSVHandler
+0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 : Completes
+
+
+With a TM4C129ENCPDT rev A2
+===========================
+
+Using ROM_FlashErase and ROM_FlashProgram changing the number of NOPs between dsb and isb in xPortPendSVHandler
+0, 1, 2, 3, 4, 10, 11, 12, 13, 14, 15 : Completes
+5, 6, 7, 8, 9 : Crashes
+
+Using FlashErase and ROM_FlashProgram changing the number of NOPs between dsb and isb in xPortPendSVHandler
+0, 1, 2, 3, 4, 10, 11, 12, 13, 14, 15 : Completes
+5, 6, 7, 8, 9 : Crashes
+
+Using ROM_FlashErase and FlashProgram changing the number of NOPs between dsb and isb in xPortPendSVHandler
+0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 : Completes

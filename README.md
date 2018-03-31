@@ -480,3 +480,11 @@ tcpEcho_EK_TM4C1294XL_TI_TivaTM4C1294NCPDT
 For https://e2e.ti.com/support/microcontrollers/tiva_arm/f/908/t/666442
 
 Developed using CCS 7.4 and tirtos_tivac_2_16_01_14
+
+
+TM4C129_FreeRTOS_FlashFailureTest
+=================================
+
+For https://e2e.ti.com/support/microcontrollers/tiva_arm/f/908/t/671683
+
+Developed using CCS 8.0, TivaWare_C_Series-2.1.4.178 and TI ARM v16.9.7.LTS
