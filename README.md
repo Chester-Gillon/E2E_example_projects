@@ -488,3 +488,11 @@ TM4C129_FreeRTOS_FlashFailureTest
 For https://e2e.ti.com/support/microcontrollers/tiva_arm/f/908/t/671683
 
 Developed using CCS 8.0, TivaWare_C_Series-2.1.4.178 and TI ARM v16.9.7.LTS
+
+
+TM4C_find_rom_size
+==================
+
+For https://e2e.ti.com/support/microcontrollers/tiva_arm/f/908/t/671683
+
+Developed using CCS 8.0, TivaWare_C_Series-2.1.4.178 and TI ARM v16.9.2.LTS

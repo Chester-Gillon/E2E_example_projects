@@ -1,0 +1,19 @@
+On a MSP432E401Y:
+Running on Device Class=0xc Major Revision=0x0 Minor Revision=0x2
+DID0=0x180c0002 DID1=0x102dc06e
+ROM version 0x301 size is 0xe700 bytes
+
+On a TM4C129ENCPDT:
+Running on Device Class=0xa Major Revision=0x0 Minor Revision=0x2
+DID0=0x100a0002 DID1=0x102dc06e
+ROM version 0x301 size is 0xe700 bytes
+
+On a TM4C1294NCPDT:
+Running on Device Class=0xa Major Revision=0x0 Minor Revision=0x1
+DID0=0x100a0001 DID1=0x101fc06d
+ROM version 0x301 size is 0xe700 bytes
+
+On a TM4C123GH6PM:
+Running on Device Class=0x5 Major Revision=0x1 Minor Revision=0x1
+DID0=0x18050101 DID1=0x10a1606c
+ROM version 0x26e size is 0x8800 bytes
