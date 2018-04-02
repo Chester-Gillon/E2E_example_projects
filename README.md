@@ -496,3 +496,12 @@ TM4C_find_rom_size
 For https://e2e.ti.com/support/microcontrollers/tiva_arm/f/908/t/671683
 
 Developed using CCS 8.0, TivaWare_C_Series-2.1.4.178 and TI ARM v16.9.2.LTS
+
+
+TM4C_read_rom_symbols and TM4C_rom_symbols
+==========================================
+
+For https://e2e.ti.com/support/microcontrollers/tiva_arm/f/908/t/671683 and
+https://e2e.ti.com/support/development_tools/compiler/f/343/t/676981
+
+Developed using CCS 8.0, TivaWare_C_Series-2.1.4.178 and TI ARM v18.1.1.LTS
