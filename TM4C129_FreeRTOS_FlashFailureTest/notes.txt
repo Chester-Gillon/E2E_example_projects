@@ -12,6 +12,14 @@ Using FlashErase in flash, ROM_FlashProgram and portasm.obj in flash changing th
 Using ROM_FlashErase, FlashProgram in flash and portasm.obj in flash changing the number of NOPs between dsb and isb in xPortPendSVHandler
 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 : Completes
 
+Using ROM_FlashErase, ROM_FlashProgram and portasm.obj in flash and clock frquency reduced from 120MHz to 80MHz,
+changing the number of NOPs between dsb and isb in xPortPendSVHandler
+0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15 : Completes
+9 : Crashes ; xPortPendSVHandler() stuck in "bx lr"
+
+Using ROM_FlashErase, ROM_FlashProgram and portasm.obj in flash, FLASH_CONF_FPFOFF changing the number of NOPs between dsb and isb in xPortPendSVHandler
+0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 : Completes
+
 
 With a TM4C129ENCPDT rev A2
 ===========================
@@ -33,6 +41,14 @@ Using ROM_FlashErase, FlashProgram in SRAM and portasm.obj in flash changing the
 
 Using ROM_FlashErase, ROM_FlashProgram and portasm.obj in SRAM changing the number of NOPs between dsb and isb in xPortPendSVHandler
     .TI.ramfunc : {portasm.obj(.text)} load=FLASH, run=SRAM, table(BINIT)
+0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 : Completes
+
+Using ROM_FlashErase, ROM_FlashProgram and portasm.obj in flash and clock frquency reduced from 120MHz to 80MHz,
+changing the number of NOPs between dsb and isb in xPortPendSVHandler
+0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15 : Completes
+9 : Crashes
+
+Using ROM_FlashErase, ROM_FlashProgram and portasm.obj in flash, FLASH_CONF_FPFOFF changing the number of NOPs between dsb and isb in xPortPendSVHandler
 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 : Completes
 
 
@@ -72,3 +88,30 @@ b) Looking for changes as the number of NOPs between the dsb and isb in xPortPen
 - With 7 NOPs after the failure every sample was still at the "bx lr" at the end of xPortPendSVHandler()
 - With 8 NOPs after the failure every sample was still at the "bx lr" at the end of xPortPendSVHandler()
 - With 9 NOPs after the failure every sample was still at the "bx lr" at the end of xPortPendSVHandler()
+
+
+Impact of fault with different debuggers
+========================================
+
+a) TM4C129ENCPDT rev A2 with a Stellaris ICDI
+Can suspend. All core registers have the same value.
+But attempting to single step reports the error "CORTEX_M4_0: Can't Single Step Target Program"
+Program verification is successfull.
+
+b) TM4C129ENCPDT rev A2 with a XDS100 JTAG
+Can't suspend with the following error reported:
+CORTEX_M4_0: Trouble Halting Target CPU: (Error -2062 @ 0x0) Unable to halt device. Reset the device, and retry the operation. If error persists, confirm configuration, power-cycle the board, and/or try more reliable JTAG settings (e.g. lower TCLK). (Emulation package 7.0.188.0) 
+
+c) TM4C129ENCPDT rev A2 with a XDS100 SWD
+Can't suspend with the following error reported:
+CORTEX_M4_0: Trouble Halting Target CPU: (Error -2062 @ 0x0) Unable to halt device. Reset the device, and retry the operation. If error persists, confirm configuration, power-cycle the board, and/or try more reliable JTAG settings (e.g. lower TCLK). (Emulation package 7.0.188.0)
+
+Can't get the Statistical Function Profiling trace out after a failure.
+
+d) TM4C129ENCPDT rev A2 with a Segger J-Link JTAG
+Can't suspend with the following error reported:
+CORTEX_M4_0: Trouble Halting Target CPU: Halt failed!
+
+e) TM4C129ENCPDT rev A2 with a Segger J-Link SWD
+Can't suspend with the following error reported:
+CORTEX_M4_0: Trouble Halting Target CPU: Halt failed!
