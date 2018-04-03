@@ -1,28 +1,74 @@
 With a MSP432E401Y rev A2
 =========================
 
-Using ROM_FlashErase and ROM_FlashProgram changing the number of NOPs between dsb and isb in xPortPendSVHandler
+Using ROM_FlashErase, ROM_FlashProgram and portasm.obj in flash changing the number of NOPs between dsb and isb in xPortPendSVHandler
 0, 1, 2, 3, 4, 10, 11, 12, 13, 14, 15 : Completes
 5, 6, 7, 8, 9 : Crashes
 
-Using FlashErase and ROM_FlashProgram changing the number of NOPs between dsb and isb in xPortPendSVHandler
+Using FlashErase in flash, ROM_FlashProgram and portasm.obj in flash changing the number of NOPs between dsb and isb in xPortPendSVHandler
 0, 1, 2, 3, 4, 10, 11, 12, 13, 14, 15 : Completes
 5, 6, 7, 8, 9 : Crashes
 
-Using ROM_FlashErase and FlashProgram changing the number of NOPs between dsb and isb in xPortPendSVHandler
+Using ROM_FlashErase, FlashProgram in flash and portasm.obj in flash changing the number of NOPs between dsb and isb in xPortPendSVHandler
 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 : Completes
 
 
 With a TM4C129ENCPDT rev A2
 ===========================
 
-Using ROM_FlashErase and ROM_FlashProgram changing the number of NOPs between dsb and isb in xPortPendSVHandler
+Using ROM_FlashErase, ROM_FlashProgram and portasm.obj in flash changing the number of NOPs between dsb and isb in xPortPendSVHandler
 0, 1, 2, 3, 4, 10, 11, 12, 13, 14, 15 : Completes
 5, 6, 7, 8, 9 : Crashes
 
-Using FlashErase and ROM_FlashProgram changing the number of NOPs between dsb and isb in xPortPendSVHandler
+Using FlashErase in flash, ROM_FlashProgram and portasm.obj in flash changing the number of NOPs between dsb and isb in xPortPendSVHandler
 0, 1, 2, 3, 4, 10, 11, 12, 13, 14, 15 : Completes
 5, 6, 7, 8, 9 : Crashes
 
-Using ROM_FlashErase and FlashProgram changing the number of NOPs between dsb and isb in xPortPendSVHandler
+Using ROM_FlashErase, FlashProgram in flash and portasm.obj in flash changing the number of NOPs between dsb and isb in xPortPendSVHandler
 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 : Completes
+
+Using ROM_FlashErase, FlashProgram in SRAM and portasm.obj in flash changing the number of NOPs between dsb and isb in xPortPendSVHandler
+    .TI.ramfunc : {*(.text:FlashProgram)} load=FLASH, run=SRAM, table(BINIT)
+0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 : Completes
+
+Using ROM_FlashErase, ROM_FlashProgram and portasm.obj in SRAM changing the number of NOPs between dsb and isb in xPortPendSVHandler
+    .TI.ramfunc : {portasm.obj(.text)} load=FLASH, run=SRAM, table(BINIT)
+0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 : Completes
+
+
+Attempt to use hardware trace analyser on MSP-EXP432E401Y to debug cause of failure
+===================================================================================
+
+a) With 5 NOPs between dsb and isb in xPortPendSVHandler
+
+The Statistical Function Profiling with a sampling interval of 896 cycles shows the following:
+"89591900","PC Sample","","16792790","C:\Users\mr_halfword\E2E_example_projects_CCS7\TM4C129_FreeRTOS_FlashFailureTest\Debug\..\utils\uartstdio.c","unknown_0x675c_0x1fffffff_g_pcHex()","","","0x1003CD6"
+"89592792","PC Sample","","16792784","C:\Users\mr_halfword\E2E_example_projects_CCS7\TM4C129_FreeRTOS_FlashFailureTest\Debug\..\utils\uartstdio.c","unknown_0x675c_0x1fffffff_g_pcHex()","","","0x1003CD0"
+"89593684","PC Sample","","21222","C:\Users\mr_halfword\E2E_example_projects_CCS7\TM4C129_FreeRTOS_FlashFailureTest\Debug\..\third_party\FreeRTOS\Source\portable\CCS\ARM_CM4F\portasm.asm","xPortPendSVHandler()","","","0x52E6"
+"89594576","PC Sample","","18440","C:\Users\mr_halfword\E2E_example_projects_CCS7\TM4C129_FreeRTOS_FlashFailureTest\Debug\..\third_party\FreeRTOS\Source\portable\CCS\ARM_CM4F\port.c","vPortEnterCritical()","","","0x4808"
+"89595468","PC Sample","","21288","C:\Users\mr_halfword\E2E_example_projects_CCS7\TM4C129_FreeRTOS_FlashFailureTest\Debug\..\third_party\FreeRTOS\Source\portable\CCS\ARM_CM4F\portasm.asm","xPortPendSVHandler()","","","0x5328"
+"89596360","PC Sample","","21288","C:\Users\mr_halfword\E2E_example_projects_CCS7\TM4C129_FreeRTOS_FlashFailureTest\Debug\..\third_party\FreeRTOS\Source\portable\CCS\ARM_CM4F\portasm.asm","xPortPendSVHandler()","","","0x5328"
+
+After the failure every sample is at address 0x00005328 which is the "bx lr" at the end of xPortPendSVHandler()
+- The program is in ROM_FlashProgram()
+- One sample in xPortPendSVHandler() on "ldr r1, [r0]"
+- One sample in vPortEnterCritical() on "msr basepri, r0"
+- All remaining samples then on address 0x00005328
+
+On another run leading up to the failure:
+- The program is in ROM_FlashProgram()
+- One sample in vListInsertEnd() on "ldr r0, [sp]"
+- One sample in uxListRemove() on "ldr r0, [sp]"
+- All remaining samples then on address 0x00005328
+
+On another run leading up to the failure:
+- The program is in ROM_FlashProgram()
+- One sample in xPortPendSVHandler() on "ldr r1, [r0]"
+- One sample in vPortEnterCritical() on "msr basepri, r0"
+- All remaining samples then on address 0x00005328
+
+b) Looking for changes as the number of NOPs between the dsb and isb in xPortPendSVHandler() was increased: 
+- With 6 NOPs after the failure every sample was still at the "bx lr" at the end of xPortPendSVHandler()
+- With 7 NOPs after the failure every sample was still at the "bx lr" at the end of xPortPendSVHandler()
+- With 8 NOPs after the failure every sample was still at the "bx lr" at the end of xPortPendSVHandler()
+- With 9 NOPs after the failure every sample was still at the "bx lr" at the end of xPortPendSVHandler()

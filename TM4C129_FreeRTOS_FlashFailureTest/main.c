@@ -249,6 +249,15 @@ main(void)
         UARTprintf("Flash used ID: 0x%X\n", flash_used_id);
     }
 
+    /* Don't start the flash test until the user confirms. After flashing a program which crashes,
+     * means after a reset pauses to allow the debugger to re-connect. */
+    UARTFlushRx ();
+    UARTprintf ("Press any key to start flash test");
+    while (!UARTRxBytesAvail ())
+    {
+    }
+    UARTprintf ("\n");
+
     LEDTaskInit();
     FlashWrInit();
     SHAMD5Init();
