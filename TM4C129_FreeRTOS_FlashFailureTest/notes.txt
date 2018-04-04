@@ -93,16 +93,16 @@ b) Looking for changes as the number of NOPs between the dsb and isb in xPortPen
 Impact of fault with different debuggers
 ========================================
 
-a) TM4C129ENCPDT rev A2 with a Stellaris ICDI
+a) TM4C129ENCPDT rev A2 with a Stellaris ICDI JTAG
 Can suspend. All core registers have the same value.
 But attempting to single step reports the error "CORTEX_M4_0: Can't Single Step Target Program"
 Program verification is successfull.
 
-b) TM4C129ENCPDT rev A2 with a XDS100 JTAG
+b) TM4C129ENCPDT rev A2 with a XDS110 JTAG
 Can't suspend with the following error reported:
 CORTEX_M4_0: Trouble Halting Target CPU: (Error -2062 @ 0x0) Unable to halt device. Reset the device, and retry the operation. If error persists, confirm configuration, power-cycle the board, and/or try more reliable JTAG settings (e.g. lower TCLK). (Emulation package 7.0.188.0) 
 
-c) TM4C129ENCPDT rev A2 with a XDS100 SWD
+c) TM4C129ENCPDT rev A2 with a XDS110 SWD
 Can't suspend with the following error reported:
 CORTEX_M4_0: Trouble Halting Target CPU: (Error -2062 @ 0x0) Unable to halt device. Reset the device, and retry the operation. If error persists, confirm configuration, power-cycle the board, and/or try more reliable JTAG settings (e.g. lower TCLK). (Emulation package 7.0.188.0)
 
@@ -115,3 +115,7 @@ CORTEX_M4_0: Trouble Halting Target CPU: Halt failed!
 e) TM4C129ENCPDT rev A2 with a Segger J-Link SWD
 Can't suspend with the following error reported:
 CORTEX_M4_0: Trouble Halting Target CPU: Halt failed!
+
+f) TM4C129ENCPDT rev A2 with a Blackhawk USB560-M JTAG
+Can't suspend with the following error reported:
+CORTEX_M4_0: Trouble Halting Target CPU: (Error -2062 @ 0x0) Unable to halt device. Reset the device, and retry the operation. If error persists, confirm configuration, power-cycle the board, and/or try more reliable JTAG settings (e.g. lower TCLK). (Emulation package 7.0.188.0) 
