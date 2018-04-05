@@ -1,0 +1,9 @@
+When compiled using TI ARM compiler v18.1.1, and the heap auto-sized to use all free SRAM
+as per https://e2e.ti.com/support/development_tools/compiler/f/343/t/676981 then:
+a) __SYSMEM_SIZE was set to 0x0003fde8 (261608) bytes by the linker
+
+b) The number of node structures allocated by new() was 16350.
+   Each node structure is 8 bytes, and allowing for 8 byte overhead means 261600 bytes in total.
+
+c) The maximum last_successfull_allocation_size for new() was 261596 bytes.	
+

@@ -505,3 +505,12 @@ For https://e2e.ti.com/support/microcontrollers/tiva_arm/f/908/t/671683 and
 https://e2e.ti.com/support/development_tools/compiler/f/343/t/676981
 
 Developed using CCS 8.0, TivaWare_C_Series-2.1.4.178 and TI ARM v18.1.1.LTS
+
+
+TM4C129_max_heap_size
+=====================
+
+For https://e2e.ti.com/support/microcontrollers/tiva_arm/f/908/t/678113
+
+Developed using CCS 8.0, TivaWare_C_Series-2.1.4.178 and TI ARM v18.1.1.LTS
+
