@@ -27,7 +27,7 @@
 	<variableList>
 		<variable>
 			<name>TIVAWARE_ROOT</name>
-			<value>file:/C:/ti/TivaWare_C_Series-2.1.4.178</value>
+			<value>$%7BTI_PRODUCTS_DIR%7D/TivaWare_C_Series-2.1.4.178</value>
 		</variable>
 	</variableList>
 </projectDescription>

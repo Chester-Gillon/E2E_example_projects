@@ -66,11 +66,16 @@ static void identify_device (void)
     printf ("DID0=0x%08x DID1=0x%08x\n", did0, did1);
 }
 
-int main(void) {
+int main(void)
+{
     uint32_t rom_byte_index;
     bool address_readable;
+    static char rom_pathname[256];
+    FILE *rom_file;
 
     identify_device ();
+    snprintf (rom_pathname, sizeof (rom_pathname), "../rom_version_%08x_did0_%08x_did1_%08x.bin",
+              ROM_VERSION, HWREG(SYSCTL_DID0), HWREG(SYSCTL_DID1));
 
     /* Report the actual ROM size, by reading from increasing byte addresses until a bus fault is reported */
     rom_byte_index = 0;
@@ -84,6 +89,17 @@ int main(void) {
         }
     } while (address_readable && (rom_byte_index < ROM_SIZE_BYTES));
     printf ("ROM version 0x%x size is 0x%x bytes\n", ROM_VERSION, rom_byte_index);
+
+    /* Save the ROM contents to a binary file on the host */
+    rom_file = fopen (rom_pathname, "w");
+    if (rom_file != NULL)
+    {
+        size_t num_written;
+
+        num_written = fwrite ((void *) ROM_BASE_ADDRESS, 1, rom_byte_index, rom_file);
+        fclose (rom_file);
+        printf ("wrote %u bytes to %s\n", num_written, rom_pathname);
+    }
 
     return 0;
 }
