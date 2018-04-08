@@ -514,3 +514,14 @@ For https://e2e.ti.com/support/microcontrollers/tiva_arm/f/908/t/678113
 
 Developed using CCS 8.0, TivaWare_C_Series-2.1.4.178 and TI ARM v18.1.1.LTS
 
+
+FlashTestFailure_MSP_EXP432E401Y_freertos_ccs and freertos_builds_MSP_EXP432E401Y_release_ccs
+=============================================================================================
+
+For https://e2e.ti.com/support/microcontrollers/msp430/f/166/t/678603
+
+Developed using:
+- CCS 8.0
+- TI ARM compiler v18.1.1.LTS
+- simplelink_msp432e4_sdk_2_10_00_17
+- FreeRTOSv10.0.1
