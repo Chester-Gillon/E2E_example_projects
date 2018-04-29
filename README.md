@@ -525,3 +525,13 @@ Developed using:
 - TI ARM compiler v18.1.1.LTS
 - simplelink_msp432e4_sdk_2_10_00_17
 - FreeRTOSv10.0.1
+
+
+MSP432_string_truncation
+========================
+
+For https://e2e.ti.com/support/development_tools/compiler/f/343/t/684878
+
+Developed using:
+- CCS 8.0
+- TI ARM compiler v18.1.1.LTS
