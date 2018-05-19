@@ -15,13 +15,11 @@
 
 MEMORY
 {
-
-    SRAM :     o = 0x402F0400,  l = 0x0000FC00  /* 64kB internal SRAM */
-    L3OCMC0 :  o = 0x40300000,  l = 0x00010000  /* 64kB L3 OCMC SRAM */
-    M3SHUMEM : o = 0x44D00000,  l = 0x00004000  /* 16kB M3 Shared Unified Code Space */
-    M3SHDMEM : o = 0x44D80000,  l = 0x00002000  /* 8kB M3 Shared Data Memory */
-    DDR0 :     o = 0x80000000,  l = 0x40000000  /* 1GB external DDR Bank 0 */
-
+    SRAM (RWX)     : o = 0x402F0400,  l = 0x0000FC00  /* 64kB internal SRAM */
+    L3OCMC0 (RWX)  : o = 0x40300000,  l = 0x00010000  /* 64kB L3 OCMC SRAM */
+    M3SHUMEM (RWX) : o = 0x44D00000,  l = 0x00004000  /* 16kB M3 Shared Unified Code Space */
+    M3SHDMEM (RWX) : o = 0x44D80000,  l = 0x00002000  /* 8kB M3 Shared Data Memory */
+    DDR0 (RWX)     : o = 0x80000000,  l = 0x40000000  /* 1GB external DDR Bank 0 */
 }
 
 /* Linker script to place sections and symbol values. Should be used together
