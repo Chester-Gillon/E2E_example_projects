@@ -535,3 +535,14 @@ For https://e2e.ti.com/support/development_tools/compiler/f/343/t/684878
 Developed using:
 - CCS 8.0
 - TI ARM compiler v18.1.1.LTS
+
+
+MSP432E401Y_virtual_inheritence
+===============================
+
+For https://e2e.ti.com/support/development_tools/code_composer_studio/f/81/t/682335
+
+Developed using:
+- CCS 8.0
+- TI ARM compiler v18.1.1.LTS
+- GNU ARM compiler v7.2.1
