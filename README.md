@@ -546,3 +546,14 @@ Developed using:
 - CCS 8.0
 - TI ARM compiler v18.1.1.LTS
 - GNU ARM compiler v7.2.1
+
+
+66AK2H14_A15_cpp_ctype
+======================
+
+For https://e2e.ti.com/support/development_tools/code_composer_studio/f/81/t/713517
+
+Developed using:
+- CCS 8.1
+- Various GCC ARM compilers
+
