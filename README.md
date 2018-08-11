@@ -567,3 +567,13 @@ Developed using:
 - CCS 8.1
 - TI MSP430 compiler v18.1.3.LTS
 
+
+TM4C_sprintf_stack_usage
+========================
+
+For https://e2e.ti.com/support/development_tools/code_composer_studio/f/81/t/716230
+Developed using:
+- CCS 8.1
+- TI ARM compiler v18.1.3.LTS
+- cg_xml 2.50.00
+
