@@ -557,3 +557,13 @@ Developed using:
 - CCS 8.1
 - Various GCC ARM compilers
 
+
+MSP430FR5994_timer
+==================
+
+For https://e2e.ti.com/support/development_tools/code_composer_studio/f/81/t/717946
+
+Developed using:
+- CCS 8.1
+- TI MSP430 compiler v18.1.3.LTS
+
