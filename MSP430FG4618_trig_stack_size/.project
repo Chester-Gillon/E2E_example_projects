@@ -27,7 +27,7 @@
 	<variableList>
 		<variable>
 			<name>CG_XML_ROOT</name>
-			<value>file:/C:/ti/cg_xml</value>
+			<value>$%7BTI_PRODUCTS_DIR%7D/cg_xml</value>
 		</variable>
 	</variableList>
 </projectDescription>
