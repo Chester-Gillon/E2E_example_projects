@@ -577,3 +577,23 @@ Developed using:
 - TI ARM compiler v18.1.3.LTS
 - cg_xml 2.50.00
 
+
+66AK2H14_C66_rts_multiple_files
+===============================
+
+For https://e2e.ti.com/support/tools/ccs/f/81/t/735807
+Developed using:
+- CCS 8.2
+- TI C6000 compiler v8.2.4
+
+
+66AK2H14_C66_BIOS_multiple_files
+================================
+
+For https://e2e.ti.com/support/tools/ccs/f/81/t/735807
+Developed using:
+- CCS 8.2
+- TI C6000 compiler v8.2.4
+- SYS/BIOS 6.45.01.29
+- XDCtools 3.32.00.06 core
+
