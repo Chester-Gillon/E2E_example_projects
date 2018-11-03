@@ -40,15 +40,17 @@ Void taskFxn(UArg a0, UArg a1)
     } while ((file_index < NUM_TEST_FILES) && (success));
     printf ("Created %d files\n", file_index);
 
+    int num_files_written = 0;
     for (file_index = 0; file_index < NUM_TEST_FILES; file_index++)
     {
         if (test_files[file_index] != NULL)
         {
             fprintf (test_files[file_index], "This is file %d\n", file_index + 1);
             fclose (test_files[file_index]);
+            num_files_written++;
         }
     }
-    printf ("Wrote %d files\n", file_index);
+    printf ("Wrote %d files\n", num_files_written);
 }
 
 /*
