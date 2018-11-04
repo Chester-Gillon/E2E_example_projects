@@ -597,3 +597,12 @@ Developed using:
 - SYS/BIOS 6.45.01.29
 - XDCtools 3.32.00.06 core
 
+
+AM5728_PRU_debug and AM3359_PRU_debug
+=====================================
+
+For https://e2e.ti.com/support/tools/ccs/f/81/t/743346
+Developed using:
+- CCS 8.2
+- TI PRU compiler v2.3.1
+
