@@ -606,3 +606,12 @@ Developed using:
 - CCS 8.2
 - TI PRU compiler v2.3.1
 
+
+AM3359_PRU_led_toggle
+=====================
+
+For https://e2e.ti.com/support/tools/ccs/f/81/t/753813
+Developed using:
+- CCS 8.3
+- TI PRU compiler v2.3.1
+
