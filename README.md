@@ -615,3 +615,11 @@ Developed using:
 - CCS 8.3
 - TI PRU compiler v2.3.1
 
+
+AM3359_struct_padding
+=====================
+
+For https://e2e.ti.com/support/tools/ccs/f/81/t/757939
+Developed using:
+- CCS 8.3
+- TI ARM compiler v5.2.5
