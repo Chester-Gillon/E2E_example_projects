@@ -623,3 +623,13 @@ For https://e2e.ti.com/support/tools/ccs/f/81/t/757939
 Developed using:
 - CCS 8.3
 - TI ARM compiler v5.2.5
+
+
+AM5728_GCC_class_variables
+==========================
+
+For https://e2e.ti.com/support/tools/ccs/f/81/t/758130
+Developed using:
+- CCS 8.3
+- GCC ARM compiler v6.3.1
+
