@@ -1,0 +1,92 @@
+# config version=3.5
+$ uscif
+  ecom_drvr=xds2xxu.out
+  ecom_port=0
+$ /
+$ xds2xx
+  bio_0="BIO_0,Active_High"
+  bio_1="BIO_1,Active_High"
+  bio_2="BIO_2,Active_High"
+  bio_3="BIO_3,Active_High"
+  txd1="TXD1,Active_High"
+  rxd1="RXD1,Active_High"
+  expio_4="EXPIO_4,Active_High"
+  expio_5="EXPIO_5,Active_High"
+  expio_6="EXPIO_6,Active_High"
+  expio_7="EXPIO_7,Active_High"
+$ /
+$ uscif
+  jtagboot_mode=disable
+  jtagboot_value=hiz
+  powerboot_mode=disable
+  powerboot_value=hiz
+  tclk_program=SPECIFIC
+  tclk_frequency=10.368MHz
+  loopback_mode=disable
+  loopback_value=disable
+  jtag_isolate=enable
+  extrareset_system=false
+$ /
+$ dot7
+  dts_usage=nothing
+$ /
+$ swd
+  swd_debug=disabled
+  swo_data=aux_uart
+$ /
+@ icepick_d family=icepick_d irbits=6 drbits=1 subpaths=9
+  & dap type=debug address=15 default=no custom=no force=yes pseudo=no cancelreset=0x0
+    @ cs_dap_debugss family=cs_dap irbits=4 drbits=1 subpaths=4 identify=0x4B6B902F revision=Legacy systemresetwhileconnected=1
+      & pru_icss2 type=debug address=8 default=no custom=no force=yes pseudo=yes
+        @ pru_1_icss2 family=pru irbits=0 drbits=0
+        @ pru_0_icss2 family=pru irbits=0 drbits=0
+      & pru_icss1 type=debug address=7 default=no custom=no force=yes pseudo=yes
+        @ pru_1_icss1 family=pru irbits=0 drbits=0
+        @ pru_0_icss1 family=pru irbits=0 drbits=0
+      & trace_stm type=debug address=15 default=no custom=no force=yes pseudo=yes
+        @ ct_tbr family=cs_etb irbits=0 drbits=0 address=0x80027000 traceid=0x0
+        @ ct_stm_config family=cs_stm irbits=0 drbits=0 address=0x80021000 traceid=0x0
+      & cortex_a15_mpuss type=virtual address=0 default=no custom=no force=yes pseudo=no
+        @ cs_dap_pc family=cs_dap_pc irbits=0 drbits=0 subpaths=2 address=0x80019000 identify=0x4B6B902F revision=Highlander
+          & cortex_a15_1 type=virtual address=1 default=no custom=no force=yes pseudo=no
+            @ ptm_1 family=cs_child irbits=0 drbits=0 address=0x8000D000 identify=0x4BE54009
+            @ cortexa15_1 family=cortex_axx irbits=0 drbits=0 address=0x80002000 identify=0 traceid=0x2
+          & cortex_a15_0 type=virtual address=0 default=no custom=no force=yes pseudo=no
+            @ ptm_0 family=cs_child irbits=0 drbits=0 address=0x8000C000 identify=0x4BE54009
+            @ cortexa15_0 family=cortex_axx irbits=0 drbits=0 address=0x80000000 identify=0 traceid=0x1
+          & /
+      & /
+  & dsp_2 type=debug address=10 default=no custom=no force=yes pseudo=no cancelreset=0x0
+    @ c66xx_dsp2 family=tms320c66xx irbits=38 drbits=1 traceid=0x2
+  & dsp_1 type=debug address=1 default=no custom=no force=yes pseudo=no cancelreset=0x0
+    @ c66xx_dsp1 family=tms320c66xx irbits=38 drbits=1 traceid=0x1
+  & ipu_2_c1 type=debug address=9 default=no custom=no force=yes pseudo=no cancelreset=0x0
+    @ cs_dap_ipu_2_c1 family=cs_dap irbits=4 drbits=1 subpaths=1 identify=0x4B6B902F revision=Legacy systemresetwhileconnected=1
+      & cortexm4_ipu_2_c1 type=debug address=9 default=no custom=no force=yes pseudo=no
+        @ icecrushercs_3 family=cs_child irbits=0 drbits=0 address=0xE0042000 identify=0x4BC44C09
+        @ cortex_m4_ipu2_c1 family=cortex_mxx irbits=0 drbits=0 identify=0x02000003 traceid=0x4
+      & /
+  & ipu_2_c0 type=debug address=8 default=no custom=no force=yes pseudo=no cancelreset=0x0
+    @ cs_dap_ipu_2_c0 family=cs_dap irbits=4 drbits=1 subpaths=1 identify=0x4B6B902F revision=Legacy systemresetwhileconnected=1
+      & cortexm4_ipu_2_c0 type=debug address=4 default=no custom=no force=yes pseudo=no
+        @ icecrushercs_2 family=cs_child irbits=0 drbits=0 address=0xE0042000 identify=0x4BC44C09
+        @ cortex_m4_ipu2_c0 family=cortex_mxx irbits=0 drbits=0 identify=0x02000003 traceid=0x3
+      & /
+  & ipu_1_c1 type=debug address=5 default=no custom=no force=yes pseudo=no cancelreset=0x0
+    @ cs_dap_ipu_1_c1 family=cs_dap irbits=4 drbits=1 subpaths=1 identify=0x4B6B902F revision=Legacy systemresetwhileconnected=1
+      & cortexm4_ipu_1_c1 type=debug address=5 default=no custom=no force=yes pseudo=no
+        @ icecrushercs_1 family=cs_child irbits=0 drbits=0 address=0xE0042000 identify=0x4BC44C09
+        @ cortex_m4_ipu1_c1 family=cortex_mxx irbits=0 drbits=0 identify=0x02000003 traceid=0x2
+      & /
+  & ipu_1_c0 type=debug address=4 default=no custom=no force=yes pseudo=no cancelreset=0x0
+    @ cs_dap_ipu_1_c0 family=cs_dap irbits=4 drbits=1 subpaths=1 identify=0x4B6B902F revision=Legacy systemresetwhileconnected=1
+      & cortexm4_ipu_1_c0 type=debug address=4 default=no custom=no force=yes pseudo=no
+        @ icecrushercs_0 family=cs_child irbits=0 drbits=0 address=0xE0042000 identify=0x4BC44C09
+        @ cortex_m4_ipu1_c0 family=cortex_mxx irbits=0 drbits=0 identify=0x02000003 traceid=0x1
+      & /
+  & iva_icont2 type=debug address=3 default=no custom=no force=yes pseudo=no cancelreset=0x0
+    @ arm9_icont2 family=arm9xx irbits=4 drbits=1 traceid=0x1
+  & iva_icont1 type=debug address=2 default=no custom=no force=yes pseudo=no cancelreset=0x0
+    @ arm9_icont1 family=arm9xx irbits=4 drbits=1 traceid=0x0
+  & /
+# /
