@@ -1,0 +1,11 @@
+target remote localhost:55006
+monitor halt
+#set to ARM mode
+p/x $cpsr
+set $cpsr = $cpsr & ~0x20
+#set to privledged mode	 
+set $cpsr = ($cpsr & ~0x1F) | 0x13
+p/x $cpsr
+load
+b main
+continue
