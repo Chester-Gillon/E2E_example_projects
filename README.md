@@ -633,3 +633,24 @@ Developed using:
 - CCS 8.3
 - GCC ARM compiler v6.3.1
 
+
+66AK2H14_C66_BIOS_binary_file_io
+================================
+
+For https://e2e.ti.com/support/tools/ccs/f/81/t/760355
+Developed using:
+- CCS 8.3
+- TI C6000 compiler v8.2.5
+- SYS/BIOS 6.73.1.01
+
+
+66AK2H14_A15_BIOS_binary_file_io
+================================
+
+
+For https://e2e.ti.com/support/tools/ccs/f/81/t/760355
+Developed using:
+- CCS 8.3
+- GCC ARM compiler v6.3.1
+- SYS/BIOS 6.73.1.01
+
