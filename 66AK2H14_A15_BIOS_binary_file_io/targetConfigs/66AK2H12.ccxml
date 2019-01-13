@@ -18,7 +18,7 @@
                             <router HW_revision="1.0" XML_version="1.2" description="CS_DAP Router" id="CS_DAP_0" isa="CS_DAP">
                                 <subpath id="cortex_A15_0">
                                     <cpu HW_revision="1.0" XML_version="1.2" description="CortexA15 CPU" deviceSim="false" id="arm_A15_0" isa="CortexA15">
-                                        <property Type="filepathfield" Value="..\..\emulation\boards\xtcievmk2x\gel\xtcievmk2x_arm.gel" id="GEL File"/>
+                                        <property Type="filepathfield" Value="..\xtcievmk2x_arm.gel" id="GEL File"/>
                                     </cpu>
                                 </subpath>
                             </router>
