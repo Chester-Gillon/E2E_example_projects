@@ -661,3 +661,15 @@ For https://e2e.ti.com/support/tools/ccs/f/81/t/760355
 Developed using:
 - CCS 8.3
 - GCC ARM compiler v7.2.1
+
+
+TMS570LC43x_flash_erase and example_TI_Fee_Write_Read
+=====================================================
+
+For https://e2e.ti.com/support/tools/ccs/f/81/t/767284
+Developed using:
+- HALCoGen v04.07.00
+- F021 Flash API v02.01.01
+- TI ARM compiler v18.1.5
+- CCS 8.3
+
