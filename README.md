@@ -673,3 +673,14 @@ Developed using:
 - TI ARM compiler v18.1.5
 - CCS 8.3
 
+
+AM5728_C66_SYSBIOS_1GB_heap
+===========================
+
+For https://e2e.ti.com/support/processors/f/791/t/770718
+Developed using:
+- CCS 8.3
+- TI C6000 compiler v8.2.5
+- SYS/BIOS v6.73.1.01
+- XDCtools 3.51.1.18_core
+

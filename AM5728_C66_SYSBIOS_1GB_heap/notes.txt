@@ -1,0 +1,38 @@
+1) Times when cache is enabled for the entire 2GB of DDR3
+
+a. Execution time for debug is 136 seconds:
+[C66xx_DSP1] [Sun Feb 17 15:38:08] enter main()
+Test iteration 0 using 1 allocations
+[Sun Feb 17 15:38:25]   Requested alloc_size=0x40000000  actual alloc_size=0x40000000  buffer=@c0000000
+[Sun Feb 17 15:38:46] Test iteration 1 using 2 allocations
+[Sun Feb 17 15:39:04]   Requested alloc_size=0x20000000  actual alloc_size=0x20000000  buffer=@c0000000
+[Sun Feb 17 15:39:04]   Requested alloc_size=0x20000000  actual alloc_size=0x20000000  buffer=@e0000000
+[Sun Feb 17 15:39:25] Test iteration 2 using 3 allocations
+[Sun Feb 17 15:39:42]   Requested alloc_size=0x10000000  actual alloc_size=0x10000000  buffer=@c0000000
+[Sun Feb 17 15:39:42]   Requested alloc_size=0x20000000  actual alloc_size=0x20000000  buffer=@d0000000
+[Sun Feb 17 15:39:42]   Requested alloc_size=0x10000000  actual alloc_size=0x10000000  buffer=@f0000000
+[Sun Feb 17 15:40:03] Test iteration 3 using 4 allocations
+[Sun Feb 17 15:40:20]   Requested alloc_size=0x10000000  actual alloc_size=0x10000000  buffer=@c0000000
+[Sun Feb 17 15:40:20]   Requested alloc_size=0x08000000  actual alloc_size=0x08000000  buffer=@d0000000
+[Sun Feb 17 15:40:20]   Requested alloc_size=0x20000000  actual alloc_size=0x20000000  buffer=@d8000000
+[Sun Feb 17 15:40:20]   Requested alloc_size=0x08000000  actual alloc_size=0x08000000  buffer=@f8000000
+[Sun Feb 17 15:40:41] Test complete
+
+b. Execution time for release is 34 seconds:
+[C66xx_DSP1] [Sun Feb 17 15:50:52] enter main()
+Test iteration 0 using 1 allocations
+[Sun Feb 17 15:50:54]   Requested alloc_size=0x40000000  actual alloc_size=0x40000000  buffer=@c0000000
+[Sun Feb 17 15:51:01] Test iteration 1 using 2 allocations
+[Sun Feb 17 15:51:03]   Requested alloc_size=0x20000000  actual alloc_size=0x20000000  buffer=@c0000000
+[Sun Feb 17 15:51:03]   Requested alloc_size=0x20000000  actual alloc_size=0x20000000  buffer=@e0000000
+[Sun Feb 17 15:51:10] Test iteration 2 using 3 allocations
+[Sun Feb 17 15:51:11]   Requested alloc_size=0x10000000  actual alloc_size=0x10000000  buffer=@c0000000
+[Sun Feb 17 15:51:11]   Requested alloc_size=0x20000000  actual alloc_size=0x20000000  buffer=@d0000000
+[Sun Feb 17 15:51:12]   Requested alloc_size=0x10000000  actual alloc_size=0x10000000  buffer=@f0000000
+[Sun Feb 17 15:51:19] Test iteration 3 using 4 allocations
+[Sun Feb 17 15:51:20]   Requested alloc_size=0x10000000  actual alloc_size=0x10000000  buffer=@c0000000
+[Sun Feb 17 15:51:20]   Requested alloc_size=0x08000000  actual alloc_size=0x08000000  buffer=@d0000000
+[Sun Feb 17 15:51:20]   Requested alloc_size=0x20000000  actual alloc_size=0x20000000  buffer=@d8000000
+[Sun Feb 17 15:51:21]   Requested alloc_size=0x08000000  actual alloc_size=0x08000000  buffer=@f8000000
+[Sun Feb 17 15:51:28] Test complete
+
