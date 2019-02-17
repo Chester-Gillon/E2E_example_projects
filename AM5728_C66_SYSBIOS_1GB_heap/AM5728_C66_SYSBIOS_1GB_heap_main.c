@@ -159,8 +159,7 @@ Int main()
      *     but as of TI C6000 compiler v8.3.2 there is limitation CODEGEN-4042 that the maximum object size the
      *     compiler can create is < 512MB.
      *
-     * @todo This absolute placement is part of the same EXT_RAM region used by the linker, and if the size of the
-     *       program grows could overlap with sections allocated by the linker resulting in a crash.
+     * @todo This absolute placement of the heap is not cached, which slows down performance
      */
     HeapMem_Params_init (&params);
     params.minBlockAlign = 128;
