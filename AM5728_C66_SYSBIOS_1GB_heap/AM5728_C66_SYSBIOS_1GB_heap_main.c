@@ -7,13 +7,12 @@
 #include <xdc/runtime/Error.h>
 #include <xdc/runtime/System.h>
 #include <xdc/runtime/Memory.h>
+#include <xdc/cfg/global.h>
 
 #include <ti/sysbios/BIOS.h>
 #include <ti/sysbios/heaps/HeapMem.h>
 
 #include <ti/sysbios/knl/Task.h>
-
-static HeapMem_Handle capture_heap;
 
 /* Table which defines how the 1GB heap is tested. It uses a number of different allocations, for which the total size of
  * the allocations made adds up to 1GB. */
@@ -85,7 +84,7 @@ Void taskFxn(UArg a0, UArg a1)
             alloc_size = alloc_defs[test_iteration].alloc_sizes[alloc_size_index];
             do
             {
-                capture_buffers[alloc_size_index] = Memory_alloc (HeapMem_Handle_upCast(capture_heap), alloc_size, 128, &eb);
+                capture_buffers[alloc_size_index] = Memory_alloc (HeapMem_Handle_upCast(CAPTURE_HEAP), alloc_size, 128, &eb);
                 if (capture_buffers[alloc_size_index] == NULL)
                 {
                     alloc_size -= 8;
@@ -131,7 +130,7 @@ Void taskFxn(UArg a0, UArg a1)
                 }
             }
 
-            Memory_free (HeapMem_Handle_upCast(capture_heap), capture_buffers[alloc_size_index],
+            Memory_free (HeapMem_Handle_upCast(CAPTURE_HEAP), capture_buffers[alloc_size_index],
                          capture_buffer_sizes[alloc_size_index]);
         }
     }
@@ -147,25 +146,10 @@ Int main()
 { 
     Task_Handle task;
     Error_Block eb;
-    HeapMem_Params params;
 
     System_printf("enter main()\n");
 
     Error_init(&eb);
-
-    /* Create a 1GB heap on the top half of the 2GB EXT_RAM region using a dynamic HeapMem_create() call since:
-     * a. The static HeapMem.create() call ignores the buf parameter.
-     * b. The static HeapMem.create() call generates an array (object) of the requested size,
-     *     but as of TI C6000 compiler v8.3.2 there is limitation CODEGEN-4042 that the maximum object size the
-     *     compiler can create is < 512MB.
-     *
-     * @todo This absolute placement of the heap is not cached, which slows down performance
-     */
-    HeapMem_Params_init (&params);
-    params.minBlockAlign = 128;
-    params.buf =  (xdc_Ptr) 0xC0000000;
-    params.size = 0x40000000;
-    capture_heap = HeapMem_create (&params, &eb);
 
     task = Task_create(taskFxn, NULL, &eb);
     if (task == NULL) {
