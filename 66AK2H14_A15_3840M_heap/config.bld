@@ -1,0 +1,38 @@
+/* Change the memory map used for the EVMK2H to define:
+   a. MCMCSRAM Multicore shared memory (MSM) to run the Cortex-A15 program in.
+   b. DDR3 to give 3840M of virtual address space which is mapped by the MMU to part of the 8G DDR3A memory
+      on the EVMK2H.
+     
+      Note that the xtcievmk2x_arm.gel script only initialises DDR3A as 2Gbytes, which causes the program to report an incorrect
+      fill pattern when the allocation exceeds 2Gbytes.
+     
+      This means the EVMK2H boot mode must be set to "ARM SPI" which means U-boot configures the DDR3A memory rather than the GEL
+      script:
+        DRAM:  DDR3A Speed will be configured for 1600 Operation.
+        Detected SO-DIMM [18KSF1G72HZ-1G6E2 ]
+        DDR3 speed 1600
+        DRAM: 8 GiB (includes reported below)
+*/
+Build.platformTable["ti.platforms.evmTCI6636K2H"] = {
+   externalMemoryMap: [
+      ["MCMCSRAM",
+         {
+         name: "MCMCSRAM",
+         base: 0x0c000000,
+         len:  0x00600000,
+         space: "code/data/stack",
+        }
+      ],
+      ["DDR3",
+         {
+         name: "DDR3",
+         base: 0x10000000,
+         len:  0xF0000000,
+         space: "code/data/stack",
+        }
+    ]
+  ],
+  codeMemory: "MCMCSRAM",
+  dataMemory: "MCMCSRAM",
+  stackMemory: "MCMCSRAM",
+};

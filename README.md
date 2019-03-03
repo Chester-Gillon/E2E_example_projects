@@ -684,3 +684,14 @@ Developed using:
 - SYS/BIOS v6.73.1.01
 - XDCtools 3.51.1.18_core
 
+
+66AK2H14_A15_3840M_heap
+=======================
+
+For https://e2e.ti.com/support/processors/f/791/t/744238
+Developed using:
+- CCS 8.3
+- GNU ARM compiler v7.2.1
+- SYS/BIOS 6.75.1.05
+- XDCtools 3.51.1.18_core
+
