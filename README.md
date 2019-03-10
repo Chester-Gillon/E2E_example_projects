@@ -695,3 +695,12 @@ Developed using:
 - SYS/BIOS 6.75.1.05
 - XDCtools 3.51.1.18_core
 
+
+66AK2H14_A15_gcc_abi_hard
+=========================
+
+For https://e2e.ti.com/support/tools/ccs/f/81/t/780727
+Developed using:
+- CCS 8.3
+- GNU ARM compiler v7.2.1
+
