@@ -704,3 +704,13 @@ Developed using:
 - CCS 8.3
 - GNU ARM compiler v7.2.1
 
+
+66AK2H14_link_binary_blob
+=========================
+
+For https://e2e.ti.com/support/tools/ccs/f/81/t/792875
+Developed using:
+- CCS 9.0.1
+- TI C6000 compiler v8.3.2
+- GNU ARM compiler v7.2.1
+
