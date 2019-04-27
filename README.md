@@ -714,3 +714,13 @@ Developed using:
 - TI C6000 compiler v8.3.2
 - GNU ARM compiler v7.2.1
 
+
+TMS320C6678_clock_gettime
+=========================
+
+For https://e2e.ti.com/support/processors/f/791/t/796647
+Developed using:
+- CCS 8.3
+- TI C6000 compiler v8.3.2
+- SYS/BIOS 6.75.2.0
+- XDCtools 3.55.0.11
