@@ -58,7 +58,6 @@ MEMORY
     FLASH0  (RX) : origin=0x00000020 length=0x0017FFE0
     STACKS  (RW) : origin=0x08000000 length=0x00001500
     RAM     (RW) : origin=0x08001500 length=0x0002EB00
-    AJSM    (RX) : origin=0xF0000000 length=0x00000010
 
 /* USER CODE BEGIN (2) */
 /* USER CODE END */
@@ -80,7 +79,6 @@ SECTIONS
     .bss     : {} > RAM
     .data    : {} > RAM
     .sysmem  : {} > RAM
-	.ajsm    : {} > AJSM
     
 
 /* USER CODE BEGIN (4) */

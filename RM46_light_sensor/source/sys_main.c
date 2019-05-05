@@ -1,7 +1,7 @@
 /** @file sys_main.c 
 *   @brief Application main file
-*   @date 08-Feb-2017
-*   @version 04.06.01
+*   @date 07-July-2017
+*   @version 04.07.00
 *
 *   This file contains an empty main function,
 *   which can be used for the application.
@@ -77,6 +77,11 @@ void wait(uint32 time);
 */
 
 /* USER CODE BEGIN (2) */
+
+void empty_entry_hook (void)
+{
+}
+
 /* USER CODE END */
 
 int main(void)

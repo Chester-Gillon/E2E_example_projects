@@ -1,7 +1,7 @@
 /** @file sys_selftest.c
 *   @brief Selftest Source File
-*   @date 08-Feb-2017
-*   @version 04.06.01
+*   @date 07-July-2017
+*   @version 04.07.00
 *
 *   This file contains:
 *   - Selftest API's
@@ -43,6 +43,17 @@
 
 
 /* USER CODE BEGIN (0) */
+
+/* Disable the generation of hooks for the following functions, which must be leaf functions (i.e. call no other functions) to
+ * avoid the link register being pushed on the stack and poped of the stack to obtain the return address.
+ *
+ * This is because these if these functions store the return address on the stack, the return address mat be overwritten
+ * while the CPU RAM is being modified by the self tests.
+ */
+#pragma NO_HOOKS (memoryInit)
+#pragma NO_HOOKS (pbistRun)
+#pragma NO_HOOKS (pbistIsTestCompleted)
+
 /* USER CODE END */
 
 #include "sys_selftest.h"
@@ -301,6 +312,10 @@ void cpuSelfTest(uint32 no_of_intervals, uint32 max_timeout, boolean restart_tes
 *   @brief PBIST self test Driver
 *
 *   This function is called to perform PBIST self test.
+*
+*   @note This Function uses register's which are not exposed to users through
+*   TRM , to run custom algorithm to make PBIST Fail. Users can use this function as Black box.
+*
 */
 /* SourceId : SELFTEST_SourceId_005 */
 /* DesignId : SELFTEST_DesignId_005 */
@@ -2773,6 +2788,10 @@ void ccmr4GetConfigValue(ccmr4_config_reg_t *config_reg, config_value_type_t typ
 *   This function is designed to initialize the ROMs using the PBIST controller.
 *   The CPU will configure the PBIST controller to test the PBIST ROM and STC ROM.
 *   This function should be called at startup after system init before using the ROMs.
+*
+*   @note : This Function uses register's which are not exposed to users through
+*   TRM , to run custom algorithm. User can use this function as Black box. 
+*
 */
 void errata_PBIST_4(void)
 {

@@ -1,7 +1,7 @@
 /** @file notification.c 
 *   @brief User Notification Definition File
-*   @date 08-Feb-2017
-*   @version 04.06.01
+*   @date 07-July-2017
+*   @version 04.07.00
 *
 *   This file  defines  empty  notification  routines to avoid
 *   linker errors, Driver expects user to define the notification. 

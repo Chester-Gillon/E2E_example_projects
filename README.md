@@ -5,9 +5,10 @@ RM46_light_sensor
 =================
 
 For https://e2e.ti.com/support/development_tools/code_composer_studio/f/81/p/608704/2240771#2240771
+and https://e2e.ti.com/support/tools/ccs/f/81/t/798139
 
-Displays the ADC value from the light sensor on a LAUNCHXL2-RM46 on the serial port.
-Developed using CCS 7.2 and HALCoGen 04.06.01.
+Displays the ADC value from the light sensor on a LAUNCHXL2-RM46 on the serial port, and has an empty entry hook.
+Developed using CCS 7.2 and HALCoGen 04.07.00.
 
 
 TM4C_RTC_trim_overflow
