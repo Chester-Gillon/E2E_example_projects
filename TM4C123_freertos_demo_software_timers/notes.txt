@@ -1,0 +1,7 @@
+This is a modified version of the TivaWare_C_Series-2.1.4.178/examples/boards/ek-tm4c123gxl/freertos_demo
+with the following changes to investigate use of the High Integrity Systems had a StateViewer Eclipse plug-in
+with CCS:
+1. Call vQueueAddToRegistry() for "g_pLEDQueue" and "g_pUARTSemaphore" to display them in the Queue Table view.
+
+2. Use a software timer to control the LED blink rate, rather than vTaskDelayUntil() in the LED task.
+   This is to populate the Timer Table view.

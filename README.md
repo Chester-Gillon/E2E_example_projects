@@ -725,3 +725,13 @@ Developed using:
 - TI C6000 compiler v8.3.2
 - SYS/BIOS 6.75.2.0
 - XDCtools 3.55.0.11
+
+
+TM4C123_freertos_demo_software_timers
+=====================================
+
+For https://e2e.ti.com/support/tools/ccs/f/81/t/801116
+Developed using:
+- CCS 9.0.1
+- TI ARM compiler v5.2.6
+- TivaWare_C_Series-2.1.4.178
