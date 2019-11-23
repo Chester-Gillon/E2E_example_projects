@@ -754,3 +754,10 @@ Developed using:
 - CCS 9.1.0
 - TI C2000 compiler v19.6.0.STS
 
+
+TM4C123_cpp_exceptions
+===================
+For https://e2e.ti.com/support/tools/ccs/f/81/t/859583
+Developed using:
+- CCS 9.2.0
+- TI ARM compiler 18.12.4
