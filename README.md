@@ -756,8 +756,18 @@ Developed using:
 
 
 TM4C123_cpp_exceptions
-===================
+======================
+
 For https://e2e.ti.com/support/tools/ccs/f/81/t/859583
+Developed using:
+- CCS 9.2.0
+- TI ARM compiler 18.12.4
+
+
+TMS570LC4357_emac_status
+========================
+
+For https://e2e.ti.com/support/microcontrollers/hercules/f/312/t/858377
 Developed using:
 - CCS 9.2.0
 - TI ARM compiler 18.12.4
