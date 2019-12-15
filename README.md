@@ -771,3 +771,13 @@ For https://e2e.ti.com/support/microcontrollers/hercules/f/312/t/858377
 Developed using:
 - CCS 9.2.0
 - TI ARM compiler 18.12.4
+
+
+EK-TM4C123GXL_grlib_demo_no_touch_no_resistors_remove
+=====================================================
+
+For https://e2e.ti.com/support/microcontrollers/other/f/908/t/862746
+Developed using:
+- CCS 9.2.0
+- TI ARM compiler v5.2.6
+
