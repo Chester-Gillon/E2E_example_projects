@@ -781,3 +781,12 @@ Developed using:
 - CCS 9.2.0
 - TI ARM compiler v5.2.6
 
+
+MSP430F5528_blinky_filled_flash
+===============================
+
+For https://e2e.ti.com/support/microcontrollers/msp430/f/166/t/867670
+Developed using:
+- CCS 9.3.0
+- TI ARM compiler v18.12.4.LTS
+
