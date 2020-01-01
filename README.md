@@ -786,3 +786,11 @@ Developed using:
 - CCS 9.3.0
 - TI ARM compiler v18.12.4.LTS
 
+
+MSP430L092_blinky_duty_cycle
+============================
+
+For https://e2e.ti.com/support/tools/ccs/f/81/t/869109
+Developed using:
+- CCS 9.3.0
+- TI MSP430 compiler v18.12.4.LTS
