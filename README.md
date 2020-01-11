@@ -804,3 +804,12 @@ Developed using:
 - CCS 9.3.0
 - TI MSP430 compiler v18.12.4.LTS
 
+
+CC430F5137_UART_echo_toggle_led
+===============================
+
+For https://e2e.ti.com/support/microcontrollers/msp430/f/166/t/863540
+Developed using:
+- CCS 9.3.0
+- TI MSP430 compiler v18.12.4.LTS
+
