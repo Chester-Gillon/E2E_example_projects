@@ -813,3 +813,12 @@ Developed using:
 - CCS 9.3.0
 - TI MSP430 compiler v18.12.4.LTS
 
+
+MSP430_crash_on_enable_disable_timer_int
+========================================
+
+For https://e2e.ti.com/support/microcontrollers/msp430/f/166/t/895839
+Developed using:
+- CCS 10.0.0
+- TI MSP compiler v20.2.1
+
