@@ -8,6 +8,7 @@
  * b. Only use a single output pin which should be toggled to indicate the program is still running.
  * c. Leave the watchdog disabled, and add a trap of reading the SYSRSTIV at start-up and halt if has got
  *    a reset source which appears to be following a crash.
+ * d. Change from using TA2 to TA0 to be able to run on smaller devices.
  */
 
 #include <msp430.h>
@@ -32,37 +33,37 @@ struct
 
 void Tick_Init()
 {
-    TA2CTL = 0;         // Disable clock
+    TA0CTL = 0;         // Disable clock
 
     globals.nTVal = 0;        // Clear current value
 
     // Configure all registers before start
-    TA2CCTL0 = TA2CCTL1 = 0;
-    TA2R = 0;
-    TA2EX0 = TAIDEX_7;      // TAIDEX = /8
+    TA0CCTL0 = TA0CCTL1 = 0;
+    TA0R = 0;
+    TA0EX0 = TAIDEX_7;      // TAIDEX = /8
 
-    TA2CCR0 = 50;      // for tests
+    TA0CCR0 = 50;      // for tests
 
-    TA2CTL = TASSEL__SMCLK | ID__8 | MC__UP | TACLR; // | TAIE;         // TASSEL = SMCLK, ID = /8, MC = UP & reset, clear, int enable, intf clear - will start
+    TA0CTL = TASSEL__SMCLK | ID__8 | MC__UP | TACLR; // | TAIE;         // TASSEL = SMCLK, ID = /8, MC = UP & reset, clear, int enable, intf clear - will start
 
     // The TAxCCR0 CCIFG interrupt flag is set when the timer counts to the TAxCCR0 value
     // Enable interrupt & clear flags
-    TA2CCTL0 = CCIE;
+    TA0CCTL0 = CCIE;
 }
 
 uint16_t TickGet16()
 {
-    TA2CCTL0 &= ~CCIE;
+    TA0CCTL0 &= ~CCIE;
 
     uint16_t nRet = (uint16_t) globals.nTVal;
 
-    TA2CCTL0 |= CCIE;
+    TA0CCTL0 |= CCIE;
 
     return nRet;
 }
 
-#pragma vector=TIMER2_A0_VECTOR
-__interrupt void TIMER2_A0_ISR()
+#pragma vector=TIMER0_A0_VECTOR
+__interrupt void TIMER0_A0_ISR()
 {
     globals.nTVal++;
 }
