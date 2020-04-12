@@ -18,7 +18,12 @@
 /* The pin toggled to indicate the program is still running */
 #define LED_OPERATIONS_PORT                 P1OUT
 #define LED_OPERATIONS_PORT_DIR             P1DIR
+#ifdef __MSP430FR2633__
+// CAPTIVATE-FR2633 LED1
+#define LED_OPERATIONS_MASK                 BIT7
+#else
 #define LED_OPERATIONS_MASK                 BIT0
+#endif
 
 /* Structure where the padding field allows the address of the nTVal variable incremented by the TIMER2_A0_ISR
  * to be adjusted, instead of the #pragma LOCATION used in the original example.
