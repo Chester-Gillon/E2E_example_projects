@@ -80,9 +80,9 @@ int main(void)
         reset_cause = SYSRSTIV;
         switch (reset_cause)
         {
-        case SYSRSTIV__NONE:
-        case SYSRSTIV__BOR:
-        case SYSRSTIV__RSTNMI:
+        case SYSRSTIV_NONE:
+        case SYSRSTIV_BOR:
+        case SYSRSTIV_RSTNMI:
             /* Continue with the program, as probably a power up */
             break;
 
