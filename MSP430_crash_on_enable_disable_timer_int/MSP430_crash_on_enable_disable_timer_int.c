@@ -40,7 +40,7 @@ void Tick_Init()
 {
     TA0CTL = 0;         // Disable clock
 
-    globals.nTVal = 0;        // Clear current value
+    globals.nTVal = 0xFEEDABBADEADBEEFULL;        // Large value for debugging
 
     // Configure all registers before start
     TA0CCTL0 = TA0CCTL1 = 0;
