@@ -56,13 +56,13 @@ MEMORY
     SFR                     : origin = 0x0000, length = 0x0010
     PERIPHERALS_8BIT        : origin = 0x0010, length = 0x00F0
     PERIPHERALS_16BIT       : origin = 0x0100, length = 0x0100
-    RAM                     : origin = 0x1C00, length = 0x0800
+    RAM                     : origin = 0x1C00, length = 0x0800, fill = 0x3FFF
     INFOA                   : origin = 0x1980, length = 0x0080
     INFOB                   : origin = 0x1900, length = 0x0080
     INFOC                   : origin = 0x1880, length = 0x0080
     INFOD                   : origin = 0x1800, length = 0x0080
-    FRAM                    : origin = 0x4400, length = 0xBB80
-    FRAM2                   : origin = 0x10000,length = 0x4000
+    FRAM                    : origin = 0x4400, length = 0xBB80, fill = 0x3FFF
+    FRAM2                   : origin = 0x10000,length = 0x4000, fill = 0x3FFF
     JTAGSIGNATURE           : origin = 0xFF80, length = 0x0004, fill = 0xFFFF
     BSLSIGNATURE            : origin = 0xFF84, length = 0x0004, fill = 0xFFFF
     IPESIGNATURE            : origin = 0xFF88, length = 0x0008, fill = 0xFFFF
