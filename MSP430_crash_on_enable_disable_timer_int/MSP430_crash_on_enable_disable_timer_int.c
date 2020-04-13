@@ -58,6 +58,9 @@ void Tick_Init()
 
 uint16_t TickGet16()
 {
+    asm volatile (" MOV.W &TA0CCTL0, R12");
+    asm volatile (" MOV.W &TA0CCTL0, R15");
+
     TA0CCTL0 &= ~CCIE;
 
     uint16_t nRet = (uint16_t) globals.nTVal;
