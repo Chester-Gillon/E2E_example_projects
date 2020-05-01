@@ -822,3 +822,12 @@ Developed using:
 - CCS 10.0.0
 - TI MSP compiler v20.2.1
 
+
+MSP430F5438A_linker_variable_order
+==================================
+
+For https://e2e.ti.com/support/microcontrollers/msp430/f/166/t/901697
+Developed using:
+- CCS 10.0.0
+- TI MSP compiler v18.12.5
+
