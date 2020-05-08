@@ -9,7 +9,14 @@
  *
  *  The project setup steps were:
  *  1. Add the following pre-build step:
- *       ${CG_TOOL_ROOT}/bin/armobjcopy --input-target=binary --output-target=elf32-littlearm ../MSP432P401R_link_binary_blob.c MSP432P401R_link_binary_blob_elf.o
+ *       ${CG_TOOL_ROOT}/bin/armobjcopy --input-target=binary --output-target=elf32-littlearm ../MSP432P401R_link_binary_blob.c MSP432P401R_link_binary_blob_elf.o --rename-section .data=.const,readonly
+ *
+ *     By default, when converting from a binary to ELF file armobjcopy creates a .data section.
+ *     Use of a .data section means the binary contents linked to the program can be modified at run time, but results
+ *     in increased memory usage as the binary file has be copied to RAM by the run time start up code.
+ *
+ *     The addition of "--rename-section .data=.const,readonly" to the above command causes the binary file to be placed in
+ *     a read-only .const section which can then be placed into FLASH by the linker.
  *
  *  2. Add the following linker libraries:
  *        MSP432P401R_link_binary_blob_elf.o
