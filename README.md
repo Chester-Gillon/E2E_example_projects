@@ -831,3 +831,12 @@ Developed using:
 - CCS 10.0.0
 - TI MSP compiler v18.12.5
 
+
+MSP432P401R_link_binary_blob
+============================
+
+For https://e2e.ti.com/support/tools/ccs/f/81/t/901982
+Developed using:
+- CCS 10.0.0
+- TI ARM compiler v20.2.1
+
