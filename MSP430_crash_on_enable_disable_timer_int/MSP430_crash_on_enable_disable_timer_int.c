@@ -70,8 +70,14 @@ uint16_t TickGet16()
     return nRet;
 }
 
-#pragma vector=TIMER0_A0_VECTOR
-__interrupt void TIMER0_A0_ISR()
+#if defined(__TI_COMPILER_VERSION__) || defined(__IAR_SYSTEMS_ICC__)
+#pragma vector = TIMER0_A0_VECTOR
+__interrupt void TIMER0_A0_ISR (void)
+#elif defined(__GNUC__)
+void __attribute__ ((interrupt(TIMER0_A0_VECTOR))) TIMER0_A0_ISR (void)
+#else
+#error Compiler not supported!
+#endif
 {
     globals.nTVal++;
 }
