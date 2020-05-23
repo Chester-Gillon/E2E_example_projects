@@ -840,3 +840,12 @@ Developed using:
 - CCS 10.0.0
 - TI ARM compiler v20.2.1
 
+
+MSP430FR5994_command_structure
+==============================
+
+For https://e2e.ti.com/support/tools/ccs/f/81/t/907757
+Developed using:
+- CCS 10.0.0
+- TI MSP430 compiler v20.2.1
+
