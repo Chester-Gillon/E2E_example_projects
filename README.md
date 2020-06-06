@@ -849,3 +849,12 @@ Developed using:
 - CCS 10.0.0
 - TI MSP430 compiler v20.2.1
 
+
+MSP432_coremark
+===============
+
+For https://e2e.ti.com/support/microcontrollers/msp430/f/166/t/910377
+Developed using:
+- CCS 10.0.0
+- TI ARM compiler v20.2.1
+
