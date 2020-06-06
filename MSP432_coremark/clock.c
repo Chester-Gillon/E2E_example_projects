@@ -15,11 +15,11 @@
 #ifdef CMSIS
 
 /* Replace this with your device-specific include file */
-#include <ARMCM4.h>
+#include <ti/devices/msp432e4/driverlib/driverlib.h>
 
 #else
 
-extern uint32_t SystemCoreClock;;
+extern uint32_t SystemCoreClock;
 
 /* SysTick registers */
 typedef struct
@@ -97,6 +97,13 @@ extern clock_t test_clock(void)
  * starting the systick timer. */
 extern void clock_init(void)
 {
+#ifdef __MSP432E401Y__
+    /* Configure the system clock for 120 MHz */
+    SystemCoreClock = MAP_SysCtlClockFreqSet((SYSCTL_XTAL_25MHZ |
+                                              SYSCTL_OSC_MAIN |
+                                              SYSCTL_USE_PLL |
+                                              SYSCTL_CFG_VCO_480), 120000000);
+#endif
   reset_cycle_counter();
   start_cycle_counter();
 }
