@@ -858,3 +858,12 @@ Developed using:
 - CCS 10.0.0
 - TI ARM compiler v20.2.1
 
+
+RM48L952_rtiblinky
+==================
+
+For https://e2e.ti.com/support/tools/ccs/f/81/t/913701
+Developed using:
+- CCS 10.0.0
+- TI ARM compiler v20.2.1
+- HalCoGen 04.07.01
