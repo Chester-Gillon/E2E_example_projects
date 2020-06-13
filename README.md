@@ -867,3 +867,13 @@ Developed using:
 - CCS 10.0.0
 - TI ARM compiler v20.2.1
 - HalCoGen 04.07.01
+
+
+MSP430FR4133_lcd_driverlib_linked_folder
+========================================
+
+For https://e2e.ti.com/support/microcontrollers/msp430/f/166/t/914022
+Developed using:
+- CCS 10.0.0
+- TI MSP430 compiler v20.2.1
+
