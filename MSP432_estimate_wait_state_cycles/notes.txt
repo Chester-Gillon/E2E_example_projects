@@ -1,0 +1,3 @@
+Release_SRAM : test takes 15,977,477 cycles
+Release_FLASH : test takes 19,972,102 cycles
+Release_FLASH_no_buffer : test takes 31,954,949 cycles
