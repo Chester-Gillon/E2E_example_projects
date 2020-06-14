@@ -84,6 +84,12 @@ SECTIONS
 	
 
 /* USER CODE BEGIN (4) */
+    .binit   : {} > FLASH0 | FLASH1
+    .TI.ramfunc :
+    {
+    	sys_main.obj(.text)
+    	rti.obj(.text:rtiCompare0Interrupt)
+    } load=FLASH0, run=RAM, table(BINIT)
 /* USER CODE END */
 }
 

@@ -83,7 +83,18 @@ void main(void)
     rtiStartCounter(rtiCOUNTER_BLOCK0);
 
     /* Run forever */
-    while(1);
+    int index;
+    volatile int total_sum = 0;
+    int current_sum;
+    for (;;)
+    {
+        current_sum = 0;
+        for (index = 0; index < CV_LENGTH; index++)
+        {
+            current_sum += cv[index];
+        }
+        total_sum += current_sum;
+    }
 
 /* USER CODE END */
 }
