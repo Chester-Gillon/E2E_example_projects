@@ -64,6 +64,7 @@
 
 #include "errata_SSWF021_45.h"
 /* USER CODE BEGIN (1) */
+#include "sys_mpu.h"
 /* USER CODE END */
 
 
@@ -641,6 +642,7 @@ void _c_int00(void)
     vimInit();    
 
 /* USER CODE BEGIN (74) */
+    _mpuInit_();
 /* USER CODE END */
 
     /* Configure system response to error conditions signaled to the ESM group1 */
