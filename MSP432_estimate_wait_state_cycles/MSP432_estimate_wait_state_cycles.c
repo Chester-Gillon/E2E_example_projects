@@ -79,7 +79,9 @@ void test (void)
  */
 void main(void)
 {
+#ifdef __MSP432P401R__
 	WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
+#endif
 
 	test ();
     test ();
