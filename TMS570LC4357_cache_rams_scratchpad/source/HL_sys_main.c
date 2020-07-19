@@ -56,7 +56,7 @@
 #include <stdarg.h>
 
 
-#define CACHE_RAM_BLOCK_SIZE_BYTES 4096
+#define CACHE_RAM_BLOCK_SIZE_BYTES 16384
 #define CACHE_RAM_BLOCK_SIZE_UINT32 (CACHE_RAM_BLOCK_SIZE_BYTES / sizeof (uint32_t))
 #define CACHE_RAM_BLOCK_SIZE_UINT64 (CACHE_RAM_BLOCK_SIZE_BYTES / sizeof (uint64_t))
 
@@ -259,6 +259,92 @@ static void find_cache_ram_writable_bits_uint32 (void)
     uart_printf ("\n\r");
 }
 
+
+static void test_data_rams_uint32 (void)
+{
+    const uint32_t data_ram_start_addresses[] =
+    {
+     0x30008000,
+     0x3000a000,
+     0x30010000,
+     0x30012000,
+     0x30020000,
+     0x30022000,
+     0x30040000,
+     0x30042000
+    };
+    const uint32_t num_banks = sizeof data_ram_start_addresses / sizeof (data_ram_start_addresses[0]);
+    const uint32_t data_ram_bank_num_words = 1024;
+
+    uint32_t bank_index;
+    uint32_t bank_offset;
+
+    uint32_t write_data = 0;
+    uint32_t actual_read_data;
+    uint32_t expected_read_data = write_data;
+    uint32_t num_read_back_failures = 0;
+    uint32_t num_words_tested = 0;
+    for (bank_index = 0; bank_index < num_banks; bank_index++)
+    {
+        volatile uint32_t *cache_data = (uint32_t *) data_ram_start_addresses[bank_index];
+
+        for (bank_offset = 0; bank_offset < data_ram_bank_num_words; bank_offset++)
+        {
+            cache_data[bank_offset] = write_data++;
+        }
+    }
+
+    for (bank_index = 0; bank_index < num_banks; bank_index++)
+    {
+        volatile uint32_t *cache_data = (uint32_t *) data_ram_start_addresses[bank_index];
+
+        for (bank_offset = 0; bank_offset < data_ram_bank_num_words; bank_offset++)
+        {
+            actual_read_data = cache_data[bank_offset];
+            if (actual_read_data != expected_read_data)
+            {
+                num_read_back_failures++;
+            }
+            expected_read_data++;
+            num_words_tested++;
+        }
+    }
+
+    uart_printf ("Num data RAM readback failures as 32-bit inc accesses = %u (out of %u tested)\n\r", num_read_back_failures, num_words_tested);
+
+    write_data = ~0;
+    expected_read_data = write_data;
+    num_read_back_failures = 0;
+    num_words_tested = 0;
+    for (bank_index = 0; bank_index < num_banks; bank_index++)
+    {
+        volatile uint32_t *cache_data = (uint32_t *) data_ram_start_addresses[bank_index];
+
+        for (bank_offset = 0; bank_offset < data_ram_bank_num_words; bank_offset++)
+        {
+            cache_data[bank_offset] = write_data--;
+        }
+    }
+
+    for (bank_index = 0; bank_index < num_banks; bank_index++)
+    {
+        volatile uint32_t *cache_data = (uint32_t *) data_ram_start_addresses[bank_index];
+
+        for (bank_offset = 0; bank_offset < data_ram_bank_num_words; bank_offset++)
+        {
+            actual_read_data = cache_data[bank_offset];
+            if (actual_read_data != expected_read_data)
+            {
+                num_read_back_failures++;
+            }
+            expected_read_data--;
+            num_words_tested++;
+        }
+    }
+
+    uart_printf ("Num data RAM readback failures as 32-bit dec accesses = %u (out of %u tested)\n\r", num_read_back_failures, num_words_tested);
+}
+
 /* USER CODE END */
 
 /** @fn void main(void)
@@ -279,6 +365,7 @@ int main(void)
     enable_axi_slave_cache_access ();
     find_cache_ram_writable_bits_uint64 ();
     find_cache_ram_writable_bits_uint32 ();
+    test_data_rams_uint32 ();
 /* USER CODE END */
 
     return 0;

@@ -8,6 +8,19 @@
             <instance XML_version="1.2" href="drivers/tixds510cortexR.xml" id="drivers" xml="tixds510cortexR.xml" xmlpath="drivers"/>
             <platform XML_version="1.2" id="platform_0">
                 <instance XML_version="1.2" desc="TMS570LS043x" href="devices/tms570ls043x.xml" id="TMS570LS043x" xml="tms570ls043x.xml" xmlpath="devices"/>
+            <device HW_revision="0" XML_version="1.2" description="TMS570LS043x TQFP, 384kB Flash, 32kB RAM" id="TMS570LS043x" partnum="TMS570LS043x" simulation="no">
+                    <router HW_revision="1.0" XML_version="1.2" description="ICEPick_C Router" id="IcePick_C_0" isa="ICEPICK_C">
+                        <subpath id="Port16">
+                            <router HW_revision="" XML_version="1.2" description="CS_DAP Router" id="CS_DAP_0" isa="CS_DAP">
+                                <subpath id="PortR4">
+                                    <cpu HW_revision="" XML_version="1.2" description="Cortex_R4 CPU" deviceSim="false" id="Cortex_R4_0" isa="Cortex_R4">
+                                        <property Type="filepathfield" Value="tms570lc43xx.gel" id="GEL File"/>
+                                    </cpu>
+                                </subpath>
+                            </router>
+                        </subpath>
+                    </router>
+                </device>
             </platform>
         </connection>
     </configuration>
