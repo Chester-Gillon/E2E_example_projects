@@ -886,3 +886,12 @@ Developed using:
 - CCS 10.0.0
 - TI ARM compiler v20.2.1
 
+
+TMS570LC4357_cache_rams_scratchpad
+==================================
+
+For https://e2e.ti.com/support/microcontrollers/hercules/f/312/t/920062
+Developed using:
+- CCS 10.1.0
+- TI ARM compiler v20.2.1
+- HalCoGen 04.07.01

@@ -1,0 +1,52 @@
+Initial results with CACHE_RAM_BLOCK_SIZE_BYTES set to 4096.
+The 32-bit access test doesn't find any writable bits.
+
+Region 30008000..30008fff accessed as 64-bits has writable bits ffffffff00000000
+Region 30010000..30010fff accessed as 64-bits has writable bits ffffffff00000000
+Region 30020000..30020fff accessed as 64-bits has writable bits ffffffff00000000
+Region 30040000..30040fff accessed as 64-bits has writable bits ffffffff00000000
+Region 30088000..30088fff accessed as 64-bits has writable bits f8ffff3f00000000
+Region 30090000..30090fff accessed as 64-bits has writable bits f8ffff3f00000000
+Region 300a0000..300a0fff accessed as 64-bits has writable bits f8ffff3f00000000
+Region 300c0000..300c0fff accessed as 64-bits has writable bits f8ffff3f00000000
+Region 30108000..30108fff accessed as 64-bits has writable bits 7f00000000000000
+Region 30110000..30110fff accessed as 64-bits has writable bits 7f7f000000000000
+Region 30118000..30118fff accessed as 64-bits has writable bits 7f7f000000000000
+Region 30120000..30120fff accessed as 64-bits has writable bits 7f7f7f0000000000
+Region 30128000..30128fff accessed as 64-bits has writable bits 7f7f7f0000000000
+Region 30130000..30130fff accessed as 64-bits has writable bits 7f7f7f0000000000
+Region 30138000..30138fff accessed as 64-bits has writable bits 7f7f7f0000000000
+Region 30140000..30140fff accessed as 64-bits has writable bits 7f7f7f7f00000000
+Region 30148000..30148fff accessed as 64-bits has writable bits 7f7f7f7f00000000
+Region 30150000..30150fff accessed as 64-bits has writable bits 7f7f7f7f00000000
+Region 30158000..30158fff accessed as 64-bits has writable bits 7f7f7f7f00000000
+Region 30160000..30160fff accessed as 64-bits has writable bits 7f7f7f7f00000000
+Region 30168000..30168fff accessed as 64-bits has writable bits 7f7f7f7f00000000
+Region 30170000..30170fff accessed as 64-bits has writable bits 7f7f7f7f00000000
+Region 30178000..30178fff accessed as 64-bits has writable bits 7f7f7f7f00000000
+
+Region 30008000..30008fff accessed as 32-bits has writable bits 00000000
+Region 30010000..30010fff accessed as 32-bits has writable bits 00000000
+Region 30020000..30020fff accessed as 32-bits has writable bits 00000000
+Region 30040000..30040fff accessed as 32-bits has writable bits 00000000
+Region 30088000..30088fff accessed as 32-bits has writable bits 00000000
+Region 30090000..30090fff accessed as 32-bits has writable bits 00000000
+Region 300a0000..300a0fff accessed as 32-bits has writable bits 00000000
+Region 300c0000..300c0fff accessed as 32-bits has writable bits 00000000
+Region 30108000..30108fff accessed as 32-bits has writable bits 00000000
+Region 30110000..30110fff accessed as 32-bits has writable bits 00000000
+Region 30118000..30118fff accessed as 32-bits has writable bits 00000000
+Region 30120000..30120fff accessed as 32-bits has writable bits 00000000
+Region 30128000..30128fff accessed as 32-bits has writable bits 00000000
+Region 30130000..30130fff accessed as 32-bits has writable bits 00000000
+Region 30138000..30138fff accessed as 32-bits has writable bits 00000000
+Region 30140000..30140fff accessed as 32-bits has writable bits 00000000
+Region 30148000..30148fff accessed as 32-bits has writable bits 00000000
+Region 30150000..30150fff accessed as 32-bits has writable bits 00000000
+Region 30158000..30158fff accessed as 32-bits has writable bits 00000000
+Region 30160000..30160fff accessed as 32-bits has writable bits 00000000
+Region 30168000..30168fff accessed as 32-bits has writable bits 00000000
+Region 30170000..30170fff accessed as 32-bits has writable bits 00000000
+Region 30178000..30178fff accessed as 32-bits has writable bits 00000000
+
+
