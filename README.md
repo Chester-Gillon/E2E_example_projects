@@ -895,3 +895,14 @@ Developed using:
 - CCS 10.1.0
 - TI ARM compiler v20.2.1
 - HalCoGen 04.07.01
+
+
+MSP430F5529_GCC_scanf
+=====================
+
+For https://e2e.ti.com/support/tools/ccs/f/81/t/932789
+Developed using:
+- CCS 10.1.0
+- TI MSP430 compiler v20.2.2
+- GNU MSP430 compiler v9.2.0.50
+
