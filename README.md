@@ -906,3 +906,12 @@ Developed using:
 - TI MSP430 compiler v20.2.2
 - GNU MSP430 compiler v9.2.0.50
 
+TM4C129EXL_TIRTOS_binary_uart_echo
+==================================
+
+For https://e2e.ti.com/support/microcontrollers/other/f/908/t/935074
+Developed using:
+- CCS 10.1.0
+- TI ARM compiler v20.2.2
+- tirtos_tivac_2_16_00_08
+
