@@ -59,14 +59,15 @@ Char task0Stack[TASKSTACKSIZE];
 /*
  *  ======== echoFxn ========
  *  Task for this function is created statically. See the project's .cfg file.
- *  This uses UART 2 Tx and Rx loop backed externally on a EK-TM4C1294XL with a wire between
- *  booster pack A2 pins 5 (PD4) and 6 (PD5).
+ *  This uses UART 2 Tx to UUART 6 Rx looped backed externally on a EK-TM4C1294XL with a wire between
+ *  booster pack A2 pins 6 (PD5) and 3 (PP0).
  */
 #define BUFFER_LEN 12
 int total_rx_bytes;
 Void echoFxn(UArg arg0, UArg arg1)
 {
-    UART_Handle uart;
+    UART_Handle tx_uart;
+    UART_Handle rx_uart;
     UART_Params uartParams;
     Uint8 tx_buffer[BUFFER_LEN];
     Uint8 rx_buffer[BUFFER_LEN];
@@ -85,9 +86,15 @@ Void echoFxn(UArg arg0, UArg arg1)
     uartParams.baudRate = 115200;
     uartParams.dataLength = UART_LEN_8;
     uartParams.parityType = UART_PAR_EVEN;
-    uart = UART_open(Board_UART2, &uartParams);
+    tx_uart = UART_open(Board_UART2, &uartParams);
 
-    if (uart == NULL) {
+    if (tx_uart == NULL) {
+        System_abort("Error opening the UART");
+    }
+
+    rx_uart = UART_open(Board_UART6, &uartParams);
+
+    if (rx_uart == NULL) {
         System_abort("Error opening the UART");
     }
 
@@ -97,9 +104,9 @@ Void echoFxn(UArg arg0, UArg arg1)
         {
             tx_buffer[index] = tx_pattern++;
         }
-        rc = UART_write (uart, tx_buffer, BUFFER_LEN);
+        rc = UART_write (tx_uart, tx_buffer, BUFFER_LEN);
         Assert_isTrue (rc == BUFFER_LEN, NULL);
-        rc = UART_read (uart, rx_buffer, BUFFER_LEN);
+        rc = UART_read (rx_uart, rx_buffer, BUFFER_LEN);
         Assert_isTrue (rc == BUFFER_LEN, NULL);
         for (index = 0; index < BUFFER_LEN; index++)
         {

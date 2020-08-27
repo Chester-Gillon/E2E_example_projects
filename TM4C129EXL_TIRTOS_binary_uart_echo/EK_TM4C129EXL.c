@@ -708,21 +708,36 @@ unsigned char uartTivaRingBuffer[EK_TM4C129EXL_UARTCOUNT][32];
 
 /* UART configuration structure */
 const UARTTiva_HWAttrs uartTivaHWAttrs[EK_TM4C129EXL_UARTCOUNT] = {
+    [EK_TM4C129EXL_UART2] =
     {
         .baseAddr = UART2_BASE,
         .intNum = INT_UART2,
         .intPriority = (~0),
         .flowControl = UART_FLOWCONTROL_NONE,
-        .ringBufPtr  = uartTivaRingBuffer[0],
-        .ringBufSize = sizeof(uartTivaRingBuffer[0])
+        .ringBufPtr  = uartTivaRingBuffer[EK_TM4C129EXL_UART2],
+        .ringBufSize = sizeof(uartTivaRingBuffer[EK_TM4C129EXL_UART2])
+    },
+    [EK_TM4C129EXL_UART6] =
+    {
+        .baseAddr = UART6_BASE,
+        .intNum = INT_UART6,
+        .intPriority = (~0),
+        .flowControl = UART_FLOWCONTROL_NONE,
+        .ringBufPtr  = uartTivaRingBuffer[EK_TM4C129EXL_UART6],
+        .ringBufSize = sizeof(uartTivaRingBuffer[EK_TM4C129EXL_UART6])
     }
 };
 
 const UART_Config UART_config[] = {
     {
         .fxnTablePtr = &UARTTiva_fxnTable,
-        .object = &uartTivaObjects[0],
-        .hwAttrs = &uartTivaHWAttrs[0]
+        .object = &uartTivaObjects[EK_TM4C129EXL_UART2],
+        .hwAttrs = &uartTivaHWAttrs[EK_TM4C129EXL_UART2]
+    },
+    {
+        .fxnTablePtr = &UARTTiva_fxnTable,
+        .object = &uartTivaObjects[EK_TM4C129EXL_UART6],
+        .hwAttrs = &uartTivaHWAttrs[EK_TM4C129EXL_UART6]
     },
     {NULL, NULL, NULL}
 };
@@ -738,6 +753,11 @@ void EK_TM4C129EXL_initUART(void)
     GPIOPinConfigure(GPIO_PD4_U2RX);
     GPIOPinConfigure(GPIO_PD5_U2TX);
     GPIOPinTypeUART(GPIO_PORTD_BASE, GPIO_PIN_4 | GPIO_PIN_5);
+
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_UART6);
+    GPIOPinConfigure(GPIO_PP0_U6RX);
+    GPIOPinConfigure(GPIO_PP1_U6TX);
+    GPIOPinTypeUART(GPIO_PORTP_BASE, GPIO_PIN_0 | GPIO_PIN_1);
 
     /* Initialize the UART driver */
 #if TI_DRIVERS_UART_DMA

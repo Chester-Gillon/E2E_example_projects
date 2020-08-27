@@ -81,6 +81,7 @@ extern "C" {
 #define Board_USBDEVICE             EK_TM4C129EXL_USBDEVICE
 
 #define Board_UART2                 EK_TM4C129EXL_UART2
+#define Board_UART6                 EK_TM4C129EXL_UART6
 
 #define Board_WATCHDOG0             EK_TM4C129EXL_WATCHDOG0
 
