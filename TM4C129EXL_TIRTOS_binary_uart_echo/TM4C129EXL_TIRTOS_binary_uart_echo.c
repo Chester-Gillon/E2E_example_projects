@@ -63,6 +63,7 @@ Char task0Stack[TASKSTACKSIZE];
  *  booster pack A2 pins 6 (PD5) and 3 (PP0).
  */
 #define BUFFER_LEN 12
+#define UART_LEN_7_MASK 0x7f
 int total_rx_bytes;
 Void echoFxn(UArg arg0, UArg arg1)
 {
@@ -70,13 +71,21 @@ Void echoFxn(UArg arg0, UArg arg1)
     UART_Handle rx_uart;
     UART_Params uartParams;
     Uint8 tx_buffer[BUFFER_LEN];
+    UART_PAR tx_parity[BUFFER_LEN];
     Uint8 rx_buffer[BUFFER_LEN];
     Uint8 tx_pattern = 1;
     Uint8 rx_pattern = tx_pattern;
     int rc;
     int index;
+    int count;
+    int parity_bit;
+    Uint8 byte;
+    Bool inject_parity_errors;
 
-    /* Create a UART with data processing off. */
+    /* Open transmit and receive UARTS.
+     * The transmitter is set to 8 bits with no parity, and the receiver to 7 bits with even parity.
+     * Software is used to control the parity bit sent for each character to select if the receiver gets the
+     * expected parity or not. */
     UART_Params_init(&uartParams);
     uartParams.readTimeout = 5000u;
     uartParams.writeDataMode = UART_DATA_BINARY;
@@ -85,35 +94,83 @@ Void echoFxn(UArg arg0, UArg arg1)
     uartParams.readEcho = UART_ECHO_OFF;
     uartParams.baudRate = 115200;
     uartParams.dataLength = UART_LEN_8;
-    uartParams.parityType = UART_PAR_EVEN;
+    uartParams.parityType = UART_PAR_NONE;
     tx_uart = UART_open(Board_UART2, &uartParams);
+    Assert_isTrue (tx_uart != NULL, NULL);
 
-    if (tx_uart == NULL) {
-        System_abort("Error opening the UART");
-    }
-
+    uartParams.dataLength = UART_LEN_7;
+    uartParams.parityType = UART_PAR_EVEN;
     rx_uart = UART_open(Board_UART6, &uartParams);
-
-    if (rx_uart == NULL) {
-        System_abort("Error opening the UART");
-    }
+    Assert_isTrue (rx_uart != NULL, NULL);
 
     /* Loop forever echoing */
-    while (1) {
+    inject_parity_errors = TRUE;
+    while (1)
+    {
+        /* Default to transmitting even parity to match that expected by the receiver */
         for (index = 0; index < BUFFER_LEN; index++)
         {
-            tx_buffer[index] = tx_pattern++;
+            tx_parity[index] = UART_PAR_EVEN;
+        }
+
+        /* On the first iteration inject a parity error into some of the characters */
+        if (inject_parity_errors)
+        {
+            tx_parity[1] = UART_PAR_ODD;
+            tx_parity[7] = UART_PAR_ODD;
+            tx_parity[9] = UART_PAR_ODD;
+        }
+
+        /* Set a transmit pattern in the buffer to be transmitted, with a software inserted parity bit */
+        for (index = 0; index < BUFFER_LEN; index++)
+        {
+            tx_buffer[index] = tx_pattern;
+            byte = tx_buffer[index];
+            for (count = 0; byte != 0; count++)
+            {
+                byte &= byte - 1;
+            }
+            if (tx_parity[index] == UART_PAR_EVEN)
+            {
+                parity_bit = (count & 1) ? 1 : 0;
+            }
+            else
+            {
+                parity_bit = (count & 1) ? 0 : 1;
+            }
+            tx_buffer[index] |= parity_bit << 7;
+
+            tx_pattern = (tx_pattern + 1) & UART_LEN_7_MASK;
         }
         rc = UART_write (tx_uart, tx_buffer, BUFFER_LEN);
         Assert_isTrue (rc == BUFFER_LEN, NULL);
+
         rc = UART_read (rx_uart, rx_buffer, BUFFER_LEN);
-        Assert_isTrue (rc == BUFFER_LEN, NULL);
-        for (index = 0; index < BUFFER_LEN; index++)
+        if (inject_parity_errors)
         {
-            Assert_isTrue (rx_buffer[index] == rx_pattern, NULL);
-            rx_pattern++;
+            /* Parity error injected, so just report what was received */
+            System_printf ("Received characters after error injection (rc=%d):", rc);
+            for (index = 0; index < rc; index++)
+            {
+                System_printf (" %02x", rx_buffer[index]);
+            }
+            System_printf ("\n");
+            System_flush();
+            rx_pattern = tx_pattern;
+        }
+        else
+        {
+            /* No parity errors injected, so check all received characters match that transmitted */
+            Assert_isTrue (rc == BUFFER_LEN, NULL);
+            for (index = 0; index < BUFFER_LEN; index++)
+            {
+                Assert_isTrue (rx_buffer[index] == rx_pattern, NULL);
+                rx_pattern = (rx_pattern + 1) & UART_LEN_7_MASK;
+            }
         }
         total_rx_bytes += rc;
+
+        inject_parity_errors = FALSE;
     }
 }
 
