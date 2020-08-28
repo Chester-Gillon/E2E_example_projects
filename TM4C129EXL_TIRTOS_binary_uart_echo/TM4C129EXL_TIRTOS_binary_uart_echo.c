@@ -38,6 +38,7 @@
 #include <xdc/std.h>
 #include <xdc/runtime/System.h>
 #include <xdc/runtime/Assert.h>
+#include <xdc/runtime/Timestamp.h>
 
 /* BIOS Header files */
 #include <ti/sysbios/BIOS.h>
@@ -65,6 +66,10 @@ Char task0Stack[TASKSTACKSIZE];
 #define BUFFER_LEN 12
 #define UART_LEN_7_MASK 0x7f
 int total_rx_bytes;
+Bits32 num_durations;
+Bits32 min_rx_duration;
+Bits32 max_rx_duration;
+
 Void echoFxn(UArg arg0, UArg arg1)
 {
     UART_Handle tx_uart;
@@ -81,6 +86,9 @@ Void echoFxn(UArg arg0, UArg arg1)
     int parity_bit;
     Uint8 byte;
     Bool inject_parity_errors;
+    Bits32 start_time;
+    Bits32 stop_time;
+    Bits32 duration;
 
     /* Open transmit and receive UARTS.
      * The transmitter is set to 8 bits with no parity, and the receiver to 7 bits with even parity.
@@ -145,11 +153,14 @@ Void echoFxn(UArg arg0, UArg arg1)
         rc = UART_write (tx_uart, tx_buffer, BUFFER_LEN);
         Assert_isTrue (rc == BUFFER_LEN, NULL);
 
+        start_time = Timestamp_get32 ();
         rc = UART_read (rx_uart, rx_buffer, BUFFER_LEN);
+        stop_time = Timestamp_get32 ();
+        duration = stop_time - start_time;
         if (inject_parity_errors)
         {
             /* Parity error injected, so just report what was received */
-            System_printf ("Received characters after error injection (rc=%d):", rc);
+            System_printf ("Received characters after error injection duration=%u (rc=%d):", duration, rc);
             for (index = 0; index < rc; index++)
             {
                 System_printf (" %02x", rx_buffer[index]);
@@ -167,6 +178,25 @@ Void echoFxn(UArg arg0, UArg arg1)
                 Assert_isTrue (rx_buffer[index] == rx_pattern, NULL);
                 rx_pattern = (rx_pattern + 1) & UART_LEN_7_MASK;
             }
+
+            /* Maintain the spread of durations seen for the UART_read call when no errors */
+            if (num_durations == 0)
+            {
+                min_rx_duration = duration;
+                max_rx_duration = duration;
+            }
+            else
+            {
+                if (duration < min_rx_duration)
+                {
+                    min_rx_duration = duration;
+                }
+                if (duration > max_rx_duration)
+                {
+                    max_rx_duration = duration;
+                }
+            }
+            num_durations++;
         }
         total_rx_bytes += rc;
 
