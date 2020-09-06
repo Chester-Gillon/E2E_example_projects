@@ -915,3 +915,13 @@ Developed using:
 - TI ARM compiler v20.2.2
 - tirtos_tivac_2_16_00_08
 
+
+TM4C129_switch_input
+====================
+
+For https://e2e.ti.com/support/tools/ccs/f/81/t/937988
+Developed using:
+- CCS 10.1.0
+- TI ARM compiler v20.2.2
+- TivaWare 2.2.0.295
+
