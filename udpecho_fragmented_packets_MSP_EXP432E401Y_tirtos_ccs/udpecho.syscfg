@@ -1,70 +1,57 @@
-/*
- * Copyright (c) 2018-2019, Texas Instruments Incorporated - http://www.ti.com
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * *  Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *
- * *  Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- *
- * *  Neither the name of Texas Instruments Incorporated nor the names of
- *    its contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
- * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
- * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-// @cliArgs --board /ti/boards/MSP_EXP432E401Y
-
-/*
- *  udpecho.syscfg
+/**
+ * These arguments were used when this file was generated. They will be automatically applied on subsequent loads
+ * via the GUI or CLI. Run CLI with '--help' for additional information on how to override these arguments.
+ * @cliArgs --board "/ti/boards/MSP_EXP432E401Y" --product "simplelink_msp432e4_sdk@4.20.00.12"
+ * @versions {"data":"2020052512","timestamp":"2020052512","tool":"1.5.0+1397","templates":"2020052512"}
  */
 
-/* ======== RTOS ======== */
-var RTOS = scripting.addModule("/ti/drivers/RTOS");
+/**
+ * Import the modules used in this configuration.
+ */
+const Display  = scripting.addModule("/ti/display/Display");
+const Display1 = Display.addInstance();
+const RTOS     = scripting.addModule("/ti/drivers/RTOS");
+const General  = scripting.addModule("/ti/ndk/General");
+const NIMU     = scripting.addModule("/ti/ndk/NIMU");
+const NIMU1    = NIMU.addInstance();
+const SlNet    = scripting.addModule("/ti/net/SlNet");
+const SlNet1   = SlNet.addInstance();
 
-/* ======== Display ======== */
-var Display = scripting.addModule("/ti/display/Display");
-var display = Display.addInstance();
-display.$hardware = system.deviceData.board.components.XDS110UART;
+/**
+ * Write custom configuration values to the imported modules.
+ */
+Display1.$name      = "CONFIG_Display_0";
+Display1.$hardware  = system.deviceData.board.components.XDS110UART;
+Display1.uart.$name = "CONFIG_UART_0";
 
-/* ======== SlNet Interfaces ======== */
-var SlNet = scripting.addModule("/ti/net/SlNet");
-var interface1 = SlNet.addInstance();
-interface1.id = 2;
-interface1.enableSecureSocks = false;
 
-/* ======== General ======== */
-var General = scripting.addModule("/ti/ndk/General");
-General.ipv6 = false;
-General.ndkThreadStkSize = 2048;
-General.lowPriTaskDefStkSize = 2048;
+General.ndkThreadStkSize      = 2048;
+General.lowPriTaskDefStkSize  = 2048;
 General.normPriTaskDefStkSize = 2048;
 General.highPriTaskDefStkSize = 2048;
-General.networkIPAddrHook = "netIPAddrHook";
-/* --- TCP --- */
-General.tcpTxBufSize = 1024;
-General.tcpRxBufSize = 1024;
-General.tcpRxBufLimit = 2048;
-/* --- UDP --- */
-General.udpRxBufSize = 2048;
+General.networkIPAddrHook     = "netIPAddrHook";
+General.tcpTxBufSize          = 1024;
+General.tcpRxBufSize          = 1024;
+General.tcpRxBufLimit         = 2048;
+General.udpRxBufSize          = 4096;
 
-/* ======== NIMU ======== */
-var eth0 = scripting.addModule("/ti/ndk/NIMU").addInstance();
-eth0.dhcpcServReportFxn = "serviceReport";
-eth0.emac.$name = "CONFIG_EMAC_0";
+NIMU1.$name              = "CONFIG_NIMU_0";
+NIMU1.dhcpcServReportFxn = "serviceReport";
+NIMU1.emac.$name         = "CONFIG_EMAC_0";
+
+SlNet1.$name             = "CONFIG_SLNET_0";
+SlNet1.id                = 2;
+SlNet1.enableSecureSocks = false;
+
+/**
+ * Pinmux solution for unlocked pins/peripherals. This ensures that minor changes to the automatic solver in a future
+ * version of the tool will not impact the pinmux you originally saw.  These lines can be completely deleted in order to
+ * re-solve from scratch.
+ */
+Display1.uart.uart.$suggestSolution       = "UART0";
+Display1.uart.uart.txPin.$suggestSolution = "expansion.76";
+Display1.uart.uart.rxPin.$suggestSolution = "expansion.74";
+RTOS.timer0.resource.$suggestSolution     = "Timer0";
+NIMU1.emac.emac.$suggestSolution          = "ETHERNET0";
+NIMU1.emac.emac.led0Pin.$suggestSolution  = "boosterpack2.39";
+NIMU1.emac.emac.led1Pin.$suggestSolution  = "boosterpack2.32";

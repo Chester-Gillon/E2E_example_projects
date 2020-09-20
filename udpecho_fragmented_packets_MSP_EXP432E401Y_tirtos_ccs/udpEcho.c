@@ -51,7 +51,7 @@
 
 #include <ti/display/Display.h>
 
-#define UDPPACKETSIZE 1472
+#define UDPPACKETSIZE 4000 /* 1472 was the original max value for one unfragmented UDP packet */
 #define MAXPORTLEN    6
 
 extern Display_Handle display;
@@ -144,7 +144,7 @@ void *echoFxn(void *arg0)
                             (struct sockaddr *)&clientAddr, addrlen);
                     if (bytesSent < 0 || bytesSent != bytesRcvd) {
                         Display_printf(display, 0, 0,
-                                "Error: sendto failed.\n");
+                                       "Error: sendto failed (bytesRcvd=%d bytesSent=%d)\n", bytesRcvd, bytesSent);
                         goto shutdown;
                     }
                 }

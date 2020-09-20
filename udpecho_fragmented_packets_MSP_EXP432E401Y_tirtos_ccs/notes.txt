@@ -29,3 +29,21 @@ Starting test with a 0 uSec delay between transmits
 [id 1] count = 2000, time = 1
 
 Increasing the size by one byte results in no response.
+
+
+2. Incease UDP buffering
+========================
+
+Buffering changes for the application
+a. Increase UDPPACKETSIZE from 1472 to 4000
+b. Increase stack size to allow for the larger UDPPACKETSIZE on the stack in echoFxn()
+c. The syscfg General.udpRxBufSize has been doubled from 2048 to 4096 to allow the larger packets to be received.
+
+Of trying  udpSendReceive:
+a. Size of 1472 works.
+b. Size of 3013 results in no response, and causes NDK_ips.Fragdropped to increment.
+   This appears releated to the DEF_IP_REASM_MAXSIZE of 3020
+c. Size of 1473 causes the echoFxn() to exit with an error:
+     Error: sendto failed (bytesRcvd=1473 bytesSent=-1)
+d. Size of 3012 causes the echoFxn() to exit with an error: 
+     Error: sendto failed (bytesRcvd=3012 bytesSent=-1)

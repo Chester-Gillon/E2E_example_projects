@@ -52,7 +52,7 @@
 
 #define UDPPORT 1000
 
-#define UDPHANDLERSTACK 4096
+#define UDPHANDLERSTACK 8192
 #define IFPRI  4   /* Ethernet interface priority */
 
 /* Prototypes */
