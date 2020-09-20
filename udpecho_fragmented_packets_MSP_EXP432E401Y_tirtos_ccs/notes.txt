@@ -39,7 +39,7 @@ a. Increase UDPPACKETSIZE from 1472 to 4000
 b. Increase stack size to allow for the larger UDPPACKETSIZE on the stack in echoFxn()
 c. The syscfg General.udpRxBufSize has been doubled from 2048 to 4096 to allow the larger packets to be received.
 
-Of trying  udpSendReceive:
+Of trying udpSendReceive:
 a. Size of 1472 works.
 b. Size of 3013 results in no response, and causes NDK_ips.Fragdropped to increment.
    This appears releated to the DEF_IP_REASM_MAXSIZE of 3020
@@ -47,3 +47,38 @@ c. Size of 1473 causes the echoFxn() to exit with an error:
      Error: sendto failed (bytesRcvd=1473 bytesSent=-1)
 d. Size of 3012 causes the echoFxn() to exit with an error: 
      Error: sendto failed (bytesRcvd=3012 bytesSent=-1)
+
+     
+3. Remove UdpOutput() which was reporting an error attempting to send fragmented packets
+========================================================================================
+
+Add a modified simplelink udp.c file to the project, to stop sendto() from returning an error if attempt to send a UDP
+packet which needs to be fragmented.
+ 
+$ git diff ~/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/ndk/stack/udp/udp.c simplelink_modified_files/udp.c | cat
+diff --git a/home/mr_halfword/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/ndk/stack/udp/udp.c b/simplelink_modified_files/udp.c
+index 6036ce1..c853663 100644
+--- a/home/mr_halfword/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/ndk/stack/udp/udp.c
++++ b/simplelink_modified_files/udp.c
+@@ -163,11 +163,13 @@ int UdpOutput( void *hSock, unsigned char *buf, int32_t size, int32_t *pRetSize
+ 
+     mss -= SockGetIpHdrSize(hSock) + UDPHDR_SIZE;   /* Sub off IpHdr & UdpHdr */
+ 
++    /* This check has been commnted out since the IPTxPacket() called later can handle transmitting fragmented packets.
+     if( size > mss )
+     {
+         error = NDK_EMSGSIZE;
+         goto UDP_EXIT;
+     }
++    */
+ 
+     /* Create the packet */
+     /* Payload = size */
+
+
+
+Of trying udpSendReceive:
+a. Size of 1472 works.
+b. Size of 3013 results in no response, and causes NDK_ips.Fragdropped to increment.
+c. Size of 1473 fails, due to the transmitted packets have an invalid UDP checksum.
+d. Size of 3012 fails, due to the transmitted packets have an invalid UDP checksum.
