@@ -1,0 +1,31 @@
+1. Using unmodified example
+===========================
+
+This has UDPPACKETSIZE set to 1472 which is the maximum UDP payload size in one Ethernet frame.
+
+With a ping size of the maximum for one Ethernet frame then successfull:
+$ ping 192.168.0.5 -s 1474
+PING 192.168.0.5 (192.168.0.5) 1474(1502) bytes of data.
+1482 bytes from 192.168.0.5: icmp_seq=1 ttl=255 time=0.703 ms
+
+Increasing the ping size by one byte fails:
+$ ping 192.168.0.5 -s 1475
+PING 192.168.0.5 (192.168.0.5) 1475(1503) bytes of data.
+1483 bytes from 192.168.0.5: icmp_seq=1 ttl=255 time=0.736 ms
+wrong data byte #1474 should be 0xc2 but was 0x7d
+
+This causes the ICMP payload to be split into two Ethernet frames, and Wireshark reports the transmitted ICMP checksum
+is invalid.
+
+The maximum ping size which generates a response is 3012.
+A ping size of 3013 causes NDK_ips.Fragdropped to increment.
+This appears related to the DEF_IP_REASM_MAXSIZE of 3020
+	
+
+A UDP packet size of 1472 works:
+$ /mnt/windows/ti/tirtos_cc13xx_cc26xx_2_21_01_08/packages/examples/tools/udpSendReceive 192.168.0.5 1000 1 -s0 -l1472
+Starting test with a 0 uSec delay between transmits
+[id 1] count = 1000, time = 1
+[id 1] count = 2000, time = 1
+
+Increasing the size by one byte results in no response.
