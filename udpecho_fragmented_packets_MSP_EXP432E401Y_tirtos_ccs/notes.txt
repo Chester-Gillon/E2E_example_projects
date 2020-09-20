@@ -82,3 +82,71 @@ a. Size of 1472 works.
 b. Size of 3013 results in no response, and causes NDK_ips.Fragdropped to increment.
 c. Size of 1473 fails, due to the transmitted packets have an invalid UDP checksum.
 d. Size of 3012 fails, due to the transmitted packets have an invalid UDP checksum.
+
+
+4. Add modified EMACMSP432E4.c driver which only enables hardware checksum offload for IP headers
+================================================================================================= 
+
+The reason for this modification is that the hardware checksum offload can only work on UDP/ICMP/TCP payloads which are
+fragmented. While TCP payloads aren't expected to the fragmented due to taking account of the MTU, the hardware doesn't
+allow UDP/ICMP/TCP payloads checksum offload to be controlled independently for different protocols.
+
+To select hardware/software checksum calculation on a packet-by-packet basis according to if the payload needed to be
+fragmented looks to be require more changes in the NDK code (which is shared among different devices?)
+
+Also, this program isn't testing TCP. 
+
+$ git diff ~/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/emac/EMACMSP432E4.c simplelink_modified_files/EMACMSP432E4.c | cat
+diff --git a/home/mr_halfword/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/emac/EMACMSP432E4.c b/simplelink_modified_files/EMACMSP432E4.c
+index 221e206..d63c153 100644
+--- a/home/mr_halfword/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/emac/EMACMSP432E4.c
++++ b/simplelink_modified_files/EMACMSP432E4.c
+@@ -232,8 +232,13 @@ static void EMACMSP432E4_processPendingTx()
+         pDesc->Desc.pvBuffer1 = pBuffer;
+         pDesc->Desc.ui32CtrlStatus = DES0_TX_CTRL_FIRST_SEG;
+ 
++        /*
++         * The MSP432E EMAC only operates on single frames, with the software being responsible for fragmenting IP packets which
++         * are too large for one Ethernet frame. The MSP432E EMAC Checksum Offload is therefore unable to generate or check the
++         * payload of a packet which is fragmented into multiple Ethernet frames.
++         */
+         pDesc->Desc.ui32CtrlStatus |=
+-                (DES0_TX_CTRL_IP_ALL_CKHSUMS | DES0_TX_CTRL_CHAINED);
++                (DES0_TX_CTRL_IP_HDR_CHKSUM | DES0_TX_CTRL_CHAINED);
+         pDesc->Desc.ui32CtrlStatus |= (DES0_TX_CTRL_LAST_SEG |
+                                        DES0_TX_CTRL_INTERRUPT);
+         EMACMSP432E4_private.pTxDescList->ulWrite++;
+@@ -1079,9 +1084,14 @@ int EMACMSP432E4_NIMUInit(STKEVENT_Handle hEvent)
+     device->mtu         = ETH_MAX_PAYLOAD - ETHHDR_SIZE;
+     device->pvt_data    = (void *)&EMACMSP432E4_private;
+ 
+-    /* Inform upper layers that this driver enables Checksum Offloading */
+-    device->flags = NIMU_DEVICE_ENABLE_HW_CHKSM_TX_ALL |
+-                    NIMU_DEVICE_ENABLE_HW_CHKSM_RX_ALL;
++    /* Inform upper layers that this driver enables IP Checksum Offloading.
++     *
++     * The MSP432E EMAC only operates on single frames, with the software being responsible for fragmenting IP packets which
++     * are too large for one Ethernet frame. The MSP432E EMAC Checksum Offload is therefore unable to generate or check the
++     * payload of a packet which is fragmented into multiple Ethernet frames.
++     */
++    device->flags = NIMU_DEVICE_ENABLE_HW_CHKSM_TX_IP |
++                    NIMU_DEVICE_ENABLE_HW_CHKSM_RX_IP;
+ 
+     /* Populate the Driver Interface Functions. */
+     device->start       = EMACMSP432E4_emacStart;
+
+
+Testing udpSendReceive:
+a. The following sizes now work:
+   1472 : payload in one frame
+   1473 : payload in two frames
+   3012 : payload in three frames
+b. Size of 3013 results in no response, and causes NDK_ips.Fragdropped to increment.
+
+Testing ping:
+a. The following sizes now work:
+   1472 : payload in one frame
+   1473 : payload in two frames
+   3012 : payload in three frames
+b. Size of 3013 results in no response, and causes NDK_ips.Fragdropped to increment.
+   
