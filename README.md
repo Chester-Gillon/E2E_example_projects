@@ -925,3 +925,12 @@ Developed using:
 - TI ARM compiler v20.2.2
 - TivaWare 2.2.0.295
 
+
+udpecho_fragmented_packets_MSP_EXP432E401Y_tirtos_ccs and tirtos_builds_MSP_EXP432E401Y_release_ccs
+===================================================================================================
+
+For https://e2e.ti.com/support/microcontrollers/msp430/f/166/t/938134
+Developed using:
+- CCS 10.1.0
+- TI ARM compiler v20.2.2
+- simplelink_msp432e4_sdk_4_20_00_12
