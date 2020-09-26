@@ -164,3 +164,48 @@ Max ping size has increased to 3016.
 Failure is now that PBM_alloc() fails due to the packet size exceeding the following in simplelink_msp432e4_sdk_4_20_00_12/source/ti/ndk/stack/pbm/pbm.c :
 /* Limitation of using mmAlloc */
 #define MMALLOC_MAXSIZE 3068
+
+
+6. Increase maximum size for mmAlloc
+====================================
+
+The syscfg was changed to increase the Page Size from the default 3072 to 4096.
+
+To allow PBM_alloc() to make use of increased Page Size had to add a modified pbm.c file to the project with a modifed
+macro:
+$ git diff ~/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/ndk/stack/pbm/pbm.c simplelink_modified_files/pbm.c | cat
+diff --git a/home/mr_halfword/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/ndk/stack/pbm/pbm.c b/simplelink_modified_files/pbm.c
+index cd20436..2f28c03 100644
+--- a/home/mr_halfword/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/ndk/stack/pbm/pbm.c
++++ b/simplelink_modified_files/pbm.c
+@@ -40,8 +40,13 @@
+ 
+ #include <stkmain.h>
+ 
+-/* Limitation of using mmAlloc */
++/* Limitation of using mmAlloc.
++ * @todo Value increased correspondingly with the syscfg pageSize being increased from the default of 3072 to 4096.
++ *       Not sure why this is hard coded rather than being calculated from the pageSize set in the NDK configuration. */
++/*
+ #define MMALLOC_MAXSIZE 3068
++*/
++#define MMALLOC_MAXSIZE 4092
+ 
+ /* Our PBM types */
+ #define PBM_MAGIC_POOL      0x0F1E2D3C
+
+udpSendReceive now works with 4000 byte UDP packets which was the intent of the test:
+$ /mnt/windows/ti/tirtos_cc13xx_cc26xx_2_21_01_08/packages/examples/tools/udpSendReceive 192.168.0.5 1000 1 -s0 -l4000
+Starting test with a 0 uSec delay between transmits
+[id 1] count = 1000, time = 2
+[id 1] count = 2000, time = 4
+
+And the maximum ping size is now 4040:
+$ ping 192.168.0.5 -s 4040
+PING 192.168.0.5 (192.168.0.5) 4040(4068) bytes of data.
+4048 bytes from 192.168.0.5: icmp_seq=1 ttl=255 time=1.42 ms
+4048 bytes from 192.168.0.5: icmp_seq=2 ttl=255 time=1.44 ms
+^C
+--- 192.168.0.5 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1001ms
+rtt min/avg/max/mdev = 1.428/1.436/1.444/0.008 ms

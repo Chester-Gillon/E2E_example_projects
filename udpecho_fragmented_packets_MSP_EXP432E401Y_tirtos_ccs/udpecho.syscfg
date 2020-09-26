@@ -35,6 +35,7 @@ General.tcpRxBufSize          = 1024;
 General.tcpRxBufLimit         = 2048;
 General.udpRxBufSize          = 4096;
 General.initHook              = "netStackInitHook";
+General.pageSize              = 4096;
 
 NIMU1.$name              = "CONFIG_NIMU_0";
 NIMU1.dhcpcServReportFxn = "serviceReport";
