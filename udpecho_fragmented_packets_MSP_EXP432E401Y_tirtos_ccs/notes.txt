@@ -149,4 +149,18 @@ a. The following sizes now work:
    1473 : payload in two frames
    3012 : payload in three frames
 b. Size of 3013 results in no response, and causes NDK_ips.Fragdropped to increment.
-   
+
+
+5. Increase CFGITEM_IP_IPREASMMAXSIZE
+=====================================
+
+A netStackInitHook() function was added to increase CFGITEM_IP_IPREASMMAXSIZE from the default of 3020 to 4096,
+with netStackInitHook() specified as a syscfg initHook function. 
+
+Max payload size for udpSendReceive has increased to 3016.
+
+Max ping size has increased to 3016.
+
+Failure is now that PBM_alloc() fails due to the packet size exceeding the following in simplelink_msp432e4_sdk_4_20_00_12/source/ti/ndk/stack/pbm/pbm.c :
+/* Limitation of using mmAlloc */
+#define MMALLOC_MAXSIZE 3068

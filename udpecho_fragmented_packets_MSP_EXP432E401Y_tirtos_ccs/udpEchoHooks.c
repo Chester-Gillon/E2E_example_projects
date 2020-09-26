@@ -59,6 +59,18 @@
 extern Display_Handle display;
 extern void *echoFxn(void *arg0);
 
+
+/*
+ * Increase the maximum IP re-assembly size above the default of 3020
+ */
+void netStackInitHook(void *hCfg)
+{
+    uint32_t IpReasmMaxSize = 4096;
+
+    CfgAddEntry(hCfg, CFGTAG_IP, CFGITEM_IP_IPREASMMAXSIZE, CFG_ADDMODE_UNIQUE,
+            sizeof(uint32_t), (unsigned char *)&IpReasmMaxSize, NULL);
+}
+
 /*
  *  ======== netIPAddrHook ========
  *  user defined network IP address hook
