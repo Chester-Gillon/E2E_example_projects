@@ -934,3 +934,14 @@ Developed using:
 - CCS 10.1.0
 - TI ARM compiler v20.2.2
 - simplelink_msp432e4_sdk_4_20_00_12
+
+
+TMS570LC4357_GCC_halcogen
+=========================
+
+For https://e2e.ti.com/support/microcontrollers/hercules/f/312/t/907975
+Developed using:
+- CCS 10.1.1
+- GCC ARM compiler 7.2.1p1
+- HALCoGen 04.07.01
+
