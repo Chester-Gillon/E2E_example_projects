@@ -83,6 +83,10 @@ void handlePLLLockFail(void);
 void _c_int00(void) __attribute__((noreturn));
 #define PLL_RETRIES 5U
 /* USER CODE BEGIN (4) */
+void _start(void);
+
+extern int __stack[];
+
 /* USER CODE END */
 
 __attribute__ ((naked))
@@ -254,6 +258,31 @@ void _c_int00(void)
 
     }
 /* USER CODE BEGIN (26) */
+    /* The _start() function sets the stack pointer to the value of the __stack symbol.
+     * In newlib __stack is a weak symbol with the default value of 0x80000 which is in flash on a TMS570LC4357.
+     * The set__stack.ld linker script added to the project manually sets the __stack symbol to match the initial value defined
+     * for userSp in the HALCoGen HL_sys_core.s, where the __stack symbol need to manually modified to set the stack settings in the
+     * HALCoGen configuration, which creates HL_sys_core.s.
+     *
+     * The following halts execution if the current stack pointer for this function, which is the value of userSp HALCoGen HL_sys_core.s,
+     * doesn't match the stack pointer which _start will set.
+     *
+     * @todo Can a HALCoGen project have a way of modifying parts of the HALCoGen created files, to avoid having to manually maintain
+     *       the value of __stack ?
+     */
+    register int *sp asm("sp");
+    if (__stack != sp)
+    {
+        for(;;)
+        {
+        }
+    }
+
+    /* Call the newlib entry point, which will call global constructors (amongst start-up actions), before calling main */
+    _start ();
+
+    /* In case _start() returns */
+    exit (0);
 /* USER CODE END */
     
         /* call the application */

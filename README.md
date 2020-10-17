@@ -939,7 +939,8 @@ Developed using:
 TMS570LC4357_GCC_halcogen
 =========================
 
-For https://e2e.ti.com/support/microcontrollers/hercules/f/312/t/907975
+For https://e2e.ti.com/support/microcontrollers/hercules/f/312/t/907975 and
+https://e2e.ti.com/support/microcontrollers/hercules/f/312/t/947965
 Developed using:
 - CCS 10.1.1
 - GCC ARM compiler 7.2.1p1

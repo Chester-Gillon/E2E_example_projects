@@ -504,6 +504,18 @@
         <NAME>HL_sys_link.cmd</NAME>
         <PATH>source\HL_sys_link.cmd</PATH>
       </SRCCMD>
+      <SSWFHDRERRATA>
+        <NAME>HL_errata_SSWF021_45.h</NAME>
+        <PATH>include\HL_errata_SSWF021_45.h</PATH>
+      </SSWFHDRERRATA>
+      <SSWFHDREGERRATA>
+        <NAME>HL_errata_SSWF021_45_defs.h</NAME>
+        <PATH>include\HL_errata_SSWF021_45_defs.h</PATH>
+      </SSWFHDREGERRATA>
+      <SSWFSRCERRATA>
+        <NAME>HL_errata_SSWF021_45.c</NAME>
+        <PATH>source\HL_errata_SSWF021_45.c</PATH>
+      </SSWFSRCERRATA>
     </FILENAMES>
   </SYSTEM>
   <PINMUX>
