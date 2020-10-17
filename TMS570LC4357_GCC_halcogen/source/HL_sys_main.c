@@ -56,6 +56,9 @@
 #include "HL_sci.h"
 #include "HL_gio.h"
 
+#include "cpp_test.h"
+
+
 #define  TSIZE1 12
 uint8  TEXT1[TSIZE1]= {'\r','\n','|','\t','C','H','.','I','D','=','0','x'};
 #define  TSIZE2 9
@@ -98,6 +101,8 @@ int main(void)
         /* Group1 -> Channel 0 and 1                        */
         /* HW trigger trigger source as GIOB  Pin 0         */
         adcInit();
+
+        cpp_test ();
 
         /* start adc conversion */
         adcStartConversion(adcREG1,adcGROUP1);
