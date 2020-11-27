@@ -41,9 +41,11 @@
  *  "Time to restore LDO to 1.2 V in Sleep mode". Therefore use a 20 KHz (50 microseconds period) systick rate. */
 #define SYSTICK_RATE_HZ 20000
 
-/** Sweep a timer through this rates to attempt to beat with the systick rate */
+/** Sweep a timer through this rates to attempt to beat with the systick rate.
+ *  The commented out value for TIMER_MAX_RATE_HZ was the original value, which has been changed to make the failure occur more quickly when
+ *  starting the program under the debugger */
 #define TIMER_MIN_RATE_HZ  18000
-#define TIMER_MAX_RATE_HZ 500000
+#define TIMER_MAX_RATE_HZ  20408 /* 500000 */
 uint32_t timer_min_period;
 uint32_t timer_max_period;
 uint32_t timer_period;
