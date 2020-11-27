@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<configurations XML_version="1.2" id="configurations_0">
+    <configuration XML_version="1.2" id="configuration_0">
+        <instance XML_version="1.2" desc="Texas Instruments XDS2xx USB Debug Probe" href="connections/TIXDS2XXUSB_Connection.xml" id="Texas Instruments XDS2xx USB Debug Probe" xml="TIXDS2XXUSB_Connection.xml" xmlpath="connections"/>
+        <connection XML_version="1.2" id="Texas Instruments XDS2xx USB Debug Probe">
+            <instance XML_version="1.2" href="drivers/tixds560cs_dap.xml" id="drivers" xml="tixds560cs_dap.xml" xmlpath="drivers"/>
+            <instance XML_version="1.2" href="drivers/tixds560cortexM.xml" id="drivers" xml="tixds560cortexM.xml" xmlpath="drivers"/>
+            <platform XML_version="1.2" id="platform_0">
+                <instance XML_version="1.2" desc="Tiva TM4C129XNCZAD" href="devices/tm4c129xnczad.xml" id="Tiva TM4C129XNCZAD" xml="tm4c129xnczad.xml" xmlpath="devices"/>
+            <device HW_revision="1" XML_version="1.2" description="" id="Tiva TM4C129XNCZAD" partnum="TM4C129XNCZAD">
+                    <router HW_revision="1.0" XML_version="1.2" description="CS_DAP Router" id="CS_DAP_0" isa="CS_DAP">
+                        <subpath id="subpath_0">
+                            <cpu HW_revision="1.0" XML_version="1.2" description="Cortex M4 CPU" id="CORTEX_M4_0" isa="CORTEX_M4">
+                                <property Type="filepathfield" Value="../tm4c129xnczad.gel" id="GEL File"/>
+                            </cpu>
+                        </subpath>
+                    </router>
+                </device>
+            </platform>
+        </connection>
+    </configuration>
+</configurations>

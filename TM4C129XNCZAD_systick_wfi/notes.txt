@@ -1,0 +1,90 @@
+==============================
+Got hard fault when the expressions were (where the expressions were set to Continuous Refesh) during the run:
+num_wakeups	unsigned int	121668114	0x2000022C	
+total_sys_tick_interrupts	unsigned int	28444900	0x20000220	
+total_timer_interrupts	unsigned int	96254053	0x20000224	
+timer_period	unsigned int	5925	0x2000020C	
+
+NVIC_FAULT_STAT	0x00008200	Configurable Fault Status [Memory Mapped]	
+NVIC_FAULT_STAT_DIV0	0	Divide-by-Zero Usage Fault	
+NVIC_FAULT_STAT_UNALIGN	0	Unaligned Access Usage Fault	
+NVIC_FAULT_STAT_NOCP	0	No Coprocessor Usage Fault	
+NVIC_FAULT_STAT_INVPC	0	Invalid PC Load Usage Fault	
+NVIC_FAULT_STAT_INVSTAT	0	Invalid State Usage Fault	
+NVIC_FAULT_STAT_UNDEF	0	Undefined Instruction Usage Fault	
+NVIC_FAULT_STAT_BFARV	1	Bus Fault Address Register Valid	
+NVIC_FAULT_STAT_BLSPERR	0	Bus Fault on Floating-Point Lazy State Preservation	
+NVIC_FAULT_STAT_BSTKE	0	Stack Bus Fault	
+NVIC_FAULT_STAT_BUSTKE	0	Unstack Bus Fault	
+NVIC_FAULT_STAT_IMPRE	0	Imprecise Data Bus Error	
+NVIC_FAULT_STAT_PRECISE	1	Precise Data Bus Error	
+NVIC_FAULT_STAT_IBUS	0	Instruction Bus Error	
+NVIC_FAULT_STAT_MMARV	0	Memory Management Fault Address Register Valid	
+NVIC_FAULT_STAT_MLSPERR	0	Memory Management Fault on Floating-Point Lazy State Preservation	
+NVIC_FAULT_STAT_MSTKE	0	Stack Access Violation	
+NVIC_FAULT_STAT_MUSTKE	0	Unstack Access Violation	
+NVIC_FAULT_STAT_DERR	0	Data Access Violation	
+NVIC_FAULT_STAT_IERR	0	Instruction Access Violation	
+
+NVIC_FAULT_ADDR	0x0138EEA5	Bus Fault Address [Memory Mapped]	
+
+Where address 0x0138EEA5 is not defined
+
+SP	0x200001B8	General Purpose Register 13 - Stack Pointer [Core]
+[SP+0x18] = 0x2AC = PC
+[SP+0x14] = 0xFFFFFFF9 = LR
+
+          sys_tick_handler():
+000002a0:   E92D4100            push.w     {r8, r14}
+ 52           GPIOPinWrite (RGB_LED_PORT, RED_LED_PIN | GREEN_LED_PIN | BLUE_LED_PIN, rgb_led_state);
+000002a4:   F2402800            movw       r8, #0x200
+000002a8:   F2C20800            movt       r8, #0x2000
+000002ac:   F8982000            ldrb.w     r2, [r8] <-- offending instruction not using a peripheral
+
+Program verification successful.
+
+==================================
+2nd run, but single stepped and set the initial timer_period to 5850 to get closer to the failure point in the 1st run.
+
+Got a hard fault for:
+num_wakeups	unsigned int	726833	0x2000022C	
+total_sys_tick_interrupts	unsigned int	365767	0x20000220	
+total_timer_interrupts	unsigned int	372787	0x20000224	
+timer_period	unsigned int	5923	0x2000020C	
+
+And the addition of the GEL script from https://e2e.ti.com/support/tools/ccs/f/81/p/810598/3026599#3026599 to automate the stack unwind
+shows the problematic PC was again 0x2AC. 
+
+Same faulrt locartion as before:
+NVIC_FAULT_STAT	0x00008200	Configurable Fault Status [Memory Mapped]	
+NVIC_FAULT_ADDR	0x0138EEA5	Bus Fault Address [Memory Mapped]	
+
+================================
+3rd run power cycled and left running without debugger attached.
+
+No hard fault when left running (omitted to record how long had been run for).
+
+After attaching debugger:
+num_wakeups	unsigned int	1126826797	0x2000022C	
+total_sys_tick_interrupts	unsigned int	274395735	0x20000220	
+total_timer_interrupts	unsigned int	880220327	0x20000224	
+timer_period	unsigned int	3670	0x2000020C	
+
+Based upon the total_sys_tick_interrupts had run for 9.6 times longer than the 1st failure and timer_period has wrapped around.
+
+With the debugger attached set running, with the Expressions set to continuous refresh.
+
+Which then stopped with a hard fault with:
+num_wakeups	unsigned int	1152019250	0x2000022C	
+total_sys_tick_interrupts	unsigned int	285672151	0x20000220	
+total_timer_interrupts	unsigned int	894588989	0x20000224	
+timer_period	unsigned int	5925	0x2000020C	
+
+Unwinding the stack with the GEL script ended up with the PC as 0x472 in main (instruction after wfi).
+However, may have made a mistake as got "CORTEX_M4_0: GEL Output: Unwound stack after an exception with non-floating point state" in the console
+so might have first unwound to the timer ISR and then to main.
+
+Fault registers the same as before:
+NVIC_FAULT_STAT	0x00008200	Configurable Fault Status [Memory Mapped]	
+NVIC_FAULT_ADDR	0x0138EEA5	Bus Fault Address [Memory Mapped]	
+

@@ -946,3 +946,13 @@ Developed using:
 - GCC ARM compiler 7.2.1p1
 - HALCoGen 04.07.01
 
+
+TM4C129XNCZAD_systick_wfi
+=========================
+
+For https://e2e.ti.com/support/microcontrollers/other/f/908/t/955745
+Developed using:
+- CCS 10.1.1
+- TI ARM compiler v20.2.3
+- TivaWare 2.2.0.295
+
