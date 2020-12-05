@@ -947,8 +947,8 @@ Developed using:
 - HALCoGen 04.07.01
 
 
-TM4C129XNCZAD_systick_wfi
-=========================
+TM4C129XNCZAD_systick_wfi and TM4C129ENCPDT_systick_wfi
+=======================================================
 
 For https://e2e.ti.com/support/microcontrollers/other/f/908/t/955745
 Developed using:
