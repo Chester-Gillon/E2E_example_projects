@@ -1,0 +1,135 @@
+/*******************************************************************/ 
+/* This GEL file is loaded on the command line of Code Composer    */
+/*                                                                 */
+/* History:                                                        */
+/* Version  Author         Date        Comments                    */
+/* 1.0      Kamal Nehal    Unknown     Initial Version AEC/Aries   */
+/* 1.1      Krishna Allam  11/30/2009  Removed use of GEL_WatchAdd */
+/*                                     It is not supported in CCSv4*/
+/*******************************************************************/
+
+#define MPU_ON    0x00000001
+#define MPU_OFF   ~MPU_ON
+
+/* When a Cortex-M exception has occurred the LR has bits [31:5] set */
+#define LR_EXC_RETURN_MASK 0xFFFFFFE0
+
+/* When a Cortex-M exception has occurred LR bit 4 set means no floating point state has been saved */
+#define LR_EXCEPTION_NO_FLOATING_POINT_SAVED_MASK 0x00000010
+
+
+menuitem "MPU"
+
+hotmenu Enable_MPU()
+{
+   int status;
+
+    status =  MPU_CONTROL;
+    status |= MPU_ON;
+    MPU_CONTROL = status;
+
+    status = MPU_CONTROL;
+
+    if ( (status & MPU_ON) == MPU_ON )
+    {
+        GEL_TextOut("MPU is ON. \n\n");
+    }
+   else
+   {
+       GEL_TextOut("MPU is OFF. \n\n");
+   }
+}
+
+hotmenu Disable_MPU()
+{
+    int status;
+
+    status =  MPU_CONTROL;
+    status &= MPU_OFF;
+    MPU_CONTROL= status;
+
+    status = MPU_CONTROL;
+
+    if ( (status & MPU_ON) == MPU_ON )
+    {
+        GEL_TextOut("MPU Is ON. \n\n");
+    }
+    else
+    {
+       GEL_TextOut("MPU Is OFF. \n\n");
+    }
+}
+
+
+unsigned int faultISR_address;
+
+/* When the program is loaded automatically get a breakpoint on the FaultISR function, so that the program halts
+ * if a hard fault occurs. */
+OnFileLoaded( int nErrorCode, int bSymbolsOnly , int bProgramOnly )
+{
+    /* Clear any breakpoint set from previous runs, to avoid getting multiple breakpoints at the same address.
+     * Since GEL_BreakPtAdd may add a hardware breakpoint, clear any hardware or software breakpoints. */
+    GEL_BreakPtDel (Default_Handler);
+    GEL_HWBreakPtDel (Default_Handler);
+    
+    /* Add the breakpoint */
+    GEL_BreakPtAdd (Default_Handler);
+    
+    /* Save the address of the symbol for use by OnHalt() */
+    faultISR_address = Default_Handler;
+}
+
+menuitem "Exception"
+
+/* Unwind the stack after a Cortex-M exception has occurred, so that the CCS debugger shows the context at
+ * which the exception occurred.
+ * 
+ * The LR is used to check for a EXC_RETURN value to verify that in an exception handler before unwinding
+ * the stack. */
+hotmenu Unwind_Exception()
+{
+    unsigned int saved_lr;
+    unsigned int saved_sp;
+    unsigned int *stacked_pc;
+    unsigned int *stacked_lr;
+    
+    saved_lr = LR;
+    if ((saved_lr & LR_EXC_RETURN_MASK) == LR_EXC_RETURN_MASK)
+    {
+        saved_sp = SP;
+        
+        /* Restore the PC and LR at which the exception occurred */
+        stacked_pc = saved_sp + 0x18;
+        stacked_lr = saved_sp + 0x14;
+        PC = *stacked_pc;
+        LR = *stacked_lr;
+        
+        /* Restore the SP value at which the exception occurred, according to if float point state was saved
+         * upon the exception entry. */
+        if ((saved_lr & LR_EXCEPTION_NO_FLOATING_POINT_SAVED_MASK) != 0)
+        {
+            SP = saved_sp + 0x20;
+            GEL_TextOut ("Unwound stack after an exception with non-floating point state\n");
+        }
+        else
+        {
+            SP = saved_sp + 0x68;
+            GEL_TextOut ("Unwound stack after an exception with floating point state\n");
+        }
+    }
+}
+
+/* When the target is halted, if halted at the start of the faultISR function then automatically
+ * unwind the exception stack.
+ * 
+ * The reason for the conditional test on being at entry to faultISR is that when loading the program, 
+ * or reseting the device, the CPU is sometimes halted at an exception and so an automatic attempt
+ * to unwind the exception stack can break the debugging. 
+ */
+OnHalt()
+{
+    if (PC == faultISR_address)
+    {
+        Unwind_Exception ();
+    }
+}

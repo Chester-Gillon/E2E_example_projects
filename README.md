@@ -956,3 +956,13 @@ Developed using:
 - TI ARM compiler v20.2.3
 - TivaWare 2.2.0.295
 
+
+MSP432E401Y_systick_wfi
+=======================
+
+For https://e2e.ti.com/support/microcontrollers/other/f/908/t/955745
+Developed using:
+- CCS 10.1.1
+- TI ARM compiler v20.2.3
+- simplelink_msp432e4_sdk_4_20_00_12
+
