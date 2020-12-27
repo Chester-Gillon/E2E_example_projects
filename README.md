@@ -966,3 +966,12 @@ Developed using:
 - TI ARM compiler v20.2.3
 - simplelink_msp432e4_sdk_4_20_00_12
 
+
+MSP430_find_bsl_accessible_addresses
+====================================
+
+For https://e2e.ti.com/support/microcontrollers/msp430/f/166/t/966686
+Developed using:
+- CCS 10.1.1
+- TI MSP430 compiler v20.2.0
+
