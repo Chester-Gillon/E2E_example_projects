@@ -1,0 +1,14 @@
+StartUp()
+{
+    GEL_MapReset(); 
+    GEL_MapOff();
+
+    /* Default the entire address space to read/write, to match the behaviour without a GEL file */
+    //@todo GEL_MapAdd seems to think a MSPX has only 16 address bits
+    GEL_MapAdd (0, 0, 0x10000, 1, 1);
+    
+    /* Make the area of the BSL ROM which generates a Security Violation PUC as not accessible */
+    GEL_MapAdd (0x1010, 0, 0x7F0, 0, 0);
+    
+    GEL_MapOn();
+}

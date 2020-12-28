@@ -975,3 +975,13 @@ Developed using:
 - CCS 10.1.1
 - TI MSP430 compiler v20.2.0
 
+
+MSP430FR5969_memory_browser_security_violation
+==============================================
+
+
+For https://e2e.ti.com/support/microcontrollers/msp430/f/166/t/966686
+Developed using:
+- CCS 10.1.1
+- TI MSP430 compiler v20.2.3
+
