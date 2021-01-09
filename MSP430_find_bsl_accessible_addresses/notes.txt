@@ -1,0 +1,3 @@
+inaccessible regions on a MSP430FR5969:
+{start_addr=0x00001010,end_addr=0x000017FF}, /* In BSL ROM memory */
+{start_addr=0x00001B08,end_addr=0x00001BFF}, /* In vacant memory */

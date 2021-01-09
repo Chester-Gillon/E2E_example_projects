@@ -12,12 +12,12 @@
 struct
 {
     bool initialised;
-    uint16_t bsl_read_addr;
+    uintptr_t bsl_read_addr;
     uint16_t num_inaccessible_regions;
     struct
     {
-        uint16_t start_addr;
-        uint16_t end_addr;
+        uintptr_t start_addr;
+        uintptr_t end_addr;
     } inaccessible_regions[MAX_INACCESSIBLE_REGIONS];
 } bsl_probe =
 {
@@ -25,8 +25,14 @@ struct
 };
 #pragma PERSISTENT (bsl_probe);
 
+/* Probe from BSL ROM start address on low memory to the highest MSPX highest address.
+ * On some MSP430FR there is 2nd part of BSL ROM at the top of the address space.
+ * This also covers vacant addresses on some devices.
+ *
+ * It excludes peripherals in at the lowest addresses.
+ */
 #define BSL_BEGIN_READ_ADDR 0x1000
-#define BSL_END_READ_ADDR   0x1800
+#define BSL_END_READ_ADDR   0x100000
 
 /**
  * main.c
