@@ -1,5 +1,5 @@
 /**
- * This program is designed to probe which addresses in the BSL of a MSP430FR5969 is inaccessible.
+ * This program is designed to probe which addresses in the BSL of a MSP430FRxxx are inaccessible.
  * Attempting to read an inaccessible address in the BSL results in the device being reset with a Security Violation,
  * so the program has to maintain persistent state in FRAM to keep track of progress.
  */
@@ -52,6 +52,11 @@ int main(void)
 	    }
 	    reset_reason = SYSRSTIV;
 	}
+
+#ifdef __MSP430FR2633__
+	/* Disable FRAM program protection */
+	SYSCFG0 = FRWPPW & ~PFWP_L;
+#endif
 	
 	if (bsl_probe.initialised)
 	{
@@ -94,8 +99,13 @@ int main(void)
 	    if (bsl_probe.bsl_read_addr == BSL_END_READ_ADDR)
 	    {
 	        /* Turn on a a LED to indicate the test is complete */
+#ifdef __MSP430FR2633__
+            P1DIR |= BIT6;
+            P1OUT |= BIT6;
+#else
 	        P1DIR |= BIT0;
 	        P1OUT |= BIT0;
+#endif
 	        PM5CTL0 &= ~LOCKLPM5;
 	        for (;;)
 	        {

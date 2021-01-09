@@ -1,3 +1,6 @@
 inaccessible regions on a MSP430FR5969:
 {start_addr=0x00001010,end_addr=0x000017FF}, /* In BSL ROM memory */
-{start_addr=0x00001B08,end_addr=0x00001BFF}, /* In vacant memory */
+{start_addr=0x00001B08,end_addr=0x00001BFF}, /* In vacant memory. Accessing this with the CCS Memory Browser doesn't seem to cause a failure */
+
+inaccessible regions on a MSP430FR2633:
+{start_addr=0x00001C08,end_addr=0x00001FFF}  /* In vacant memory */	
