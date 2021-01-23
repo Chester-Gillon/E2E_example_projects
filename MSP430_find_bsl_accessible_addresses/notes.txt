@@ -16,3 +16,7 @@ inaccessible regions on a MSP430FR2355:
 
 inaccessible regions on a MSP430FR4133:
 {start_addr=0x00001C08,end_addr=0x00001FFF}  /* In vacant memory */
+
+inaccessible regions on a MSP430FR6989:
+{start_addr=0x00001010,end_addr=0x000017FF}	 /* In BSL ROM memory */
+{start_addr=0x00001B08,end_addr=0x00001BFF}	 /* In Boot Memory (ROM) */
