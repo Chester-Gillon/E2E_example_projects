@@ -54,8 +54,12 @@ int main(void)
 	}
 
 #ifdef PFWP_L
+#ifdef FRWPPW
 	/* Disable FRAM program protection */
 	SYSCFG0 = FRWPPW & ~PFWP_L;
+#else
+    SYSCFG0 &= ~PFWP_L;
+#endif
 #endif
 	
 	if (bsl_probe.initialised)
