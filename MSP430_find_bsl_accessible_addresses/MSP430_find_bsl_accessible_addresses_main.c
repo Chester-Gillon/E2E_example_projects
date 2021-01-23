@@ -53,7 +53,7 @@ int main(void)
 	    reset_reason = SYSRSTIV;
 	}
 
-#ifdef __MSP430FR2633__
+#ifdef PFWP_L
 	/* Disable FRAM program protection */
 	SYSCFG0 = FRWPPW & ~PFWP_L;
 #endif

@@ -4,3 +4,6 @@ inaccessible regions on a MSP430FR5969:
 
 inaccessible regions on a MSP430FR2633:
 {start_addr=0x00001C08,end_addr=0x00001FFF}  /* In vacant memory */	
+
+inaccessible regions on a MSP430FR2433:
+{start_addr=0x00001C08,end_addr=0x00001FFF}  /* In vacant memory */	
