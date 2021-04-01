@@ -985,3 +985,13 @@ Developed using:
 - CCS 10.1.1
 - TI MSP430 compiler v20.2.3
 
+
+TMS570LC4357_cache_lock
+=======================
+
+For https://e2e.ti.com/support/microcontrollers/other/f/other-microcontrollers-forum/986752/tms570lc4357-simulate-a-lock-mechanism-for-the-cache
+
+Developed using:
+- CCS 10.2.0
+- TI ARM Compiler v20.2.4
+- HALCoGen 04.07.01

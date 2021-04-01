@@ -1,0 +1,22 @@
+Results from the icache_regions_minus_last_32b build configuration were:
+iter 1 Region X size:0x1fe0 Region Y size:0x5fe0
+  After region X instructions: miss=256 access=1021 cycles=5927
+  After region X+Y instructions: miss=1024 access=4090 cycles=23101
+
+iter 2 Region X size:0x1fe0 Region Y size:0x5fe0
+  After region X instructions: miss=0 access=1022 cycles=2325
+  After region X+Y instructions: miss=0 access=4092 cycles=8729
+
+With no misses after 3,378,405 iterations
+
+
+Results from the entire_icache build configuration were:
+iter 1 Region X size:0x2000 Region Y size:0x6000
+  After region X instructions: miss=256 access=1024 cycles=5949
+  After region X+Y instructions: miss=1024 access=4096 cycles=23145
+
+iter 2 Region X size:0x2000 Region Y size:0x6000
+  After region X instructions: miss=0 access=1024 cycles=2359
+  After region X+Y instructions: miss=0 access=4096 cycles=8797
+  
+With no missues after 4,744,587 iterations
