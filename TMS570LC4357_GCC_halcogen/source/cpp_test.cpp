@@ -8,7 +8,9 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 #include <sstream>
+#include <iomanip>
 
 #include "HL_sci.h"
 #include "cpp_test.h"
@@ -52,9 +54,13 @@ void cpp_test (void)
 {
     test_class stack_instance;
     std::stringstream ss;
+    volatile float float_in = 123.45f;
+    volatile double double_in = 123.456789;
 
     ss << "\n\rC++ test\n\r";
     ss << "global_instance.initialised=0x" << std::hex << global_instance.get_initialised() << "\n\r";
     ss << "stack_instance.initialised=0x" << std::hex << stack_instance.get_initialised() << "\n\r";
+    ss << "sqrtf(" << float_in << ")=" << sqrtf (float_in) << "\n\r";
+    ss << std::setprecision(16) << "sqrt(" << double_in << ")=" << sqrt (double_in) << "\n\r";
     uart_print (ss.str().c_str());
 }
