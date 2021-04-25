@@ -995,3 +995,14 @@ Developed using:
 - CCS 10.2.0
 - TI ARM Compiler v20.2.4
 - HALCoGen 04.07.01
+
+
+MSP430F6736_time_t_size
+=======================
+
+For https://e2e.ti.com/support/microcontrollers/msp430/f/msp-low-power-microcontroller-forum/994928/msp430f6720-possible-to-use-64-bit-time_t-as-in-msp432-series-mcu
+
+Developed using:
+- CCS 10.3.0
+- TI MSP430 compiler v20.2.4.LTS
+
