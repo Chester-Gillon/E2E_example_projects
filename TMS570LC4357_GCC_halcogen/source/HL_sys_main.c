@@ -70,6 +70,20 @@ void sciDisplayText(sciBASE_t *sci, uint8 *text, uint32 length);
 void sciDisplayData(sciBASE_t *sci, uint8 *text,uint32 length);
 void wait(uint32 time);
 
+/*
+ * The gcc-arm-none-eabi-9-2020-q2-update/src/newlib/libgloss/arm/crt0.S contains a week _stack_init() function which
+ * is called by _start(), where _stack_init() is attempting to repeat initialising the stack initialisation for each
+ * processor mode. The fixed default stack sizes in _stack_init() end up setting the stack pointer for the
+ * Supervisory mode used during initialisation to an invalid value which leads to an abort when attempts to write to
+ * the stack.
+ *
+ * The HALCoGen code is already initialising the stack, so the solution is to add this stub _stack_init() function
+ * which leaves the stack pointers for the processor modes unchanged.
+ */
+void _stack_init (void)
+{
+}
+
 /* USER CODE END */
 
 /** @fn void main(void)

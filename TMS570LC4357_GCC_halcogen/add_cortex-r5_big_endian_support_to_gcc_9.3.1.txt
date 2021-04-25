@@ -1,0 +1,430 @@
+== Initial failed attempt, big-endian for the wrong march ==
+
+The changes made to the gcc-arm-none-eabi-9-2020-q2-update source were:
+1. Change the version:
+$ git diff /mnt/gcc_arm_toolchain/gcc-arm-none-eabi-9-2020-q2-update/src/gcc/gcc/BASE-VER src/gcc/gcc/BASE-VER
+diff --git a/mnt/gcc_arm_toolchain/gcc-arm-none-eabi-9-2020-q2-update/src/gcc/gcc/BASE-VER b/src/gcc/gcc/BASE-VER
+old mode 100755
+new mode 100644
+index 3b74042..94f8603
+--- a/mnt/gcc_arm_toolchain/gcc-arm-none-eabi-9-2020-q2-update/src/gcc/gcc/BASE-VER
++++ b/src/gcc/gcc/BASE-VER
+@@ -1 +1 @@
+-9.3.1
++9.3.1p1
+
+2. Modify the t-multilib Makefile fragment to add the building big-endian versions of the run-time libraries for Cortex-R:
+$ git diff /mnt/gcc_arm_toolchain/gcc-arm-none-eabi-9-2020-q2-update/src/gcc/gcc/config/arm/t-multilib src/gcc/gcc/config/arm/t-multilib | cat
+diff --git a/mnt/gcc_arm_toolchain/gcc-arm-none-eabi-9-2020-q2-update/src/gcc/gcc/config/arm/t-multilib b/src/gcc/gcc/config/arm/t-multilib
+old mode 100755
+new mode 100644
+index 87069f7..7b0025b
+--- a/mnt/gcc_arm_toolchain/gcc-arm-none-eabi-9-2020-q2-update/src/gcc/gcc/config/arm/t-multilib
++++ b/src/gcc/gcc/config/arm/t-multilib
+@@ -104,8 +104,13 @@ MULTILIB_REQUIRED	+= mthumb/march=armv7/mfloat-abi=soft
+ MULTILIB_REQUIRED	+= mthumb/march=armv7+fp/mfloat-abi=softfp
+ MULTILIB_REQUIRED	+= mthumb/march=armv7+fp/mfloat-abi=hard
+ 
++MULTILIB_OPTIONS	+= mbig-endian
++MULTILIB_DIRNAMES	+= big-endian
++
+ MULTILIB_REQUIRED	+= mthumb/march=armv7-r+fp.sp/mfloat-abi=softfp
+ MULTILIB_REQUIRED	+= mthumb/march=armv7-r+fp.sp/mfloat-abi=hard
++MULTILIB_REQUIRED	+= mthumb/march=armv7-r+fp.sp/mfloat-abi=softfp/mbig-endian
++MULTILIB_REQUIRED	+= mthumb/march=armv7-r+fp.sp/mfloat-abi=hard/mbig-endian
+ 
+ # Map v7-r with double precision down onto common v7 code.
+ MULTILIB_MATCHES	+= march?armv7=march?armv7-r
+
+
+The output from the original compiler:
+$ ~/ti/ccs1030/ccs/tools/compiler/gcc-arm-none-eabi-9-2020-q2-update/bin/arm-none-eabi-gcc --version
+arm-none-eabi-gcc (GNU Arm Embedded Toolchain 9-2020-q2-update) 9.3.1 20200408 (release)
+Copyright (C) 2019 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+$ ~/ti/ccs1030/ccs/tools/compiler/gcc-arm-none-eabi-7-2017-q4-major/bin/arm-none-eabi-gcc --print-multi-lib
+.;
+thumb;@mthumb
+hard;@mfloat-abi=hard
+thumb/v6-m;@mthumb@march=armv6s-m
+thumb/v7-m;@mthumb@march=armv7-m
+thumb/v7e-m;@mthumb@march=armv7e-m
+thumb/v7-ar;@mthumb@march=armv7
+thumb/v8-m.base;@mthumb@march=armv8-m.base
+thumb/v8-m.main;@mthumb@march=armv8-m.main
+thumb/v7e-m/fpv4-sp/softfp;@mthumb@march=armv7e-m@mfpu=fpv4-sp-d16@mfloat-abi=softfp
+thumb/v7e-m/fpv4-sp/hard;@mthumb@march=armv7e-m@mfpu=fpv4-sp-d16@mfloat-abi=hard
+thumb/v7e-m/fpv5/softfp;@mthumb@march=armv7e-m@mfpu=fpv5-d16@mfloat-abi=softfp
+thumb/v7e-m/fpv5/hard;@mthumb@march=armv7e-m@mfpu=fpv5-d16@mfloat-abi=hard
+thumb/v7-ar/fpv3/softfp;@mthumb@march=armv7@mfpu=vfpv3-d16@mfloat-abi=softfp
+thumb/v7-ar/fpv3/hard;@mthumb@march=armv7@mfpu=vfpv3-d16@mfloat-abi=hard
+thumb/v8-m.main/fpv5-sp/softfp;@mthumb@march=armv8-m.main@mfpu=fpv5-sp-d16@mfloat-abi=softfp
+thumb/v8-m.main/fpv5-sp/hard;@mthumb@march=armv8-m.main@mfpu=fpv5-sp-d16@mfloat-abi=hard
+thumb/v8-m.main/fpv5/softfp;@mthumb@march=armv8-m.main@mfpu=fpv5-d16@mfloat-abi=softfp
+thumb/v8-m.main/fpv5/hard;@mthumb@march=armv8-m.main@mfpu=fpv5-d16@mfloat-abi=hard
+
+And from the modified compiler:
+$ install-native/bin/arm-none-eabi-gcc --version
+arm-none-eabi-gcc (GNU Arm Embedded Toolchain 9-2021-q2-update) 9.3.1p1 20200408 (release)
+Copyright (C) 2019 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+$ install-native/bin/arm-none-eabi-gcc --print-multi-lib
+.;
+arm/v5te/softfp;@marm@march=armv5te+fp@mfloat-abi=softfp
+arm/v5te/hard;@marm@march=armv5te+fp@mfloat-abi=hard
+thumb/nofp;@mthumb@mfloat-abi=soft
+thumb/v7/nofp;@mthumb@march=armv7@mfloat-abi=soft
+thumb/v7+fp/softfp;@mthumb@march=armv7+fp@mfloat-abi=softfp
+thumb/v7+fp/hard;@mthumb@march=armv7+fp@mfloat-abi=hard
+thumb/v7-r+fp.sp/softfp;@mthumb@march=armv7-r+fp.sp@mfloat-abi=softfp
+thumb/v7-r+fp.sp/hard;@mthumb@march=armv7-r+fp.sp@mfloat-abi=hard
+thumb/v7-r+fp.sp/softfp/big-endian;@mthumb@march=armv7-r+fp.sp@mfloat-abi=softfp@mbig-endian
+thumb/v7-r+fp.sp/hard/big-endian;@mthumb@march=armv7-r+fp.sp@mfloat-abi=hard@mbig-endian
+thumb/v6-m/nofp;@mthumb@march=armv6s-m@mfloat-abi=soft
+thumb/v7-m/nofp;@mthumb@march=armv7-m@mfloat-abi=soft
+thumb/v7e-m/nofp;@mthumb@march=armv7e-m@mfloat-abi=soft
+thumb/v7e-m+fp/softfp;@mthumb@march=armv7e-m+fp@mfloat-abi=softfp
+thumb/v7e-m+fp/hard;@mthumb@march=armv7e-m+fp@mfloat-abi=hard
+thumb/v7e-m+dp/softfp;@mthumb@march=armv7e-m+fp.dp@mfloat-abi=softfp
+thumb/v7e-m+dp/hard;@mthumb@march=armv7e-m+fp.dp@mfloat-abi=hard
+thumb/v8-m.base/nofp;@mthumb@march=armv8-m.base@mfloat-abi=soft
+thumb/v8-m.main/nofp;@mthumb@march=armv8-m.main@mfloat-abi=soft
+thumb/v8-m.main+fp/softfp;@mthumb@march=armv8-m.main+fp@mfloat-abi=softfp
+thumb/v8-m.main+fp/hard;@mthumb@march=armv8-m.main+fp@mfloat-abi=hard
+thumb/v8-m.main+dp/softfp;@mthumb@march=armv8-m.main+fp.dp@mfloat-abi=softfp
+thumb/v8-m.main+dp/hard;@mthumb@march=armv8-m.main+fp.dp@mfloat-abi=hard
+
+But, if took TMS570LC4357_GCC_halcogen and upgraded the compiler version from GNU v7.2.1p1 to v9.3.1p1 the link failed
+reporting numererous errors of the form:
+  BE8 images only valid in big-endian mode
+
+
+The example passes the following options to the linker which control the multi-lib selection:
+  -mfloat-abi=hard -mcpu=cortex-r5 -mfpu=vfpv3-d16 -mbig-endian
+  
+Those options with 7.2.1p1 select the big-endian libraries:
+$ ~/ti/ccs1030/ccs/tools/compiler/gcc-arm-none-eabi-7-2020-q2-update/bin/arm-none-eabi-gcc --print-multi-directory  -mfloat-abi=hard -mcpu=cortex-r5 -mfpu=vfpv3-d16 -mbig-endian
+thumb/v7-ar/fpv3/hard/big-endian
+
+But with v9.3.1p1 select the top-level ARM little-endian libraries:
+$ ~/ti/ccs1030/ccs/tools/compiler/gcc-arm-none-eabi-9-2021-q2-update/bin/arm-none-eabi-gcc --print-multi-directory  -mfloat-abi=hard -mcpu=cortex-r5 -mfpu=vfpv3-d16 -mbig-endian
+.
+
+Without the -mbig-endian libraries selects:
+$ ~/ti/ccs1030/ccs/tools/compiler/gcc-arm-none-eabi-9-2021-q2-update/bin/arm-none-eabi-gcc --print-multi-directory  -mfloat-abi=hard -mcpu=cortex-r5 -mfpu=vfpv3-d16 
+thumb/v7+fp/hard
+
+The problem is added the big-endian support to the march=armv7-r+fp.sp, not march=armv7+fp.
+
+The Cortex-R5 FPU has double-precision registers, and armv7-r+fp.sp is for single precision registers.
+
+
+== Second attempt ==
+
+The changes made to the gcc-arm-none-eabi-9-2020-q2-update source were:
+1. Change the version:
+$ git diff /mnt/gcc_arm_toolchain/gcc-arm-none-eabi-9-2020-q2-update/src/gcc/gcc/BASE-VER src/gcc/gcc/BASE-VER | cat
+diff --git a/mnt/gcc_arm_toolchain/gcc-arm-none-eabi-9-2020-q2-update/src/gcc/gcc/BASE-VER b/src/gcc/gcc/BASE-VER
+old mode 100755
+new mode 100644
+index 3b74042..94f8603
+--- a/mnt/gcc_arm_toolchain/gcc-arm-none-eabi-9-2020-q2-update/src/gcc/gcc/BASE-VER
++++ b/src/gcc/gcc/BASE-VER
+@@ -1 +1 @@
+-9.3.1
++9.3.1p1
+
+2. Modify the t-multilib Makefile fragment to add the building big-endian versions of the run-time libraries for Cortex-R:
+$ git diff /mnt/gcc_arm_toolchain/gcc-arm-none-eabi-9-2020-q2-update/src/gcc/gcc/config/arm/t-multilib src/gcc/gcc/config/arm/t-multilib | cat
+diff --git a/mnt/gcc_arm_toolchain/gcc-arm-none-eabi-9-2020-q2-update/src/gcc/gcc/config/arm/t-multilib b/src/gcc/gcc/config/arm/t-multilib
+old mode 100755
+new mode 100644
+index 87069f7..9c42358
+--- a/mnt/gcc_arm_toolchain/gcc-arm-none-eabi-9-2020-q2-update/src/gcc/gcc/config/arm/t-multilib
++++ b/src/gcc/gcc/config/arm/t-multilib
+@@ -100,12 +100,20 @@ MULTILIB_REQUIRED	+= mthumb/mfloat-abi=soft
+ MULTILIB_REQUIRED	+= marm/march=armv5te+fp/mfloat-abi=softfp
+ MULTILIB_REQUIRED	+= marm/march=armv5te+fp/mfloat-abi=hard
+ 
++MULTILIB_OPTIONS	+= mbig-endian
++MULTILIB_DIRNAMES	+= big-endian
++
+ MULTILIB_REQUIRED	+= mthumb/march=armv7/mfloat-abi=soft
+ MULTILIB_REQUIRED	+= mthumb/march=armv7+fp/mfloat-abi=softfp
+ MULTILIB_REQUIRED	+= mthumb/march=armv7+fp/mfloat-abi=hard
++MULTILIB_REQUIRED	+= mthumb/march=armv7/mfloat-abi=soft/mbig-endian
++MULTILIB_REQUIRED	+= mthumb/march=armv7+fp/mfloat-abi=softfp/mbig-endian
++MULTILIB_REQUIRED	+= mthumb/march=armv7+fp/mfloat-abi=hard/mbig-endian
+ 
+ MULTILIB_REQUIRED	+= mthumb/march=armv7-r+fp.sp/mfloat-abi=softfp
+ MULTILIB_REQUIRED	+= mthumb/march=armv7-r+fp.sp/mfloat-abi=hard
++MULTILIB_REQUIRED	+= mthumb/march=armv7-r+fp.sp/mfloat-abi=softfp/mbig-endian
++MULTILIB_REQUIRED	+= mthumb/march=armv7-r+fp.sp/mfloat-abi=hard/mbig-endian
+ 
+ # Map v7-r with double precision down onto common v7 code.
+ MULTILIB_MATCHES	+= march?armv7=march?armv7-r
+
+
+From the modified compiler:
+$ install-native/bin/arm-none-eabi-gcc --version
+arm-none-eabi-gcc (GNU Arm Embedded Toolchain 9-2021-q2-update) 9.3.1p1 20200408 (release)
+Copyright (C) 2019 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+$ install-native/bin/arm-none-eabi-gcc --print-multi-lib
+.;
+arm/v5te/softfp;@marm@march=armv5te+fp@mfloat-abi=softfp
+arm/v5te/hard;@marm@march=armv5te+fp@mfloat-abi=hard
+thumb/nofp;@mthumb@mfloat-abi=soft
+thumb/v7/nofp;@mthumb@march=armv7@mfloat-abi=soft
+thumb/v7/nofp/big-endian;@mthumb@march=armv7@mfloat-abi=soft@mbig-endian
+thumb/v7+fp/softfp;@mthumb@march=armv7+fp@mfloat-abi=softfp
+thumb/v7+fp/hard;@mthumb@march=armv7+fp@mfloat-abi=hard
+thumb/v7+fp/softfp/big-endian;@mthumb@march=armv7+fp@mfloat-abi=softfp@mbig-endian
+thumb/v7+fp/hard/big-endian;@mthumb@march=armv7+fp@mfloat-abi=hard@mbig-endian
+thumb/v7-r+fp.sp/softfp;@mthumb@march=armv7-r+fp.sp@mfloat-abi=softfp
+thumb/v7-r+fp.sp/hard;@mthumb@march=armv7-r+fp.sp@mfloat-abi=hard
+thumb/v7-r+fp.sp/softfp/big-endian;@mthumb@march=armv7-r+fp.sp@mfloat-abi=softfp@mbig-endian
+thumb/v7-r+fp.sp/hard/big-endian;@mthumb@march=armv7-r+fp.sp@mfloat-abi=hard@mbig-endian
+thumb/v6-m/nofp;@mthumb@march=armv6s-m@mfloat-abi=soft
+thumb/v7-m/nofp;@mthumb@march=armv7-m@mfloat-abi=soft
+thumb/v7e-m/nofp;@mthumb@march=armv7e-m@mfloat-abi=soft
+thumb/v7e-m+fp/softfp;@mthumb@march=armv7e-m+fp@mfloat-abi=softfp
+thumb/v7e-m+fp/hard;@mthumb@march=armv7e-m+fp@mfloat-abi=hard
+thumb/v7e-m+dp/softfp;@mthumb@march=armv7e-m+fp.dp@mfloat-abi=softfp
+thumb/v7e-m+dp/hard;@mthumb@march=armv7e-m+fp.dp@mfloat-abi=hard
+thumb/v8-m.base/nofp;@mthumb@march=armv8-m.base@mfloat-abi=soft
+thumb/v8-m.main/nofp;@mthumb@march=armv8-m.main@mfloat-abi=soft
+thumb/v8-m.main+fp/softfp;@mthumb@march=armv8-m.main+fp@mfloat-abi=softfp
+thumb/v8-m.main+fp/hard;@mthumb@march=armv8-m.main+fp@mfloat-abi=hard
+thumb/v8-m.main+dp/softfp;@mthumb@march=armv8-m.main+fp.dp@mfloat-abi=softfp
+thumb/v8-m.main+dp/hard;@mthumb@march=armv8-m.main+fp.dp@mfloat-abi=hard
+
+However, big-endian is still not selected by multi-lib:
+$ install-native/bin/arm-none-eabi-gcc --print-multi-directory  -mfloat-abi=hard -mcpu=cortex-r5 -mfpu=vfpv3-d16 -mbig-endian
+.
+
+$ install-native/bin/arm-none-eabi-gcc --print-multi-directory  -mfloat-abi=hard -mcpu=cortex-r5 -mfpu=vfpv3-d16 
+thumb/v7+fp/hard
+
+Adding -mthumb to the command line does select a bin-endian library:
+$ install-native/bin/arm-none-eabi-gcc --print-multi-directory  -mfloat-abi=hard -mcpu=cortex-r5 -mbig-endian -mthumb
+thumb/v7+fp/hard/big-endian
+
+Which suggests a problem the lack of MULTILIB_REUSE
+
+
+
+== Third attempt ==
+
+The changes made to the gcc-arm-none-eabi-9-2020-q2-update source were:
+$ git diff /mnt/gcc_arm_toolchain/gcc-arm-none-eabi-9-2020-q2-update/src/gcc/gcc/BASE-VER src/gcc/gcc/BASE-VER | cat
+diff --git a/mnt/gcc_arm_toolchain/gcc-arm-none-eabi-9-2020-q2-update/src/gcc/gcc/BASE-VER b/src/gcc/gcc/BASE-VER
+old mode 100755
+new mode 100644
+index 3b74042..94f8603
+--- a/mnt/gcc_arm_toolchain/gcc-arm-none-eabi-9-2020-q2-update/src/gcc/gcc/BASE-VER
++++ b/src/gcc/gcc/BASE-VER
+@@ -1 +1 @@
+-9.3.1
++9.3.1p1
+
+2. Modify the t-multilib Makefile fragment to add the building big-endian versions of the run-time libraries for Cortex-R:
+$ git diff /mnt/gcc_arm_toolchain/gcc-arm-none-eabi-9-2020-q2-update/src/gcc/gcc/config/arm/t-multilib src/gcc/gcc/config/arm/t-multilib | cat
+diff --git a/mnt/gcc_arm_toolchain/gcc-arm-none-eabi-9-2020-q2-update/src/gcc/gcc/config/arm/t-multilib b/src/gcc/gcc/config/arm/t-multilib
+old mode 100755
+new mode 100644
+index 87069f7..cfc809d
+--- a/mnt/gcc_arm_toolchain/gcc-arm-none-eabi-9-2020-q2-update/src/gcc/gcc/config/arm/t-multilib
++++ b/src/gcc/gcc/config/arm/t-multilib
+@@ -100,12 +100,20 @@ MULTILIB_REQUIRED	+= mthumb/mfloat-abi=soft
+ MULTILIB_REQUIRED	+= marm/march=armv5te+fp/mfloat-abi=softfp
+ MULTILIB_REQUIRED	+= marm/march=armv5te+fp/mfloat-abi=hard
+ 
++MULTILIB_OPTIONS	+= mbig-endian
++MULTILIB_DIRNAMES	+= big-endian
++
+ MULTILIB_REQUIRED	+= mthumb/march=armv7/mfloat-abi=soft
+ MULTILIB_REQUIRED	+= mthumb/march=armv7+fp/mfloat-abi=softfp
+ MULTILIB_REQUIRED	+= mthumb/march=armv7+fp/mfloat-abi=hard
++MULTILIB_REQUIRED	+= mthumb/march=armv7/mfloat-abi=soft/mbig-endian
++MULTILIB_REQUIRED	+= mthumb/march=armv7+fp/mfloat-abi=softfp/mbig-endian
++MULTILIB_REQUIRED	+= mthumb/march=armv7+fp/mfloat-abi=hard/mbig-endian
+ 
+ MULTILIB_REQUIRED	+= mthumb/march=armv7-r+fp.sp/mfloat-abi=softfp
+ MULTILIB_REQUIRED	+= mthumb/march=armv7-r+fp.sp/mfloat-abi=hard
++MULTILIB_REQUIRED	+= mthumb/march=armv7-r+fp.sp/mfloat-abi=softfp/mbig-endian
++MULTILIB_REQUIRED	+= mthumb/march=armv7-r+fp.sp/mfloat-abi=hard/mbig-endian
+ 
+ # Map v7-r with double precision down onto common v7 code.
+ MULTILIB_MATCHES	+= march?armv7=march?armv7-r
+@@ -199,13 +207,20 @@ endif		# Not APROFILE.
+ # Use Thumb libraries for everything.
+ 
+ MULTILIB_REUSE		+= mthumb/march.armv7/mfloat-abi.soft=marm/march.armv7/mfloat-abi.soft
++MULTILIB_REUSE		+= mthumb/march.armv7/mfloat-abi.soft/mbig-endian=marm/march.armv7/mfloat-abi.soft/mbig-endian
+ 
+ MULTILIB_REUSE		+= $(foreach ABI, hard softfp, \
+ 			     $(foreach ARCH, armv7+fp armv7-r+fp\.sp, \
+ 			       mthumb/march.$(ARCH)/mfloat-abi.$(ABI)=marm/march.$(ARCH)/mfloat-abi.$(ABI)))
++MULTILIB_REUSE		+= $(foreach ABI, hard softfp, \
++			     $(foreach ARCH, armv7+fp armv7-r+fp\.sp, \
++			       mthumb/march.$(ARCH)/mfloat-abi.$(ABI)/mbig-endian=marm/march.$(ARCH)/mfloat-abi.$(ABI)/mbig-endian))
+ 
+ # Softfp but no FP, use the soft-float libraries.
+ MULTILIB_REUSE		+= $(foreach MODE, arm thumb, \
+ 			     $(foreach ARCH, armv7, \
+ 			       mthumb/march.$(ARCH)/mfloat-abi.soft=m$(MODE)/march.$(ARCH)/mfloat-abi.softfp))
++MULTILIB_REUSE		+= $(foreach MODE, arm thumb, \
++			     $(foreach ARCH, armv7, \
++			       mthumb/march.$(ARCH)/mfloat-abi.soft/mbig-endian=m$(MODE)/march.$(ARCH)/mfloat-abi.softfp/mbig-endian))
+ 
+
+From the modified compiler:
+$ install-native/bin/arm-none-eabi-gcc --versionarm-none-eabi-gcc (GNU Arm Embedded Toolchain 9-2021-q2-update) 9.3.1p1 20200408 (release)
+Copyright (C) 2019 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+$ install-native/bin/arm-none-eabi-gcc --print-multi-lib 
+.;
+arm/v5te/softfp;@marm@march=armv5te+fp@mfloat-abi=softfp
+arm/v5te/hard;@marm@march=armv5te+fp@mfloat-abi=hard
+thumb/nofp;@mthumb@mfloat-abi=soft
+thumb/v7/nofp;@mthumb@march=armv7@mfloat-abi=soft
+thumb/v7/nofp/big-endian;@mthumb@march=armv7@mfloat-abi=soft@mbig-endian
+thumb/v7+fp/softfp;@mthumb@march=armv7+fp@mfloat-abi=softfp
+thumb/v7+fp/hard;@mthumb@march=armv7+fp@mfloat-abi=hard
+thumb/v7+fp/softfp/big-endian;@mthumb@march=armv7+fp@mfloat-abi=softfp@mbig-endian
+thumb/v7+fp/hard/big-endian;@mthumb@march=armv7+fp@mfloat-abi=hard@mbig-endian
+thumb/v7-r+fp.sp/softfp;@mthumb@march=armv7-r+fp.sp@mfloat-abi=softfp
+thumb/v7-r+fp.sp/hard;@mthumb@march=armv7-r+fp.sp@mfloat-abi=hard
+thumb/v7-r+fp.sp/softfp/big-endian;@mthumb@march=armv7-r+fp.sp@mfloat-abi=softfp@mbig-endian
+thumb/v7-r+fp.sp/hard/big-endian;@mthumb@march=armv7-r+fp.sp@mfloat-abi=hard@mbig-endian
+thumb/v6-m/nofp;@mthumb@march=armv6s-m@mfloat-abi=soft
+thumb/v7-m/nofp;@mthumb@march=armv7-m@mfloat-abi=soft
+thumb/v7e-m/nofp;@mthumb@march=armv7e-m@mfloat-abi=soft
+thumb/v7e-m+fp/softfp;@mthumb@march=armv7e-m+fp@mfloat-abi=softfp
+thumb/v7e-m+fp/hard;@mthumb@march=armv7e-m+fp@mfloat-abi=hard
+thumb/v7e-m+dp/softfp;@mthumb@march=armv7e-m+fp.dp@mfloat-abi=softfp
+thumb/v7e-m+dp/hard;@mthumb@march=armv7e-m+fp.dp@mfloat-abi=hard
+thumb/v8-m.base/nofp;@mthumb@march=armv8-m.base@mfloat-abi=soft
+thumb/v8-m.main/nofp;@mthumb@march=armv8-m.main@mfloat-abi=soft
+thumb/v8-m.main+fp/softfp;@mthumb@march=armv8-m.main+fp@mfloat-abi=softfp
+thumb/v8-m.main+fp/hard;@mthumb@march=armv8-m.main+fp@mfloat-abi=hard
+thumb/v8-m.main+dp/softfp;@mthumb@march=armv8-m.main+fp.dp@mfloat-abi=softfp
+thumb/v8-m.main+dp/hard;@mthumb@march=armv8-m.main+fp.dp@mfloat-abi=hard
+
+And big-endian is now selected by multi-lib:
+$ install-native/bin/arm-none-eabi-gcc --print-multi-directory  -mfloat-abi=hard -mcpu=cortex-r5 -mbig-endian 
+thumb/v7+fp/hard/big-endian
+
+Modified complier uploaded to:
+https://drive.google.com/drive/folders/1TCo9yO3kUeejP1C3YZjjirWwnsxsM0Lq?usp=sharing
+
+
+== Changes to CCS project options to allow to link with v9.3.1p1 ==
+
+Initially used CCS 10.3.0 under Linux, and repeated the same issue with CCS 10.2.0 under Windows 10.
+
+Looking at the TMS570LC4357_GCC_halcogen project options with the original project set to v7.2.1p1 has:
+   CCS Build -> GNU Compiler -> Runtime
+      Target CPU (-mcpu) "cortex-r5"
+	  Use floating point hardware (-mfloat-abi) "hard"
+	  Target floating point hardware/format (-mfpu) "vfpv3-d16"
+   CCS Build -> GNU Compiler -> Miscellaneous
+      Miscellaneous flags "-mbig-endian"
+   CCS Build -> Gnu Linker -> Miscellaneous
+      Miscellaneous flags "-mcpu=cortex-r5"
+                      	  "-mfpu=vfpv3-d16" 
+						  "-mbig-endian"
+						  
+Summary of linker flags set:
+-Og -g -gdwarf-3 -gstrict-dwarf -Wall -specs="nosys.specs" -mfloat-abi=hard -Wl,-Map,"TMS570LC4357_GCC_halcogen.map" -mcpu=cortex-r5 -mfpu=vfpv3-d16 -mbig-endian
+
+Changed just the compiler version to v9.3.1p1
+
+And the link failed with errors of the form:
+ld: error: ./source/HL_adc.o uses VFP register arguments, TMS570LC4357_GCC_halcogen.out does not
+
+The summary of linker flags set is now:
+-mfpu=vfpv3-d16 -Og -g -gdwarf-3 -gstrict-dwarf -Wall -specs="nosys.specs" -mcpu=cortex-r5 -Wl,-Map,"TMS570LC4357_GCC_halcogen.map" -mcpu=cortex-r5 -mfpu=vfpv3-d16 -mbig-endian
+
+And the linker flags have been changed so that:
+a. "-mfpu=vfpv3-d16" is now passed automatically and manually.
+b. "-mcpu=cortex-r5" is now passed automatically and manually.
+c. "-mfloat-abi=hard" is no longer passed automatically.
+
+Adding "-mfloat-abi=hard" to CCS Build -> Gnu Linker -> Miscellaneous then allowed the project to link.
+
+The specific miscellaneous options added were:
+  -mbig-endian
+  -mfloat-abi=hard
+  
+And the overall linker options were:
+-mfpu=vfpv3-d16 -Og -g -gdwarf-3 -gstrict-dwarf -Wall -specs="nosys.specs" -mcpu=cortex-r5 -Wl,-Map,"TMS570LC4357_GCC_halcogen.map" -mbig-endian -mfloat-abi=hard
+
+
+== Need to specify BE32 in CCS linker project options with v9.3.1p1 ==
+
+With the above changes which allowed the project to link, when downloaded and halted at the _c_int00 entry point,
+as soon as tried to single step the first instruction ended up in an ABT handler.
+
+Looking at the instructions each 32-bit word appears to be endian-swapped.
+
+E.g. with the v9.3.1p1 non-working executable the disassembly for the vectors was:
+00000000:   DA0E00EA            ble        #0x3803b0
+00000004:   FEFFFFEA            cdp2       p15, #0xf, c15, c15, c10, #7
+00000008:   FEFFFFEA            cdp2       p15, #0xf, c15, c15, c10, #7
+0000000c:   FEFFFFEA            cdp2       p15, #0xf, c15, c15, c10, #7
+00000010:   FEFFFFEA            cdp2       p15, #0xf, c15, c15, c10, #7
+00000014:   220E00EA            andhs      r0, r14, #0xea
+00000018:   B0F11FE5            rscslt     r1, r1, r5, ror #31
+0000001c:   B0F11FE5            rscslt     r1, r1, r5, ror #31
+
+Whereas for the working executable created by the v7.2.1p1 compiler:
+00000000:   EA000EDA            b          _c_int00
+00000004:   EAFFFFFE            b          #4
+00000008:   EAFFFFFE            b          #8
+0000000c:   EAFFFFFE            b          #0xc
+00000010:   EAFFFFFE            b          #0x10
+00000014:   EA000E22            b          phantomInterrupt
+00000018:   E51FF1B0            ldr        pc, [pc, #-0x1b0]
+0000001c:   E51FF1B0            ldr        pc, [pc, #-0x1b0]
+
+There is a difference in the reported type of the executable.
+
+For the v7.2.1p1 executable "EABI5 version 1 (SYSV)":
+$ file E2E_example_projects/TMS570LC4357_GCC_halcogen/Debug/TMS570LC4357_GCC_halcogen.out 
+E2E_example_projects/TMS570LC4357_GCC_halcogen/Debug/TMS570LC4357_GCC_halcogen.out: ELF 32-bit MSB executable, ARM, EABI5 version 1 (SYSV), statically linked, with debug_info, not stripped
+
+For the v9.3.1p1 executable "EABI5 BE8 version 1 (SYSV)":
+$ file workspace_v10/TMS570LC4357_GCC_halcogen/Debug/TMS570LC4357_GCC_halcogen.out 
+workspace_v10/TMS570LC4357_GCC_halcogen/Debug/TMS570LC4357_GCC_halcogen.out: ELF 32-bit MSB executable, ARM, EABI5 BE8 version 1 (SYSV), statically linked, with debug_info, not stripped
+
+https://e2e.ti.com/support/microcontrollers/hercules/f/hercules-safety-microcontrollers-forum/908345/ccs-tms570lc4357-ccs-10-target-status-displays-be8-for-a-tms570lc4357-rather-than-be32
+notes the TMS570LC4357 has additional logic to appear as a BE-32 device to users.
+
+The v7.2.1p1 compiler didn't support "-mbe8" or "-mbe32" options, but the v9.3.1p1 compiler does.
+
+Adding -mbe32 to the linker miscellaneous options for v9.3.1p1 then produced the same EABI version as the v7.2.1p1 compiler:
+$ file workspace_v10/TMS570LC4357_GCC_halcogen/Debug/TMS570LC4357_GCC_halcogen.out 
+workspace_v10/TMS570LC4357_GCC_halcogen/Debug/TMS570LC4357_GCC_halcogen.out: ELF 32-bit MSB executable, ARM, EABI5 version 1 (SYSV), statically linked, with debug_info, not stripped
+
+
+== Need a stub _stack_init() function for v9.3.1p1 start up code ==
+
+With the above changes could step through the _c_int00() code but got an abort when _start() was called.
+
+The gcc-arm-none-eabi-9-2020-q2-update/src/newlib/libgloss/arm/crt0.S contains a week _stack_init() function which 
+is called by _start(), where _stack_init() is attempting to repeat initialising the stack initialisation for each
+processor mode. The fixed default stack sizes in _stack_init() end up setting the stack pointer for the
+Supervisory mode used during initialisation to an invalid value which leads to an abort when attempts to write to
+the stack.
+
+The HALCoGen code is aleady initialising the stack, so the solution is to add a stub _stack_init() to HL_sys_startup.c
