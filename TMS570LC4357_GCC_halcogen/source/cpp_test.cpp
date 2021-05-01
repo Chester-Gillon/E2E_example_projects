@@ -49,8 +49,16 @@ static void uart_print (const char *const text)
     }
 }
 
+double division(int var1, int var2)
+{
+  if (var2 == 0)
+  {
+    throw "Division by Zero.";
+  }
+  return (var1 / var2);
+}
 
-void cpp_test (void)
+void cpp_test_internal (void)
 {
     test_class stack_instance;
     std::stringstream ss;
@@ -62,5 +70,23 @@ void cpp_test (void)
     ss << "stack_instance.initialised=0x" << std::hex << stack_instance.get_initialised() << "\n\r";
     ss << "sqrtf(" << float_in << ")=" << sqrtf (float_in) << "\n\r";
     ss << std::setprecision(16) << "sqrt(" << double_in << ")=" << sqrt (double_in) << "\n\r";
+    int a = 30;
+    int b = 0;
+    double d = 0;
+    try
+    {
+      d = division(a, b);
+      ss << d << "\n\r";
+    }
+    catch (const char *error)
+    {
+      ss << error << "\n\r";
+    }
     uart_print (ss.str().c_str());
+}
+
+
+void cpp_test (void)
+{
+    cpp_test_internal ();
 }
