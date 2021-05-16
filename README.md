@@ -1006,3 +1006,13 @@ Developed using:
 - CCS 10.3.0
 - TI MSP430 compiler v20.2.4.LTS
 
+
+TMS570LC4357_TI_compilers_halcogen
+==================================
+
+For https://e2e.ti.com/support/tools/code-composer-studio-group/ccs/f/code-composer-studio-forum/998144/ti-arm-clang-compiler-tools-user-s-guide-v1-3-description-of-run-time-library-selection-seems-incorrect
+
+Developed using:
+- CCS 10.3.0
+- HALCoGen 04.07.01
+- TI ARM Compiler v20.2.5
