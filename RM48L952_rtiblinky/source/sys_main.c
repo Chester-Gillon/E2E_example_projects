@@ -53,9 +53,6 @@
 #include "rti.h"
 #include "het.h"
 #include "gio.h"
-#ifdef __clang__
-#include "ti_compatibility.h" /* For _enable_IRQ */
-#endif
 /* USER CODE END */
 
 /** @fn void main(void)
@@ -90,7 +87,13 @@ int main(void)
 
     /* Enable IRQ - Clear I flag in CPS register */
     /* Note: This is usually done by the OS or in an svc dispatcher */
+#ifdef __clang__
+    /* Work-around https://e2e.ti.com/support/tools/code-composer-studio-group/ccs/f/code-composer-studio-forum/1001588/arm-cgt-clang-1_1-3-0-beta-1-_enable_irq-in-ti_compatibility-h-is-a-non-op-for-a-cortex-r4
+     * where _enable_IRQ() in ti_compatibility.h is a no-op on Cortex-R. */
+    asm (" cpsie i");
+#else
     _enable_IRQ();
+#endif
 
     /* Start RTI Counter Block 0 */
     rtiStartCounter(rtiCOUNTER_BLOCK0);
