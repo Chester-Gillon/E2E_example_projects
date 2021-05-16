@@ -1,0 +1,74 @@
+== Initial use of TI ARM CLANG compiler ==
+
+The following warnings were initially reported when the HALCoGen code generated for the TI ARM compiler is compiled
+with TI ARM Clang Linker PC v1.3.0:
+
+Description	Resource	Path	Location	Type
+__little_endian__ is a legacy TI macro that is not defined in clang compilers and will evaluate to 0, use '!defined(__ARM_BIG_ENDIAN)' instead [-Wti-macros]	HL_sys_common.h	/TMS570LC4357_TI_compilers_halcogen/include	line 97	C/C++ Problem
+[W0003] Assembly-source debug	HL_sys_core.asm	/TMS570LC4357_TI_compilers_halcogen/source	line 48	C/C++ Problem
+[W0003] Assembly-source debug	HL_sys_mpu.asm	/TMS570LC4357_TI_compilers_halcogen/source	line 49	C/C++ Problem
+[W0003] Assembly-source debug	HL_sys_pmu.asm	/TMS570LC4357_TI_compilers_halcogen/source	line 50	C/C++ Problem
+pragma CODE_STATE is a legacy TI pragma and not supported in clang compilers. use '__attribute__((target("code_state")))' instead [-Wti-pragmas]	HL_esm.c	/TMS570LC4357_TI_compilers_halcogen/source	line 1025	C/C++ Problem
+pragma CODE_STATE is a legacy TI pragma and not supported in clang compilers. use '__attribute__((target("code_state")))' instead [-Wti-pragmas]	HL_sys_phantom.c	/TMS570LC4357_TI_compilers_halcogen/source	line 56	C/C++ Problem
+pragma CODE_STATE is a legacy TI pragma and not supported in clang compilers. use '__attribute__((target("code_state")))' instead [-Wti-pragmas]	HL_sys_startup.c	/TMS570LC4357_TI_compilers_halcogen/source	line 91	C/C++ Problem
+pragma CODE_STATE is a legacy TI pragma and not supported in clang compilers. use '__attribute__((target("code_state")))' instead [-Wti-pragmas]	HL_sys_vim.c	/TMS570LC4357_TI_compilers_halcogen/source	line 765	C/C++ Problem
+pragma INTERRUPT is a legacy TI pragma and not supported in clang compilers. use '__attribute__((interrupt("int_kind")))' instead [-Wti-pragmas]	HL_esm.c	/TMS570LC4357_TI_compilers_halcogen/source	line 1026	C/C++ Problem
+pragma INTERRUPT is a legacy TI pragma and not supported in clang compilers. use '__attribute__((interrupt("int_kind")))' instead [-Wti-pragmas]	HL_sys_phantom.c	/TMS570LC4357_TI_compilers_halcogen/source	line 57	C/C++ Problem
+pragma INTERRUPT is a legacy TI pragma and not supported in clang compilers. use '__attribute__((interrupt("int_kind")))' instead [-Wti-pragmas]	HL_sys_startup.c	/TMS570LC4357_TI_compilers_halcogen/source	line 92	C/C++ Problem
+pragma INTERRUPT is a legacy TI pragma and not supported in clang compilers. use '__attribute__((interrupt("int_kind")))' instead [-Wti-pragmas]	HL_sys_vim.c	/TMS570LC4357_TI_compilers_halcogen/source	line 766	C/C++ Problem
+pragma WEAK is a legacy TI pragma and not supported in clang compilers. use '__attribute__((weak))' instead [-Wti-pragmas]	HL_errata.c	/TMS570LC4357_TI_compilers_halcogen/source	line 57	C/C++ Problem
+pragma WEAK is a legacy TI pragma and not supported in clang compilers. use '__attribute__((weak))' instead [-Wti-pragmas]	HL_notification.c	/TMS570LC4357_TI_compilers_halcogen/source	line 60	C/C++ Problem
+pragma WEAK is a legacy TI pragma and not supported in clang compilers. use '__attribute__((weak))' instead [-Wti-pragmas]	HL_notification.c	/TMS570LC4357_TI_compilers_halcogen/source	line 70	C/C++ Problem
+pragma WEAK is a legacy TI pragma and not supported in clang compilers. use '__attribute__((weak))' instead [-Wti-pragmas]	HL_notification.c	/TMS570LC4357_TI_compilers_halcogen/source	line 80	C/C++ Problem
+pragma WEAK is a legacy TI pragma and not supported in clang compilers. use '__attribute__((weak))' instead [-Wti-pragmas]	HL_notification.c	/TMS570LC4357_TI_compilers_halcogen/source	line 96	C/C++ Problem
+pragma WEAK is a legacy TI pragma and not supported in clang compilers. use '__attribute__((weak))' instead [-Wti-pragmas]	HL_notification.c	/TMS570LC4357_TI_compilers_halcogen/source	line 112	C/C++ Problem
+pragma WEAK is a legacy TI pragma and not supported in clang compilers. use '__attribute__((weak))' instead [-Wti-pragmas]	HL_notification.c	/TMS570LC4357_TI_compilers_halcogen/source	line 122	C/C++ Problem
+pragma WEAK is a legacy TI pragma and not supported in clang compilers. use '__attribute__((weak))' instead [-Wti-pragmas]	HL_notification.c	/TMS570LC4357_TI_compilers_halcogen/source	line 133	C/C++ Problem
+pragma WEAK is a legacy TI pragma and not supported in clang compilers. use '__attribute__((weak))' instead [-Wti-pragmas]	HL_notification.c	/TMS570LC4357_TI_compilers_halcogen/source	line 161	C/C++ Problem
+pragma WEAK is a legacy TI pragma and not supported in clang compilers. use '__attribute__((weak))' instead [-Wti-pragmas]	HL_notification.c	/TMS570LC4357_TI_compilers_halcogen/source	line 168	C/C++ Problem
+pragma WEAK is a legacy TI pragma and not supported in clang compilers. use '__attribute__((weak))' instead [-Wti-pragmas]	HL_sys_phantom.c	/TMS570LC4357_TI_compilers_halcogen/source	line 58	C/C++ Problem
+pragma WEAK is a legacy TI pragma and not supported in clang compilers. use '__attribute__((weak))' instead [-Wti-pragmas]	HL_sys_startup.c	/TMS570LC4357_TI_compilers_halcogen/source	line 93	C/C++ Problem
+pragma WEAK is a legacy TI pragma and not supported in clang compilers. use '__attribute__((weak))' instead [-Wti-pragmas]	HL_sys_vim.c	/TMS570LC4357_TI_compilers_halcogen/source	line 767	C/C++ Problem
+
+The warning about unrecognised INTERRUPT pragma does change the generated code.
+
+The initial disassembly for vimECCErrorHandler() from TI ARM CLANG:
+c:\ti\ccs1030\ccs\tools\compiler\gcc-arm-none-eabi-9-2021-q2-update-win32\bin\arm-none-eabi-objdump.exe --source Debug_TI_CLANG\source\HL_sys_vim.o
+<snip>
+00000000 <vimECCErrorHandler>:
+
+/* SourceId : VIM_SourceId_006 */
+/* DesignId : VIM_DesignId_006 */
+/* Requirements : HL_CONQ_VIM_SR6 */
+void vimECCErrorHandler(void)
+{
+   0:   e92d4800        push    {fp, lr}
+   4:   e24dd010        sub     sp, sp, #16
+   8:   e30f0df4        movw    r0, #65012      ; 0xfdf4
+   c:   e34f0fff        movt    r0, #65535      ; 0xffff
+
+/* USER CODE BEGIN (11) */
+/* USER CODE END */
+
+    /* Identify the corrupted address */
+    uint32 error_addr = vimREG->UERRADDR;
+  10:   e5900000        ldr     r0, [r0]
+  14:   e58d0008        str     r0, [sp, #8]
+  
+And from TI ARM CGT:
+c:\ti\ccs1030\ccs\tools\compiler\gcc-arm-none-eabi-9-2021-q2-update-win32\bin\arm-none-eabi-objdump.exe -d Debug_TI_ARM_CGT\source\HL_sys_vim.obj
+00000000 <vimECCErrorHandler>:
+   0:   e92d500f        push    {r0, r1, r2, r3, ip, lr}
+   4:   eef8ca10        vmrs    ip, fpexc
+   8:   e92d1000        stmfd   sp!, {ip}
+   c:   eef1ca10        vmrs    ip, fpscr
+  10:   e92d1000        stmfd   sp!, {ip}
+  14:   ed2d0b10        vpush   {d0-d7}
+  18:   e24dd010        sub     sp, sp, #16
+  1c:   e59fc2c0        ldr     ip, [pc, #704]  ; 2e4 <vimECCErrorHandler+0x2e4>
+  20:   e59cc000        ldr     ip, [ip]
+  24:   e58dc004        str     ip, [sp, #4]
+
+I.e. the TI ARM CLANG compiler is not emmitting the prologue for an IRQ which means the interrupt handlers won't work.
+This example doesn't use IRQ handlers in normal operation (i.e. when no ESM errors or phantom interrupts) and so still runs correctly.
+ 

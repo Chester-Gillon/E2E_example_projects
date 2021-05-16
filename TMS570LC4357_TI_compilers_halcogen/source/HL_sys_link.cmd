@@ -91,6 +91,7 @@ SECTIONS
     .init_array align(32) : {} > FLASH0 | FLASH1
     .ARM.exidx  align(32) : {} > FLASH0 | FLASH1
     .ARM.extab  align(32) : {} > FLASH0 | FLASH1
+    .rodata     align(32) : {} > FLASH0 | FLASH1
 /* USER CODE END */
 }
 
