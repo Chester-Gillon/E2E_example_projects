@@ -760,6 +760,7 @@ void vimGetConfigValue(vim_config_reg_t *config_reg, config_value_type_t type)
 }
 
 /* USER CODE BEGIN (10) */
+void vimECCErrorHandler(void) __attribute__((target("arm"))) __attribute__((interrupt("IRQ")));
 /* USER CODE END */
 
 #pragma CODE_STATE(vimECCErrorHandler, 32)

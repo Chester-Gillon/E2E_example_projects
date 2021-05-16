@@ -71,4 +71,50 @@ c:\ti\ccs1030\ccs\tools\compiler\gcc-arm-none-eabi-9-2021-q2-update-win32\bin\ar
 
 I.e. the TI ARM CLANG compiler is not emmitting the prologue for an IRQ which means the interrupt handlers won't work.
 This example doesn't use IRQ handlers in normal operation (i.e. when no ESM errors or phantom interrupts) and so still runs correctly.
- 
+
+Exception support has been left disabled for the TI ARM CLANG compiler due to https://sir.ext.ti.com/jira/browse/EXT_EP-10343
+
+
+== Inserting code in USER CODE blocks to get TI ARM CLANG to insert IRQ prologue ==
+
+In the HL_sys_vim.c source file an additional prototype was added into USER CODE blocks with the addition of function attributes:
+
+/* USER CODE BEGIN (10) */
+void vimECCErrorHandler(void) __attribute__((target("arm"))) __attribute__((interrupt("IRQ")));
+/* USER CODE END */
+
+#pragma CODE_STATE(vimECCErrorHandler, 32)
+#pragma INTERRUPT(vimECCErrorHandler, IRQ)
+#pragma WEAK(vimECCErrorHandler)
+
+/* SourceId : VIM_SourceId_006 */
+/* DesignId : VIM_DesignId_006 */
+/* Requirements : HL_CONQ_VIM_SR6 */
+void vimECCErrorHandler(void)
+{
+
+The TI ARM CLANG compiler still warns about the legacy TI pragmas, but now the function attributes cause an IRQ prologue to be used,
+meaning more registers are pushed and the stack pointer is given 8 bytes alignment:
+00000000 <vimECCErrorHandler>:
+
+/* SourceId : VIM_SourceId_006 */
+/* DesignId : VIM_DesignId_006 */
+/* Requirements : HL_CONQ_VIM_SR6 */
+void vimECCErrorHandler(void)
+{
+   0:   e92d5c0f        push    {r0, r1, r2, r3, sl, fp, ip, lr}
+   4:   e28db014        add     fp, sp, #20
+   8:   e24dd010        sub     sp, sp, #16
+   c:   e7c2d01f        bfc     sp, #0, #3
+  10:   e30fedf4        movw    lr, #65012      ; 0xfdf4
+  14:   e34fefff        movt    lr, #65535      ; 0xffff
+
+/* USER CODE BEGIN (11) */
+/* USER CODE END */
+
+    /* Identify the corrupted address */
+    uint32 error_addr = vimREG->UERRADDR;
+  18:   e59ee000        ldr     lr, [lr]
+  1c:   e58de008        str     lr, [sp, #8]
+  
+  
