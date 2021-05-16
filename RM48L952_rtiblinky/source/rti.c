@@ -845,6 +845,8 @@ void rtiGetConfigValue(rti_config_reg_t *config_reg, config_value_type_t type)
 }
 
 /* USER CODE BEGIN (73) */
+/* Work-around for TI ARM CLANG not understanding CODE_STATE and INTERRUPT pragmas */
+void rtiCompare0Interrupt(void) __attribute__((target("arm"))) __attribute__((interrupt("IRQ")));
 /* USER CODE END */
 
 /** @fn void rtiCompare0Interrupt(void)

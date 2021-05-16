@@ -1,0 +1,45 @@
+
+
+!CONFIGURATION: 'Debug_TI_ARM_CGT__TICLANG' (com.ti.ccstudio.buildDefinitions.TMS470.Debug.1185614148) [Sun May 16 16:28:05 BST 2021]
+
+	!TOOL: 'Arm Compiler' (com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_1.0.exe.compilerDebug.1128390078)
+
+		!NOTE: Source-tool setting '--code_state=32 -mv7R4' has been migrated to target-tool setting '-march=armv7r -marm'
+
+		!NOTE: Source-tool setting '--float_support=VFPv3D16 -mv7R4' has been migrated to target-tool setting '-mfloat-abi=hard -mfpu=vfpv3-d16'
+
+		!NOTE: Source-tool setting '--opt_for_speed=5 -O4' has been migrated to target-tool setting '-O3'
+			tiarmclang's -O3 option enables aggressive performance optimizations that may impact code size and compile time; tiarmclang does not support whole-program optimizations that are available with armcl's --opt_level=4
+
+		!NOTE: Source-tool default '--c89 --relaxed_ansi' has been migrated to target-tool setting '-std=gnu90'
+
+		!NOTE: Source-tool default '--c++14 --relaxed_ansi' has been migrated to target-tool setting '-std=gnu++14'
+
+		!NOTE: Source-tool setting '-mv7R4' has been migrated to target-tool setting '-mcpu=cortex-r4'
+
+		!NOTE: Source-tool default '--endian=little' has been migrated to target-tool setting '-mlittle-endian'
+
+		!NOTE: Source-tool setting: 
+				--include_path="${PROJECT_ROOT}" --include_path="${PROJECT_ROOT}/include" --include_path="${CG_TOOL_ROOT}/include" 
+			has been migrated to target-tool setting: 
+				-I"${PROJECT_ROOT}" -I"${PROJECT_ROOT}/include" -I"${CG_TOOL_ROOT}/include"
+
+		!NOTE: Source-tool default '--define=_INLINE' has been migrated to target-tool setting '-D_INLINE'
+
+		!NOTE: Source-tool setting '-g' has been migrated to target-tool setting '-gdwarf-3'
+
+		!NOTE: Source-tool default '--wchar_t=16' has been migrated to target-tool setting '-fno-short-wchar'
+			tiarmclang does not support 16-bit wchar_t in its runtime libraries; the --wchar_t=16 option will map to tiarmclang's -fno-short-wchar option (32-bit wchar_t type assumed)
+
+		!NOTE: Source-tool default '--common=on' has been migrated to target-tool setting '-fcommon'
+
+		!NOTE: Source-tool setting '--gen_func_subsections=on' has been migrated to target-tool setting '-ffunction-sections'
+
+		!NOTE: Source-tool default '' has been migrated to target-tool setting '-Werror=ti-pragmas -Werror=ti-macros -Werror=ti-intrinsics'
+			use of legacy TI pragmas will be flagged as errors
+			use of legacy TI pre-defined macro symbols will be flagged as errors
+			use of legacy TI intrinsics will be flagged as errors
+
+		!WARNING: The following source-tool settings were not migrated because no migration rules have been defined - please migrate these settings manually, if applicable: 
+				--diag_warning=225 --diag_wrap=off --display_error_number
+

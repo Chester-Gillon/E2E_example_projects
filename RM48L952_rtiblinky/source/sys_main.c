@@ -53,6 +53,9 @@
 #include "rti.h"
 #include "het.h"
 #include "gio.h"
+#ifdef __clang__
+#include "ti_compatibility.h" /* For _enable_IRQ */
+#endif
 /* USER CODE END */
 
 /** @fn void main(void)

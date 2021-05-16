@@ -95,6 +95,7 @@ void memoryPort1TestFailNotification(uint32 groupSelect, uint32 dataSelect, uint
 }
 
 /* USER CODE BEGIN (8) */
+void rtiNotification(uint32 notification) __attribute__((weak));
 /* USER CODE END */
 #pragma WEAK(rtiNotification)
 void rtiNotification(uint32 notification)

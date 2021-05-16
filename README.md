@@ -863,9 +863,11 @@ RM48L952_rtiblinky
 ==================
 
 For https://e2e.ti.com/support/tools/ccs/f/81/t/913701
+and https://e2e.ti.com/support/tools/code-composer-studio-group/ccs/f/code-composer-studio-forum/1001588/arm-cgt-clang-1_1-3-0-beta-1-_enable_irq-in-ti_compatibility-h-is-a-non-op-for-a-cortex-r4
 Developed using:
-- CCS 10.0.0
-- TI ARM compiler v20.2.1
+- CCS 10.3.0
+- TI ARM compiler v20.2.5
+- TI ARM Clang v1.3.0
 - HalCoGen 04.07.01
 
 
@@ -1016,3 +1018,4 @@ Developed using:
 - CCS 10.3.0
 - HALCoGen 04.07.01
 - TI ARM Compiler v20.2.5
+- TI ARM Clang v1.3.0

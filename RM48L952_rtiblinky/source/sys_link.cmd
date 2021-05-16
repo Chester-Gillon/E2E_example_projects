@@ -85,10 +85,15 @@ SECTIONS
 
 /* USER CODE BEGIN (4) */
     .binit   : {} > FLASH0 | FLASH1
+    .rodata  : {} > FLASH0 | FLASH1
     .TI.ramfunc :
     {
-    	sys_main.obj(.text)
-    	rti.obj(.text:rtiCompare0Interrupt)
+    	/* The wildcards account for differences between TI ARM CGT and TI ARM CLANG compilers:
+    	   a. TI ARM CGT generates ".obj" object files, and TI ARM CLANG generates ".o" object files.
+    	   b. TI ARM CGT places functions in .text:<function_name>, and TI ARM CLANG places functions in .text.<function_name>
+    	*/
+    	sys_main.o*(.text)
+    	rti.o*(.text?rtiCompare0Interrupt)
     } load=FLASH0, run=RAM, table(BINIT)
 /* USER CODE END */
 }
