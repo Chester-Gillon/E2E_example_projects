@@ -43,6 +43,7 @@ SECTIONS
     . = ALIGN(4);
 
     _sflashAPI = .;         /* create a global symbol at data start */
+    *Fapi_UserDefinedFunctions.o (.text*)
     *F021_API_CortexR4_LE_V3D16.lib:* (.text*)
 
     . = ALIGN(4);
