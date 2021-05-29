@@ -1019,3 +1019,16 @@ Developed using:
 - HALCoGen 04.07.01
 - TI ARM Compiler v20.2.5
 - TI ARM Clang v1.3.0
+
+
+RM48L952_GCC_FEE_read_write
+===========================
+
+For https://e2e.ti.com/support/microcontrollers/other-microcontrollers-group/other/f/other-microcontrollers-forum/1004535/tms570ls3137-contents-of-f021-flash-library-being-partially-placed-into-text-section-of-executable-with-gcc-ld
+
+Developed using:
+- CCS 10.3.0
+- HALCoGen 04.07.01
+- GNU ARM compiler v9.2.1
+- F021 Flash API v02.01.01
+
