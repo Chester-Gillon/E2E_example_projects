@@ -1,0 +1,43 @@
+Changes to convert the Debug_Linaro build configuration (using gcc-arm-none-eabi-9-2019-q4-major installed from CCS) into the
+Debug_AdaCore configuration (using gnat-2021-20210519-arm-elf)
+=============================================================================================================================
+
+1. Compilation of the source files was failing with:
+Building file: "../source/Device_RM48.c"
+Invoking: GNU Compiler
+"C:/GNAT/2021-arm-elf/bin/arm-eabi-gcc-10.3.1.exe" -c -mcpu=cortex-r4 -mfloat-abi=hard -mfpu=vfpv3-d16 -I"C:/Users/mr_halfword/E2E_example_projects/RM48L952_GCC_FEE_read_write" -I"C:/Users/mr_halfword/E2E_example_projects/RM48L952_GCC_FEE_read_write/include" -I"C:/ti/Hercules/F021 Flash API/02.01.01/include" -I"C:/GNAT/2021-arm-elf/arm-eabi/include" -Og -g -gdwarf-3 -gstrict-dwarf -Wall -specs="nosys.specs" -MMD -MP -MF"source/Device_RM48.d_raw" -MT"source/Device_RM48.o"   -o"source/Device_RM48.o" "../source/Device_RM48.c"
+source/subdir_rules.mk:9: recipe for target 'source/Device_RM48.o' failed
+arm-eabi-gcc-10.3.1.exe: fatal error: cannot read spec file 'nosys.specs': No such file or directory
+compilation terminated.
+
+The AdaCore distribution doesn't have the .specs files for the run-time library.
+To remove the compile error, under CCS Build -> GNU Compiler -> Miscellaneous delete nosys.specs from the -specs option.
+
+2. Following the above change, linking failed with:
+makefile:177: recipe for target 'RM48L952_GCC_FEE_read_write.out' failed
+c:/gnat/2021-arm-elf/bin/../lib/gcc/arm-eabi/10.3.1/../../../../arm-eabi/bin/ld.exe: cannot find crt0.o: No such file or directory
+
+The AdaCore distribution doesn't have the run-time library startup code.
+To remove this linker error under CCS Build -> GNU Linker -> Basic select the -nostartfiles option
+
+3. Following the above change, link failed with:
+c:/gnat/2021-arm-elf/bin/../lib/gcc/arm-eabi/10.3.1/../../../../arm-eabi/bin/ld.exe: c:/gnat/2021-arm-elf/bin/../lib/gcc/arm-eabi/10.3.1/../../../../arm-eabi/lib/thumb/v7-ar/fpv3/hard\libc.a(lib_a-exit.o): in function `exit':
+C:\it\sbx\a2c2\arm-elf-windows64\newlib_bootstrap-c\build\arm-eabi\thumb\v7-ar\fpv3\hard\newlib\libc\stdlib/../../../../../../../../../src/newlib/libc/stdlib/exit.c:70: undefined reference to `_exit'
+collect2.exe: error: ld returned 1 exit status
+
+Add a crt.c source file, only compiled for the Debug_AdaCore configuration which had a stub _exit() function.
+
+4. The memcpy() call in main() which copies tge flash API from FLASH to SRAM was failing with a data abort.
+
+This was a bug in the original code in that the _sflashAPI, _siflashAPI and _eflashAPI were variables defined rather
+than declared in sys_main.c.
+The AdaCore compiler was using the address of the defined variables, rather than the symbols from the linker.
+
+
+== Stack usage ==
+
+-fcallgraph-info=su,da was added to the Debug_AdaCore configuration, and creates .ci files which combine the call-graph and
+stack usage on a per-function basis. https://github.com/simonjwright/stack_usage can process the .ci files and produce an
+an overall CSV file.
+
+The Linaro compiler only supports the -fstack-usage option which reports stack usage but no call graph.

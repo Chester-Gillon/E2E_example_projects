@@ -116,9 +116,9 @@ void delay(void)
 }
 
 /* Symbols defined by linker script to copy flash API functions from the load address in flash to the run address in sram */
-char _sflashAPI;
-char _siflashAPI;
-char _eflashAPI;
+extern char _sflashAPI;
+extern char _siflashAPI;
+extern char _eflashAPI;
 
 /* USER CODE END */
 
