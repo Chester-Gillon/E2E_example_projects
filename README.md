@@ -1039,7 +1039,18 @@ MSP430FR2355_persistent_reboot_and_switch_counts
 For https://e2e.ti.com/support/microcontrollers/msp-low-power-microcontrollers-group/msp430/f/msp-low-power-microcontroller-forum/1003383/msp430fr2355-retaining-a-variable-after-power-down-----how-to
 
 Developed using:
-- CCS 10.3.9
+- CCS 10.3.0
 - TI MSP430 compiler v20.2.5 
 - DriverLib from MSP430Ware 3.80.13.03
+
+
+TMS570LC4357_report_esm_status_over_uart
+========================================
+
+For https://e2e.ti.com/support/microcontrollers/other-microcontrollers-group/other/f/other-microcontrollers-forum/1010835/tms570lc4357-source-of-cortex-r5f-core-errors-properly-initializing-flash-ecc
+
+Developed using:
+- CCS 10.3.0
+- HALCoGen 04.07.01
+- TI ARM compiler v20.2.5
 
