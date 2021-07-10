@@ -1054,3 +1054,13 @@ Developed using:
 - HALCoGen 04.07.01
 - TI ARM compiler v20.2.5
 
+
+RM48L952_ethernet
+=================
+
+For https://e2e.ti.com/support/microcontrollers/other-microcontrollers-group/other/f/other-microcontrollers-forum/1012352/tms570ls3137-ep-emac-receive-packet-issue-rxaligncodeerrors-getting-set
+
+Developed using:
+- CCS 10.4.0
+- HALCoGen 04.07.01
+- TI ARM compiler v20.2.5
