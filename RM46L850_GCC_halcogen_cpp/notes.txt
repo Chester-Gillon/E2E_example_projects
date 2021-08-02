@@ -1,4 +1,4 @@
-1. Selecting correct libraries to link with gcc-arm-none-eabi-6-2017-q1-update
+== Selecting correct libraries to link with gcc-arm-none-eabi-6-2017-q1-update ==
 
 When first created the project in CCS 10.4 got the linker error undefined reference to `__sync_synchronize'
 
@@ -6,3 +6,18 @@ To get the project to link under Build -> GNU Linker -> Miscellaneous added the 
 
 Reported on https://e2e.ti.com/support/tools/code-composer-studio-group/ccs/f/code-composer-studio-forum/1023679/ccs-10-4-0-00006-for-the-gcc-arm-compiler-how-does-ccs-determine-how-many-of-the-compiler-runtime-options-to-pass-to-the-linker
 
+
+== Allow exception to be thrown ==
+
+When the cpp_test file attempted to throw an exception crashed with a data abort.
+
+The linker map showed .ARM.extab had been placed in RAM which is the same issue reported in
+https://e2e.ti.com/support/microcontrollers/arm-based-microcontrollers-group/arm-based-microcontrollers/f/arm-based-microcontrollers-forum/996446/halcogen-halcogen-04-07-01-hl_sys_link-ld-gcc-linker-script-places-read-only-section-arm-extab-section-in-ram-not-flash
+
+ Adding a sys_link_extra.ld file to place .ARM.extab in flash allowed exceptions to work.
+ 
+ Initially tried naming the script set__stack.ld as per the TMS570LC4357_GCC_halcogen project but set__stack.ld was passed to the linker
+ before sys_link.ld and the change didn't take effect. 
+ 
+ Appears by default CCS uses the filename to decide the order files are passed to the linker, and so change the filename had an effect.
+ 

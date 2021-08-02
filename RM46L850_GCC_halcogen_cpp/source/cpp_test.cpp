@@ -76,7 +76,7 @@ void cpp_test_internal (void)
     double d = 0;
     try
     {
-      //d = division(a, b);
+      d = division(a, b);
       ss << d << "\n\r";
     }
     catch (const char *error)
