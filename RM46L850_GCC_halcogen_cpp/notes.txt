@@ -1,0 +1,8 @@
+1. Selecting correct libraries to link with gcc-arm-none-eabi-6-2017-q1-update
+
+When first created the project in CCS 10.4 got the linker error undefined reference to `__sync_synchronize'
+
+To get the project to link under Build -> GNU Linker -> Miscellaneous added the -mcpu=cortex-r4 and -mfpu=vfpv3-d16 options
+
+Reported on https://e2e.ti.com/support/tools/code-composer-studio-group/ccs/f/code-composer-studio-forum/1023679/ccs-10-4-0-00006-for-the-gcc-arm-compiler-how-does-ccs-determine-how-many-of-the-compiler-runtime-options-to-pass-to-the-linker
+

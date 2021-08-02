@@ -1064,3 +1064,16 @@ Developed using:
 - CCS 10.4.0
 - HALCoGen 04.07.01
 - TI ARM compiler v20.2.5
+
+
+RM46L850_GCC_halcogen_cpp
+=========================
+
+For https://e2e.ti.com/support/microcontrollers/arm-based-microcontrollers-group/arm-based-microcontrollers/f/arm-based-microcontrollers-forum/1023130/rm46l850-startup-codes-not-call-global-c-constructors
+
+Developed using:
+- CCS 10.4.0
+- HALCoGen 04.07.01
+- GNU v6.3.1 (Linaro)
+
+
