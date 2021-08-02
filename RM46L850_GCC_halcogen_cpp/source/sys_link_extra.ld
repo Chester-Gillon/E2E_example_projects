@@ -1,3 +1,7 @@
+/* Set the symbol which the _start() newlib function set the stack pointer to.
+   The value here must match the value in userSp in the HALCoGen HL_sys_core file */
+__stack = 0x08001000;
+
 /* Work-around the issue where the HALCoGen generated sys_link.ld places the read-only .ARM.extab section in RAM rather than FLASH.
    Placed in a separate linker script due to sys_link.ld not containing any USER CODE blocks to preserve changes.
    For this to work relies upon this linker script being passed to the linker after sys_link.ld by CCS.

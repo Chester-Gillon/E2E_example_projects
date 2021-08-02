@@ -14,10 +14,19 @@ When the cpp_test file attempted to throw an exception crashed with a data abort
 The linker map showed .ARM.extab had been placed in RAM which is the same issue reported in
 https://e2e.ti.com/support/microcontrollers/arm-based-microcontrollers-group/arm-based-microcontrollers/f/arm-based-microcontrollers-forum/996446/halcogen-halcogen-04-07-01-hl_sys_link-ld-gcc-linker-script-places-read-only-section-arm-extab-section-in-ram-not-flash
 
- Adding a sys_link_extra.ld file to place .ARM.extab in flash allowed exceptions to work.
+Adding a sys_link_extra.ld file to place .ARM.extab in flash allowed exceptions to work.
  
- Initially tried naming the script set__stack.ld as per the TMS570LC4357_GCC_halcogen project but set__stack.ld was passed to the linker
- before sys_link.ld and the change didn't take effect. 
+Initially tried naming the script set__stack.ld as per the TMS570LC4357_GCC_halcogen project but set__stack.ld was passed to the linker
+before sys_link.ld and the change didn't take effect. 
  
- Appears by default CCS uses the filename to decide the order files are passed to the linker, and so change the filename had an effect.
+Appears by default CCS uses the filename to decide the order files are passed to the linker, and so change the filename had an effect.
+ 
+ 
+== Allow global constructions to be called ==
+
+_c_int00() in sys_startup.c was modified call _start() rather than main() in order to perform the newlib startup, part of which involves
+calling global constructors.
+
+In sys_link_extra.ld had to set the __stack symbol.
+ 
  
