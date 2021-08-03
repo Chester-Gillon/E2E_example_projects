@@ -1077,3 +1077,12 @@ Developed using:
 - GNU v6.3.1 (Linaro)
 
 
+TMS570LC4357_div_by_zero
+========================
+
+For https://e2e.ti.com/support/microcontrollers/arm-based-microcontrollers-group/arm-based-microcontrollers/f/arm-based-microcontrollers-forum/1024059/tms570lc4357-reporting-undef-instruction-exception-for-divide-by-zero/3786124#3786124
+
+Developed using:
+- CCS 10.4.0
+- HALCoGen 04.07.01
+- TI ARM compiler v20.2.5
