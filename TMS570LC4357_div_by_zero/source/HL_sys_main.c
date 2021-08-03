@@ -69,19 +69,51 @@ uint32_t get_fpscr (void)
     asm volatile (" VMRS r0, FPSCR");
 }
 #pragma diag_pop
+
+void set_fpscr (const uint32_t new_fpscr)
+{
+    asm volatile (" VMSR FPSCR, r0");
+}
+
+/* Clear the FPSRC accumulated Divide-by-zero bit */
+void clear_fpscr_dzc (void)
+{
+    const uint32_t dzc = 0x2;
+    uint32_t fpscr = get_fpscr ();
+    fpscr &= ~dzc;
+    set_fpscr (fpscr);
+}
+
 /* USER CODE END */
 
 int main(void)
 {
 /* USER CODE BEGIN (3) */
-    const volatile double a = 1023.4567;
-    const volatile double b = 0.0;
-    const volatile uint32_t fpscr_before = get_fpscr ();
-    const volatile double c = a / b;
-    const volatile uint32_t fpscr_after = get_fpscr ();
+    bool first_pass = true;
 
-    printf ("%g/%g=%g\n", a, b, c);
-    printf ("FPSCR before=0x%08x after=0x%08x\n", fpscr_before, fpscr_after);
+    for (;;)
+    {
+        const volatile double a = 1023.4567;
+        const volatile double b = 0.0;
+        const volatile uint32_t fpscr_before = get_fpscr ();
+        const volatile double c = a / b;
+        const volatile uint32_t fpscr_after = get_fpscr ();
+
+        printf ("%g/%g=%g\n", a, b, c);
+        printf ("FPSCR before=0x%08x after=0x%08x\n", fpscr_before, fpscr_after);
+        clear_fpscr_dzc ();
+
+        if (first_pass)
+        {
+            /* Enable divide-by-zero exception */
+            const uint32_t original_sctlr = __MRC (15, 0, 1, 0, 0);
+            const uint32_t dz = 1 << 19;
+            const uint32_t new_sctlr = original_sctlr | dz;
+            __MCR (15, 0, new_sctlr, 1, 0, 0);
+            printf ("Changed SCTLR 0x%08x -> 0x%08x\n", original_sctlr, new_sctlr);
+            first_pass = false;
+        }
+    }
 /* USER CODE END */
 
     return 0;
