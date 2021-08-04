@@ -26,7 +26,7 @@
 static char message_buffer[128];
 
 /* Address of the reset vector of the application control is transferred to */
-#define APP_RESET_VECTOR_ADDR 0x8000
+#define APP_RESET_VECTOR_ADDR 0x8100
 const uint32_t *const app_reset_vector = (const uint32_t *) APP_RESET_VECTOR_ADDR;
 
 /*
