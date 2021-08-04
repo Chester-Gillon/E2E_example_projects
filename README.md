@@ -1087,3 +1087,16 @@ Developed using:
 - CCS 10.4.0
 - HALCoGen 04.07.01
 - TI ARM compiler v20.2.5
+
+
+TM4C1294XL_simple_bootloader
+TM4C1294XL_TI_tcpEcho_non_zero_reset_vector
+===========================================
+
+For https://e2e.ti.com/support/microcontrollers/arm-based-microcontrollers-group/arm-based-microcontrollers/f/arm-based-microcontrollers-forum/1024278/tm4c1294ncpdt-rtos-bios-not-working/3787282#3787282
+
+Developed using:
+- CCS 10.4.0
+- TI ARM compiler v20.2.5
+- TI-RTOS to TivaC 2.16.1.14
+
