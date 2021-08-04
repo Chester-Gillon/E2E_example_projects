@@ -147,9 +147,13 @@ void main(void)
     sciInit();      /* initialize sci/sci-lin    */
                     /* even parity , 2 stop bits */
 
+    snprintf (text_buffer, sizeof (text_buffer), "\n\rMINITGCR=0x%08x MSINENA=0x%08x L2RAM.MEMINITDOMAIN=0x%08x\n\r",
+              systemREG1->MINITGCR, systemREG1->MSINENA, l2ramwREG->MEMINITDOMAIN);
+    sciDisplayText (UART, (uint8 *) text_buffer, strlen (text_buffer));
+
     const uint64_t chans_0_to_63 = (uint64_t) -1;
     const uint64_t status = esmGetStatus (esmGROUP2, chans_0_to_63);
-    snprintf (text_buffer, sizeof (text_buffer), "\n\resmGetStatus(esmGROUP2,0x%" PRIx64 ")=0x%" PRIx64 "\n\rStarting continuous output\n\r",
+    snprintf (text_buffer, sizeof (text_buffer), "esmGetStatus(esmGROUP2,0x%" PRIx64 ")=0x%" PRIx64 "\n\rStarting continuous output\n\r",
               chans_0_to_63, status);
 
     sciDisplayText (UART, (uint8 *) text_buffer, strlen (text_buffer));

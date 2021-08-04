@@ -1048,6 +1048,7 @@ TMS570LC4357_report_esm_status_over_uart
 ========================================
 
 For https://e2e.ti.com/support/microcontrollers/other-microcontrollers-group/other/f/other-microcontrollers-forum/1010835/tms570lc4357-source-of-cortex-r5f-core-errors-properly-initializing-flash-ecc
+https://e2e.ti.com/support/microcontrollers/arm-based-microcontrollers-group/arm-based-microcontrollers/f/arm-based-microcontrollers-forum/1022389/tms570lc4357-code-does-not-execute-when-run-standalone-on-the-launchpad
 
 Developed using:
 - CCS 10.3.0
