@@ -79,6 +79,9 @@ void sciDisplayText(const char *const text)
     };
 }
 
+#ifdef USE_RAMFUNCS
+__attribute__((ramfunc))
+#endif
 void timing_tests (void)
 {
     char text[80];

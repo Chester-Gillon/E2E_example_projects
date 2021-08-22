@@ -82,6 +82,31 @@ SECTIONS
     
 
 /* USER CODE BEGIN (4) */
+#ifdef USE_RAMFUNCS
+    /* Place the sin/cos functions and some support functions called from the timed functions in SRAM.
+       The timing_tests() function is placed in SRAM via a rmfunc attribute in the source code.
+
+       The _pmuGetCycleCount_() function can't be placec in SRAM via a ramfunc as that function is called from errata_PBIST_4()
+       during startup before runfunc's have been copied from FLASH to SRAM. */
+    .binit   : {} > FLASH0
+    .TI.ramfunc :
+    {
+        /* The CMSIS DSP library functions and constant look up tables */
+    	ti_math_Cortex_R4_lspf.lib<*>(.text)
+    	ti_math_Cortex_R4_lspf.lib<*>(.const)
+    	/* Standard library math functions sinf() / cosf(), their constant look up tables and and called functions.
+    	   The dependencies were found by looking at the linker map file and checking for *tramp* symbols inserted
+    	   by the linker. */
+    	rtsv7R4_T_le_v3D16_eabi.lib<*>(.text:sinf)
+    	rtsv7R4_T_le_v3D16_eabi.lib<*>(.text:cosf)
+    	rtsv7R4_T_le_v3D16_eabi.lib<*>(.text:floor)
+    	rtsv7R4_T_le_v3D16_eabi.lib<*>(.text:scalbn)
+    	rtsv7R4_T_le_v3D16_eabi.lib<*>(.text:copysign)
+    	rtsv7R4_T_le_v3D16_eabi.lib<*>(.text:__aeabi_errno_addr)
+    	rtsv7R4_T_le_v3D16_eabi.lib<k_rem_pio2.c.obj>(.text)
+    	rtsv7R4_T_le_v3D16_eabi.lib<k_rem_pio2.c.obj>(.const)
+    } load=FLASH0, run=RAM, table(BINIT)
+#endif
 /* USER CODE END */
 }
 

@@ -1,7 +1,7 @@
 The program runs in a RM46L852 with the GCLK configured as 220 MHz.
 HCLK is also 220 MHz
 
-The initial timing results with the program in flash and compiler --opt_level=off
+1. The initial timing results with the program in flash and compiler --opt_level=off
 Starting tests
 Cycle count overhead = 25
 sinf(1.234500)=0.943983, took 528 cycles
@@ -22,7 +22,8 @@ arm_sin_f32(1.234500)=0.943983, took 121 cycles
 arm_cos_f32(1.234500)=0.329993, took 114 cycles
 arm_sin_cos_f32(70.731636)=0.943955,0.329983, took 107 cycles
 
-Results after chaging to compile with --opt_level=1 (local optimisations):
+
+2. Results after chaging to compile with --opt_level=1 (local optimisations):
 Starting tests
 Cycle count overhead = 20
 sinf(1.234500)=0.943983, took 527 cycles
@@ -41,4 +42,52 @@ sinf(1.234500)=0.943983, took 522 cycles
 cosf(1.234500)=0.329993, took 569 cycles
 arm_sin_f32(1.234500)=0.943983, took 114 cycles
 arm_cos_f32(1.234500)=0.329993, took 105 cycles
-arm_sin_cos_f32(70.731636)=0.943955,0.329983, took 107 cyclesa
+arm_sin_cos_f32(70.731636)=0.943955,0.329983, took 107 cycles
+
+
+3. Results in flash after adding ramfunc support, which are unchanged from the above:
+Starting tests
+Cycle count overhead = 20
+sinf(1.234500)=0.943983, took 527 cycles
+cosf(1.234500)=0.329993, took 569 cycles
+arm_sin_f32(1.234500)=0.943983, took 114 cycles
+arm_cos_f32(1.234500)=0.329993, took 105 cycles
+arm_sin_cos_f32(70.731636)=0.943955,0.329983, took 107 cycles
+Cycle count overhead = 20
+sinf(1.234500)=0.943983, took 522 cycles
+cosf(1.234500)=0.329993, took 569 cycles
+arm_sin_f32(1.234500)=0.943983, took 114 cycles
+arm_cos_f32(1.234500)=0.329993, took 105 cycles
+arm_sin_cos_f32(70.731636)=0.943955,0.329983, took 107 cycles
+Cycle count overhead = 20
+sinf(1.234500)=0.943983, took 522 cycles
+cosf(1.234500)=0.329993, took 569 cycles
+arm_sin_f32(1.234500)=0.943983, took 114 cycles
+arm_cos_f32(1.234500)=0.329993, took 105 cycles
+arm_sin_cos_f32(70.731636)=0.943955,0.329983, took 107 cycles
+
+
+4. Results in sram after adding ramfunc support:
+Starting tests
+Cycle count overhead = 24
+sinf(1.234500)=0.943983, took 458 cycles
+cosf(1.234500)=0.329993, took 505 cycles
+arm_sin_f32(1.234500)=0.943983, took 100 cycles
+arm_cos_f32(1.234500)=0.329993, took 100 cycles
+arm_sin_cos_f32(70.731636)=0.943955,0.329983, took 69 cycles
+Cycle count overhead = 24
+sinf(1.234500)=0.943983, took 457 cycles
+cosf(1.234500)=0.329993, took 505 cycles
+arm_sin_f32(1.234500)=0.943983, took 100 cycles
+arm_cos_f32(1.234500)=0.329993, took 100 cycles
+arm_sin_cos_f32(70.731636)=0.943955,0.329983, took 69 cycles
+Cycle count overhead = 24
+sinf(1.234500)=0.943983, took 457 cycles
+cosf(1.234500)=0.329993, took 505 cycles
+arm_sin_f32(1.234500)=0.943983, took 100 cycles
+arm_cos_f32(1.234500)=0.329993, took 100 cycles
+arm_sin_cos_f32(70.731636)=0.943955,0.329983, took 69 cycles
+
+The cycle count overhead with timing_tests() is in SRAM is 24 compared to 20 when timing_tests() is in FLASH, but the
+_pmuGetCycleCount_() function is in FLASH in both cases. I.e. when timing_tests() is in SRAM involves a linker trampoline
+to call  _pmuGetCycleCount_().
