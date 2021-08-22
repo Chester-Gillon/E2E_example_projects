@@ -1100,3 +1100,13 @@ Developed using:
 - TI ARM compiler v20.2.5
 - TI-RTOS to TivaC 2.16.1.14
 
+
+RM46L852_sin_cos
+================
+
+For https://e2e.ti.com/support/microcontrollers/arm-based-microcontrollers-group/arm-based-microcontrollers/f/arm-based-microcontrollers-forum/1029067/tms570lc4357-fastest-sin-cos-code-functions
+
+Developed using:
+- CCS 10.4.0
+- HALCoGen 04.07.01
+- TI ARM compiler v20.2.5
