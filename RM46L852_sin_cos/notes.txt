@@ -21,3 +21,24 @@ cosf(1.234500)=0.329993, took 563 cycles
 arm_sin_f32(1.234500)=0.943983, took 121 cycles
 arm_cos_f32(1.234500)=0.329993, took 114 cycles
 arm_sin_cos_f32(70.731636)=0.943955,0.329983, took 107 cycles
+
+Results after chaging to compile with --opt_level=1 (local optimisations):
+Starting tests
+Cycle count overhead = 20
+sinf(1.234500)=0.943983, took 527 cycles
+cosf(1.234500)=0.329993, took 569 cycles
+arm_sin_f32(1.234500)=0.943983, took 114 cycles
+arm_cos_f32(1.234500)=0.329993, took 105 cycles
+arm_sin_cos_f32(70.731636)=0.943955,0.329983, took 107 cycles
+Cycle count overhead = 20
+sinf(1.234500)=0.943983, took 522 cycles
+cosf(1.234500)=0.329993, took 569 cycles
+arm_sin_f32(1.234500)=0.943983, took 114 cycles
+arm_cos_f32(1.234500)=0.329993, took 105 cycles
+arm_sin_cos_f32(70.731636)=0.943955,0.329983, took 107 cycles
+Cycle count overhead = 20
+sinf(1.234500)=0.943983, took 522 cycles
+cosf(1.234500)=0.329993, took 569 cycles
+arm_sin_f32(1.234500)=0.943983, took 114 cycles
+arm_cos_f32(1.234500)=0.329993, took 105 cycles
+arm_sin_cos_f32(70.731636)=0.943955,0.329983, took 107 cyclesa
