@@ -79,6 +79,57 @@ void sciDisplayText(const char *const text)
     };
 }
 
+// Clean the data cache.
+// ARM Architecture Reference Manual
+// B2.2.7 (B2-1286) Performing Cache Maintenance Operations
+// From https://e2e.ti.com/support/microcontrollers/arm-based-microcontrollers-group/arm-based-microcontrollers/f/arm-based-microcontrollers-forum/485953/incorrect-cache-enable-disable-procedure-in-rm57-technical-reference-manual
+asm("CONST_3FF  .word 0x3ff");
+asm("CONST_7FFF .word 0x00007fff");
+
+#define CACHE_CLEAN \
+    asm(" MRC p15, #1, r0, c0, c0, #1");  \
+    asm(" ANDS R3, R0, #0x07000000");     \
+    asm(" MOV R3, R3, LSR #23");          \
+    asm(" BEQ Finished");                 \
+    asm(" MOV R10, #0");                  \
+    asm("Loop1:");                        \
+    asm(" ADD R2, R10, R10, LSR #1");     \
+    asm(" MOV R1, R0, LSR R2");           \
+    asm(" AND R1, R1, #7");               \
+    asm(" CMP R1, #2");                   \
+    asm(" BLT Skip");                     \
+    asm(" MCR p15, #2, R10, c0, c0, #0"); \
+    asm(" ISB");                          \
+    asm(" MRC p15, #1, R1, c0, c0, #0");  \
+    asm(" AND R2, R1, #7");               \
+    asm(" ADD R2, R2, #4");               \
+    asm(" LDR R4,  CONST_3FF");           \
+    asm(" ANDS R4, R4, R1, LSR #3");      \
+    asm(" CLZ R5, R4");                   \
+    asm(" MOV R9, R4");                   \
+    asm("Loop2:");                        \
+    asm(" LDR R7, CONST_7FFF");           \
+    asm(" ANDS R7, R7, R1, LSR #13");     \
+    asm("Loop3:");                        \
+    asm(" ORR R11, R10, R9, LSL R5");     \
+    asm(" ORR R11, R11, R7, LSL R2");     \
+    asm(" MCR p15, #0, R11, c7, c10, #2");\
+    asm(" SUBS R7, R7, #1");              \
+    asm(" BGE Loop3");                    \
+    asm(" SUBS R9, R9, #1");              \
+    asm(" BGE Loop2");                    \
+    asm("Skip:");                         \
+    asm(" ADD R10, R10, #2");             \
+    asm(" CMP R3, R10");                  \
+    asm(" BGT Loop1");                    \
+    asm(" DSB");                          \
+    asm("Finished:")
+
+void cache_clean(void)
+{
+    CACHE_CLEAN;
+}
+
 /* A local copy of the _pmuGetCycleCount_() function from sys_pmu.asm, so that the local copy can be placed in SRAM
  * when the timing_tests() is in SRAM to avoid a linker trampoline to call _pmuGetCycleCount_() in flash.
  *
@@ -152,6 +203,17 @@ void timing_tests (void)
 int main(void)
 {
 /* USER CODE BEGIN (3) */
+#ifdef USE_RAMFUNCS
+    /* In _c_int00() _cacheEnable_() is called before __TI_auto_init().
+     * I.e. the cache is enabled by the time ramfuncs are copied from FLASH to SRAM, which is effectively self-modifying code.
+     * Therefore, need to clean the cache to write-back the ramfuncs into SRAM so that the correct contents is loaded into the
+     * instruction cache when the functions are called.
+     *
+     * Without this cache clean attempting to call the ramfuncs resulted in a pre-fetch abort.
+     */
+    cache_clean ();
+#endif
+
     sciInit();
     sciDisplayText ("\n\rStarting tests\n\r");
 

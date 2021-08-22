@@ -1,0 +1,47 @@
+The program runs in a TMS570LC4357 configured with:
+a. Caches enabled
+b. GCLK 300 MHz
+c. HCLK 150 MHz
+
+1. Results in FLASH:
+Starting tests
+Cycle count overhead = 9
+sinf(1.234500)=0.943983, took 687 cycles
+cosf(1.234500)=0.329993, took 777 cycles
+arm_sin_f32(1.234500)=0.943983, took 256 cycles
+arm_cos_f32(1.234500)=0.329993, took 181 cycles
+arm_sin_cos_f32(70.731636)=0.943955,0.329983, took 176 cycles
+Cycle count overhead = 9
+sinf(1.234500)=0.943983, took 465 cycles
+cosf(1.234500)=0.329993, took 514 cycles
+arm_sin_f32(1.234500)=0.943983, took 80 cycles
+arm_cos_f32(1.234500)=0.329993, took 80 cycles
+arm_sin_cos_f32(70.731636)=0.943955,0.329983, took 50 cycles
+Cycle count overhead = 9
+sinf(1.234500)=0.943983, took 445 cycles
+cosf(1.234500)=0.329993, took 493 cycles
+arm_sin_f32(1.234500)=0.943983, took 80 cycles
+arm_cos_f32(1.234500)=0.329993, took 80 cycles
+arm_sin_cos_f32(70.731636)=0.943955,0.329983, took 50 cycles
+
+
+2. Results in SRAM:
+Starting tests
+Cycle count overhead = 9
+sinf(1.234500)=0.943983, took 561 cycles
+cosf(1.234500)=0.329993, took 606 cycles
+arm_sin_f32(1.234500)=0.943983, took 176 cycles
+arm_cos_f32(1.234500)=0.329993, took 170 cycles
+arm_sin_cos_f32(70.731636)=0.943955,0.329983, took 100 cycles
+Cycle count overhead = 9
+sinf(1.234500)=0.943983, took 450 cycles
+cosf(1.234500)=0.329993, took 507 cycles
+arm_sin_f32(1.234500)=0.943983, took 79 cycles
+arm_cos_f32(1.234500)=0.329993, took 80 cycles
+arm_sin_cos_f32(70.731636)=0.943955,0.329983, took 57 cycles
+Cycle count overhead = 9
+sinf(1.234500)=0.943983, took 441 cycles
+cosf(1.234500)=0.329993, took 495 cycles
+arm_sin_f32(1.234500)=0.943983, took 79 cycles
+arm_cos_f32(1.234500)=0.329993, took 80 cycles
+arm_sin_cos_f32(70.731636)=0.943955,0.329983, took 50 cycles
