@@ -91,3 +91,50 @@ arm_sin_cos_f32(70.731636)=0.943955,0.329983, took 69 cycles
 The cycle count overhead with timing_tests() is in SRAM is 24 compared to 20 when timing_tests() is in FLASH, but the
 _pmuGetCycleCount_() function is in FLASH in both cases. I.e. when timing_tests() is in SRAM involves a linker trampoline
 to call  _pmuGetCycleCount_().
+
+
+5. Results in flash after a local get_pmu_cycle_count function was added:
+Starting tests
+Cycle count overhead = 24
+sinf(1.234500)=0.943983, took 536 cycles
+cosf(1.234500)=0.329993, took 572 cycles
+arm_sin_f32(1.234500)=0.943983, took 118 cycles
+arm_cos_f32(1.234500)=0.329993, took 114 cycles
+arm_sin_cos_f32(70.731636)=0.943955,0.329983, took 100 cycles
+Cycle count overhead = 24
+sinf(1.234500)=0.943983, took 531 cycles
+cosf(1.234500)=0.329993, took 572 cycles
+arm_sin_f32(1.234500)=0.943983, took 118 cycles
+arm_cos_f32(1.234500)=0.329993, took 114 cycles
+arm_sin_cos_f32(70.731636)=0.943955,0.329983, took 100 cycles
+Cycle count overhead = 24
+sinf(1.234500)=0.943983, took 531 cycles
+cosf(1.234500)=0.329993, took 572 cycles
+arm_sin_f32(1.234500)=0.943983, took 118 cycles
+arm_cos_f32(1.234500)=0.329993, took 114 cycles
+arm_sin_cos_f32(70.731636)=0.943955,0.329983, took 100 cycles
+
+
+6. Results in SRAM after a local get_pmu_cycle_count was added which is also in SRAM:
+Starting tests
+Cycle count overhead = 9
+sinf(1.234500)=0.943983, took 444 cycles
+cosf(1.234500)=0.329993, took 490 cycles
+arm_sin_f32(1.234500)=0.943983, took 85 cycles
+arm_cos_f32(1.234500)=0.329993, took 85 cycles
+arm_sin_cos_f32(70.731636)=0.943955,0.329983, took 54 cycles
+Cycle count overhead = 9
+sinf(1.234500)=0.943983, took 437 cycles
+cosf(1.234500)=0.329993, took 490 cycles
+arm_sin_f32(1.234500)=0.943983, took 85 cycles
+arm_cos_f32(1.234500)=0.329993, took 85 cycles
+arm_sin_cos_f32(70.731636)=0.943955,0.329983, took 54 cycles
+Cycle count overhead = 9
+sinf(1.234500)=0.943983, took 437 cycles
+cosf(1.234500)=0.329993, took 490 cycles
+arm_sin_f32(1.234500)=0.943983, took 85 cycles
+arm_cos_f32(1.234500)=0.329993, took 85 cycles
+arm_sin_cos_f32(70.731636)=0.943955,0.329983, took 54 cycles
+
+This has reduced the overhead of reading the cycle counter by 15 cycles, with a corresponding reduction in the measured
+time for the arm_sin_f32(), arm_cos_f32() and arm_sin_cos_f32() calls.

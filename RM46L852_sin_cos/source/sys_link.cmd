@@ -84,10 +84,7 @@ SECTIONS
 /* USER CODE BEGIN (4) */
 #ifdef USE_RAMFUNCS
     /* Place the sin/cos functions and some support functions called from the timed functions in SRAM.
-       The timing_tests() function is placed in SRAM via a rmfunc attribute in the source code.
-
-       The _pmuGetCycleCount_() function can't be placec in SRAM via a ramfunc as that function is called from errata_PBIST_4()
-       during startup before runfunc's have been copied from FLASH to SRAM. */
+       The timing_tests() function is placed in SRAM via a rmfunc attribute in the source code. */
     .binit   : {} > FLASH0
     .TI.ramfunc :
     {

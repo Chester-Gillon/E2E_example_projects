@@ -79,6 +79,21 @@ void sciDisplayText(const char *const text)
     };
 }
 
+/* A local copy of the _pmuGetCycleCount_() function from sys_pmu.asm, so that the local copy can be placed in SRAM
+ * when the timing_tests() is in SRAM to avoid a linker trampoline to call _pmuGetCycleCount_() in flash.
+ *
+ * The _pmuGetCycleCount_() function can't be placec in SRAM via a ramfunc as that function is called from errata_PBIST_4()
+ * during startup before runfunc's have been copied from FLASH to SRAM
+ */
+#ifdef USE_RAMFUNCS
+__attribute__((ramfunc))
+#endif
+__attribute((naked)) uint32 get_pmu_cycle_count (void)
+{
+    asm (" mrc   p15, #0, r0, c9, c13, #0");
+    asm (" bx    lr");
+}
+
 #ifdef USE_RAMFUNCS
 __attribute__((ramfunc))
 #endif
@@ -94,41 +109,41 @@ void timing_tests (void)
     float output;
 
     /* Get a measure of overhead of reading cycle counters */
-    tic = _pmuGetCycleCount_ ();
-    toc = _pmuGetCycleCount_ ();
+    tic = get_pmu_cycle_count ();
+    toc = get_pmu_cycle_count ();
     snprintf (text, sizeof (text), "Cycle count overhead = %u\n\r", toc - tic);
     sciDisplayText (text);
 
     /* Time standard library math.h functions */
-    tic = _pmuGetCycleCount_ ();
+    tic = get_pmu_cycle_count ();
     output = sinf (input_rads);
-    toc = _pmuGetCycleCount_ ();
+    toc = get_pmu_cycle_count ();
     snprintf (text, sizeof (text), "sinf(%f)=%f, took %u cycles\n\r", input_rads, output, toc - tic);
     sciDisplayText (text);
 
-    tic = _pmuGetCycleCount_ ();
+    tic = get_pmu_cycle_count ();
     output = cosf (input_rads);
-    toc = _pmuGetCycleCount_ ();
+    toc = get_pmu_cycle_count ();
     snprintf (text, sizeof (text), "cosf(%f)=%f, took %u cycles\n\r", input_rads, output, toc - tic);
     sciDisplayText (text);
 
     /* Time CMSIS DSP Fast Math Functions */
-    tic = _pmuGetCycleCount_ ();
+    tic = get_pmu_cycle_count ();
     output = arm_sin_f32 (input_rads);
-    toc = _pmuGetCycleCount_ ();
+    toc = get_pmu_cycle_count ();
     snprintf (text, sizeof (text), "arm_sin_f32(%f)=%f, took %u cycles\n\r", input_rads, output, toc - tic);
     sciDisplayText (text);
 
-    tic = _pmuGetCycleCount_ ();
+    tic = get_pmu_cycle_count ();
     output = arm_cos_f32 (input_rads);
-    toc = _pmuGetCycleCount_ ();
+    toc = get_pmu_cycle_count ();
     snprintf (text, sizeof (text), "arm_cos_f32(%f)=%f, took %u cycles\n\r", input_rads, output, toc - tic);
     sciDisplayText (text);
 
     /* Time CMSIS DSP Controller Math Function */
-    tic = _pmuGetCycleCount_ ();
+    tic = get_pmu_cycle_count ();
     arm_sin_cos_f32  (input_degs, &sin_val, &cos_val);
-    toc = _pmuGetCycleCount_ ();
+    toc = get_pmu_cycle_count ();
     snprintf (text, sizeof (text), "arm_sin_cos_f32(%f)=%f,%f, took %u cycles\n\r", input_degs, sin_val, cos_val, toc - tic);
     sciDisplayText (text);
 }
