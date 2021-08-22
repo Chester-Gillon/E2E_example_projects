@@ -1101,8 +1101,8 @@ Developed using:
 - TI-RTOS to TivaC 2.16.1.14
 
 
-RM46L852_sin_cos
-================
+RM46L852_sin_cos and TMS570LC4357_sin_cos
+=========================================
 
 For https://e2e.ti.com/support/microcontrollers/arm-based-microcontrollers-group/arm-based-microcontrollers/f/arm-based-microcontrollers-forum/1029067/tms570lc4357-fastest-sin-cos-code-functions
 
