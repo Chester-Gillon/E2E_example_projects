@@ -1110,3 +1110,14 @@ Developed using:
 - CCS 10.4.0
 - HALCoGen 04.07.01
 - TI ARM compiler v20.2.5
+
+
+TMS570LS0432_TI_fee_read_write
+==============================
+
+For https://e2e.ti.com/support/microcontrollers/arm-based-microcontrollers-group/arm-based-microcontrollers/f/arm-based-microcontrollers-forum/1051370/ccs11-fails-to-load-f021-flash-api-from-debugger
+
+Developed using:
+- CCS 11.0.0
+- HALCoGen 04.07.01
+- TI ARM compiler v20.2.5
