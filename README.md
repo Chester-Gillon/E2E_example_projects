@@ -1112,8 +1112,8 @@ Developed using:
 - TI ARM compiler v20.2.5
 
 
-TMS570LS0432_TI_fee_read_write
-==============================
+TMS570LS0432_TI_fee_read_write and RM42L432_TI_fee_read_write
+=============================================================
 
 For https://e2e.ti.com/support/microcontrollers/arm-based-microcontrollers-group/arm-based-microcontrollers/f/arm-based-microcontrollers-forum/1051370/ccs11-fails-to-load-f021-flash-api-from-debugger
 
