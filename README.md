@@ -1013,6 +1013,7 @@ TMS570LC4357_TI_compilers_halcogen
 ==================================
 
 For https://e2e.ti.com/support/tools/code-composer-studio-group/ccs/f/code-composer-studio-forum/998144/ti-arm-clang-compiler-tools-user-s-guide-v1-3-description-of-run-time-library-selection-seems-incorrect
+and https://e2e.ti.com/support/microcontrollers/arm-based-microcontrollers-group/arm-based-microcontrollers/f/arm-based-microcontrollers-forum/1060510/tms570ls1114-tiarmclang-wrong-assembly-output-for-simple-assignment
 
 Developed using:
 - CCS 10.3.0

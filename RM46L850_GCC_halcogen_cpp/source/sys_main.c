@@ -70,9 +70,8 @@ int main(void)
 /* USER CODE BEGIN (3) */
     sciInit ();
     cpp_test ();
-    for (;;)
-    {
-    }
+
+    /* Return to allow coverage collection when exit() is called */
 /* USER CODE END */
 
     return 0;
