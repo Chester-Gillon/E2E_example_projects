@@ -1121,3 +1121,14 @@ Developed using:
 - CCS 11.0.0
 - HALCoGen 04.07.01
 - TI ARM compiler v20.2.5
+
+
+MSP432E401Y_tracer
+==================
+
+Developed using:
+- CCS 11.0.0
+- TI ARM compiler v20.2.5
+
+For https://e2e.ti.com/support/tools/code-composer-studio-group/ccs/f/code-composer-studio-forum/1061524/ccs-11-0-0-00012-under-linux-crashes-when-attempt-to-use-data-variable-trace
+
