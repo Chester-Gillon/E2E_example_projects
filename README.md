@@ -1133,3 +1133,14 @@ Developed using:
 
 For https://e2e.ti.com/support/tools/code-composer-studio-group/ccs/f/code-composer-studio-forum/1061524/ccs-11-0-0-00012-under-linux-crashes-when-attempt-to-use-data-variable-trace
 
+
+TMS320F280049C_link_binary_blob
+===============================
+
+For https://e2e.ti.com/support/microcontrollers/c2000-microcontrollers-group/c2000/f/c2000-microcontrollers-forum/1061405/tms320f28335-include-binary-data-into-c-project
+
+Developed using:
+- CCS 11.0.0
+- TI C2000 compiler v21.6.0
+- GNU ARM compiler v9.2.1 (just for objcopy)
+
