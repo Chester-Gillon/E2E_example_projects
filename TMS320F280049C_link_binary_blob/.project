@@ -26,6 +26,10 @@
 	</natures>
 	<variableList>
 		<variable>
+			<name>CG_ARM_ROOT</name>
+			<value>$%7BCCS_INSTALL_ROOT%7D/tools/compiler/ti-cgt-arm_20.2.5.LTS</value>
+		</variable>
+		<variable>
 			<name>CG_GCC_ROOT</name>
 			<value>$%7BCCS_INSTALL_ROOT%7D/tools/compiler/gcc-arm-none-eabi-9-2019-q4-major</value>
 		</variable>

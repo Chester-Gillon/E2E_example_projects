@@ -1142,5 +1142,6 @@ For https://e2e.ti.com/support/microcontrollers/c2000-microcontrollers-group/c20
 Developed using:
 - CCS 11.0.0
 - TI C2000 compiler v21.6.0
-- GNU ARM compiler v9.2.1 (just for objcopy)
+- GNU ARM compiler v9.2.1 (just for objcopy in pre-build rule)
+- TI ARM compiler v20.2.5 (just for armobjcopy in pre-build rule)
 

@@ -9,18 +9,21 @@
  *
  *  The project setup steps were:
  *  1. The output format needs to be set to "eabi (ELF)" and the section names in the linker command file set appropriately.
- *  2. Create a Linked Resource Path Variable named CG_GCC_ROOT with the following value:
+ *  2. Create a Linked Resource Path Variable named CG_ARM_ROOT with the following value:
+ *       ${CCS_INSTALL_ROOT}/tools/compiler/ti-cgt-arm_20.2.5.LTS
+ *  3. Create a Linked Resource Path Variable named CG_GCC_ROOT with the following value:
  *       ${CCS_INSTALL_ROOT}/tools/compiler/gcc-arm-none-eabi-9-2019-q4-major
- *  3. Add the following pre-build step:
- *       ${CG_GCC_ROOT}/bin/arm-none-eabi-objcopy --alt-machine-code=141 --input-target=binary --output-target=elf32-little  ../TMS320F280049C_link_binary_blob.c TMS320F280049C_link_binary_blob_elf.o
+ *  4. Add the following pre-build steps:
+ *       ${CG_ARM_ROOT}/bin/armobjcopy --input-target=binary --output-target=elf32-littlearm ../TMS320F280049C_link_binary_blob.c TMS320F280049C_link_binary_blob_elf.o  --rename-section .data=.const,readonly
+ *       ${CG_GCC_ROOT}/arm-none-eabi/bin/objcopy --input-target=elf32-little --alt-machine-code=141  TMS320F280049C_link_binary_blob_elf.o
  *
- *     Where the alt-machine-code of 141 is the value for "Texas Instruments TMS320C2000 DSP family".
- *
- *     @todo
- *     By default, when converting from a binary to ELF file armobjcopy creates a .data section.
- *     Use of a .data section means the binary contents linked to the program can be modified at run time, but results
- *     in increased memory usage as the binary file has be copied to RAM by the run time start up code.
- *  4. Add the following linker libraries:
+ *     Where:
+ *     a. The alt-machine-code of 141 is the value for "Texas Instruments TMS320C2000 DSP family".
+ *        This has to be done by the GCC objcopy, as the TI armobjcopy doesn't understand the --alt-machine-code option.
+ *     b. By default, when converting from a binary to ELF file armobjcopy creates a .data section.
+ *        Use of a .data section means the binary contents linked to the program can be modified at run time, but results
+ *        in increased memory usage as the binary file has be copied to RAM by the run time start up code.
+ *  5. Add the following linker libraries:
  *        TMS320F280049C_link_binary_blob_elf.o
  */
 
