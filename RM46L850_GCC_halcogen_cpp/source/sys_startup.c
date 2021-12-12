@@ -86,7 +86,6 @@ void handlePLLLockFail(void);
 void _c_int00(void) __attribute__((noreturn));
 #define PLL_RETRIES 5U
 /* USER CODE BEGIN (4) */
-void initialise_monitor_handles(void);
 void _start(void);
 
 extern int __stack[];
@@ -668,7 +667,6 @@ void _c_int00(void)
     }
 
     /* Call the newlib entry point, which will call global constructors (amongst start-up actions), before calling main */
-    initialise_monitor_handles ();
     _start ();
 
     /* In case _start() returns */

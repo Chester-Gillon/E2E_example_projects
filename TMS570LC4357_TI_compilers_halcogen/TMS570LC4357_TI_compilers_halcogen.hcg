@@ -285,7 +285,8 @@
         <NAME>HL_mibspi.h</NAME>
       </HDRMIBSPI>
       <SRCMIBSPI>
-</SRCMIBSPI>
+        <NAME>HL_mibspi.c</NAME>
+      </SRCMIBSPI>
       <HDRSPI_R>
         <NAME>HL_reg_spi.h</NAME>
       </HDRSPI_R>
@@ -581,7 +582,7 @@
         <PATH>include\HL_mibspi.h</PATH>
       </HDRMIBSPI>
       <SRCMIBSPI>
-        <PATH></PATH>
+        <PATH>source\HL_mibspi.c</PATH>
       </SRCMIBSPI>
     </FILENAMES>
   </MIBSPI>
