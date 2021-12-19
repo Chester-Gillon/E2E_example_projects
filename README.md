@@ -1145,3 +1145,15 @@ Developed using:
 - GNU ARM compiler v9.2.1 (just for objcopy in pre-build rule)
 - TI ARM compiler v20.2.5 (just for armobjcopy in pre-build rule)
 
+
+MSP432E401Y_tirtos_ccs_pthread_setname_np
+=========================================
+
+For https://e2e.ti.com/support/microcontrollers/arm-based-microcontrollers-group/arm-based-microcontrollers/f/arm-based-microcontrollers-forum/1062581/msp432e411y-bgaevm-task-name-in-rov-for-c-application
+
+Developed using:
+- CCS 11.0.0
+- TI ARM compiler v20.2.5
+- SimpleLink MSP432E SDK v4.20.0.12
+- SysConfig v1.10.0
+
