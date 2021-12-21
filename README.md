@@ -1157,3 +1157,13 @@ Developed using:
 - SimpleLink MSP432E SDK v4.20.0.12
 - SysConfig v1.10.0
 
+
+MSP430FR5994_read_csv
+=====================
+
+For https://e2e.ti.com/support/microcontrollers/msp-low-power-microcontrollers-group/msp430/f/msp-low-power-microcontroller-forum/1063552/msp430fr5994-input-data-from-csv-file-into-an-array-at-compile-and-run-time
+
+Developed using:
+- CCS 11.0.0
+- TI MSP430 compiler v21.6.0.LTS
+
