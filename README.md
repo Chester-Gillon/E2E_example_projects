@@ -1167,3 +1167,13 @@ Developed using:
 - CCS 11.0.0
 - TI MSP430 compiler v21.6.0.LTS
 
+
+TIVA_const_flash_commands
+=========================
+
+For https://e2e.ti.com/support/microcontrollers/arm-based-microcontrollers-group/arm-based-microcontrollers/f/arm-based-microcontrollers-forum/341213/how-to-correctly-declare-initialized-data-into-flash-using-c-c
+
+Developed using:
+- CCS 11.0.0
+- TI ARM compiler v5.1.6
+
