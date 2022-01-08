@@ -1177,3 +1177,13 @@ Developed using:
 - CCS 11.0.0
 - TI ARM compiler v5.1.6
 
+
+MSP430F2418_compiler_constants_cast and MSP430F2418_compiler_constants_round
+============================================================================
+
+For https://e2e.ti.com/support/tools/code-composer-studio-group/ccs/f/code-composer-studio-forum/1066465/calculating-constants-at-compile-time-not-run-time
+
+Developed using:
+- CCS 11.1.0
+- TI MSP430 compiler v21.6.0
+
