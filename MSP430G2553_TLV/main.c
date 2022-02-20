@@ -33,7 +33,7 @@ uint16_t corrected(int val)
 {
 
     int32_t tmp;
-    static int *p = 0;
+    static int *volatile p = 0;
 
     if(p || tlv_good())
     {
