@@ -1187,3 +1187,12 @@ Developed using:
 - CCS 11.1.0
 - TI MSP430 compiler v21.6.0
 
+
+MSP430G2553_TLV
+===============
+
+For https://e2e.ti.com/support/microcontrollers/msp-low-power-microcontrollers-group/msp430/f/msp-low-power-microcontroller-forum/1077422/msp430g2553-gcc-vs-tlv-data
+
+- CCS 11.1.0
+- GNU MSP430 Compiler 9.3.0.31
+
