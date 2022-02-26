@@ -118,3 +118,60 @@ void vimECCErrorHandler(void)
   1c:   e58de008        str     lr, [sp, #8]
   
   
+== Using -mllvm -align-all-functions=2 with TI_CLANG to reduce code size ==
+
+For investigating https://e2e.ti.com/support/microcontrollers/arm-based-microcontrollers-group/arm-based-microcontrollers/f/arm-based-microcontrollers-forum/1080160/arm-cgt-use-of--mllvm--align-all-functions-2-compiler-option
+
+Code size before adding the options:
+$ ~/ti/sc_mcsdk_2_02_01_03/cg_xml/utils/ofd6x -x -g Debug_TI_CLANG/TMS570LC4357_TI_compilers_halcogen.out | ~/ti/sc_mcsdk_2_02_01_03/cg_xml/bin/sectti 
+Reading from stdin ...
+
+************************************************************
+REPORT FOR FILE: Debug_TI_CLANG/TMS570LC4357_TI_compilers_halcogen.out
+************************************************************
+                Name : Size (dec)  Size (hex)  Type   Load Addr   Run Addr
+-------------------- : ----------  ----------  ----   ----------  ----------
+            .intvecs :         32  0x00000020  CODE   0x00000000  0x00000000
+               .text :     286404  0x00045ec4  CODE   0x00000020  0x00000020
+              .cinit :        176  0x000000b0  DATA   0x00048740  0x00048740
+                .bss :        560  0x00000230  UDATA  0x08009f24  0x08009f24
+               .data :       2593  0x00000a21  UDATA  0x08009500  0x08009500
+             .sysmem :      32768  0x00008000  UDATA  0x08001500  0x08001500
+         .init_array :          4  0x00000004  DATA   0x00048720  0x00048720
+             .rodata :      10268  0x0000281c  DATA   0x00045f00  0x00045f00
+          .ARM.exidx :          8  0x00000008  DATA   0x00048800  0x00048800
+
+------------------------------------------------------------
+Totals by section type
+------------------------------------------------------------
+  Uninitialized Data :      35921  0x00008c51
+    Initialized Data :      10456  0x000028d8
+                Code :     286436  0x00045ee4
+
+Code size after adding -mllvm -align-all-functions=2 to "Miscellaneous C source specific flags" and
+"Miscellaneous C++ source specific flags" :
+$ ~/ti/sc_mcsdk_2_02_01_03/cg_xml/utils/ofd6x -x -g Debug_TI_CLANG/TMS570LC4357_TI_compilers_halcogen.out | ~/ti/sc_mcsdk_2_02_01_03/cg_xml/bin/sectti 
+Reading from stdin ...
+
+************************************************************
+REPORT FOR FILE: Debug_TI_CLANG/TMS570LC4357_TI_compilers_halcogen.out
+************************************************************
+                Name : Size (dec)  Size (hex)  Type   Load Addr   Run Addr
+-------------------- : ----------  ----------  ----   ----------  ----------
+            .intvecs :         32  0x00000020  CODE   0x00000000  0x00000000
+               .text :     285092  0x000459a4  CODE   0x00000020  0x00000020
+              .cinit :        176  0x000000b0  DATA   0x00048220  0x00048220
+                .bss :        560  0x00000230  UDATA  0x08009f24  0x08009f24
+               .data :       2593  0x00000a21  UDATA  0x08009500  0x08009500
+             .sysmem :      32768  0x00008000  UDATA  0x08001500  0x08001500
+         .init_array :          4  0x00000004  DATA   0x00048200  0x00048200
+             .rodata :      10268  0x0000281c  DATA   0x000459e0  0x000459e0
+          .ARM.exidx :          8  0x00000008  DATA   0x000482e0  0x000482e0
+
+------------------------------------------------------------
+Totals by section type
+------------------------------------------------------------
+  Uninitialized Data :      35921  0x00008c51
+    Initialized Data :      10456  0x000028d8
+                Code :     285124  0x000459c4
+
