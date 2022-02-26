@@ -57,8 +57,9 @@ resetEntry:
         b   _c_int00
 undefEntry:
         b   undefEntry
-svcEntry:
-        b   svcEntry
+        .global SVC_Handler
+SVC_Handler:
+        b   SVC_Handler
 prefetchEntry:
         b   prefetchEntry
         b   _dabort

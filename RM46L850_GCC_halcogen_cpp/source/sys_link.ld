@@ -18,8 +18,8 @@ MEMORY
 {
   VECTORS(rx)     : ORIGIN = 0x00000000, LENGTH = 0x00000020
   FLASH  (rx)     : ORIGIN = 0x00000020, LENGTH = 0x0017FFE0
-  CPU_STACK (rw)  : ORIGIN = 0x08000000, LENGTH = 0x00001e00 /* Stack is configured in sys_core.asm */
-  RAM (xrw)       : ORIGIN = 0x08001e00, LENGTH = 0x0002e200
+  CPU_STACK (rw)  : ORIGIN = 0x08000000, LENGTH = 0x00006500 /* Stack is configured in sys_core.asm */
+  RAM (xrw)       : ORIGIN = 0x08006500, LENGTH = 0x00029b00
   MEMORY_B1 (rx)  : ORIGIN = 0x60000000, LENGTH = 0K
 }
 

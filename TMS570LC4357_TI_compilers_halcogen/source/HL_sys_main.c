@@ -55,7 +55,6 @@
 #include "HL_adc.h"
 #include "HL_sci.h"
 #include "HL_gio.h"
-#include "HL_mibspi.h"
 
 #include "cpp_test.h"
 
@@ -90,8 +89,6 @@ int main(void)
        uint32 ch_count=0;
         uint32 id    =0;
         uint32 value =0;
-
-        mibspiInit ();
 
         /* initialize gio     */
         gioInit();
