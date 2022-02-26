@@ -70,7 +70,11 @@ uint32_t get_fpscr (void)
 }
 #pragma diag_pop
 
-void set_fpscr (const uint32_t new_fpscr)
+/*
+ * @todo Needed to declare the new_fpscr parameter as volatile to prevent the modification of the fpscr variable
+ *       being optimised out in clear_fpscr_dzc() at optimisation level "0 - Register Optimizations" using TI v20.2.5.LTS
+ */
+void set_fpscr (const volatile uint32_t new_fpscr)
 {
     asm volatile (" VMSR FPSCR, r0");
 }
@@ -84,12 +88,39 @@ void clear_fpscr_dzc (void)
     set_fpscr (fpscr);
 }
 
+static volatile uint32_t num_fpu_interrupts;
+
+#pragma CODE_STATE(fpuInterrupt, 32)
+#pragma INTERRUPT(fpuInterrupt, IRQ)
+#pragma WEAK(fpuInterrupt)
+
+/*
+ * Interrupt handler for FPU interrupts.
+ * The FPU interrupt seems to be level sensitive so have to clear the DZC bit in the FPSCR to stop continuous interrupts
+ * from occurring.
+ *
+ * @todo Have to use inline assembler to clear DZC, rather than calling clear_fpscr_dzc(), since if any functions are
+ *       called by an interrupt handler to compiler inserts code to preserve and restore the FPSCR, and restoring the FPSCR
+ *       then results in continuous interrupts.
+ */
+void fpuInterrupt (void)
+{
+    asm volatile (" VMRS v9, FPSCR");
+    asm volatile (" BIC v9, v9, #2");
+    asm volatile (" VMSR FPSCR, v9");
+    num_fpu_interrupts++;
+}
+
 /* USER CODE END */
 
 int main(void)
 {
 /* USER CODE BEGIN (3) */
     bool first_pass = true;
+
+    /* Enable IRQ - Clear I flag in CPS register */
+    /* Note: This is usually done by the OS or in an svc dispatcher */
+    _enable_IRQ();
 
     for (;;)
     {
@@ -101,16 +132,18 @@ int main(void)
 
         printf ("%g/%g=%g\n", a, b, c);
         printf ("FPSCR before=0x%08x after=0x%08x\n", fpscr_before, fpscr_after);
+        printf ("num_fpu_interrupts=%u\n", num_fpu_interrupts);
         clear_fpscr_dzc ();
 
         if (first_pass)
         {
-            /* Enable divide-by-zero exception */
-            const uint32_t original_sctlr = __MRC (15, 0, 1, 0, 0);
-            const uint32_t dz = 1 << 19;
-            const uint32_t new_sctlr = original_sctlr | dz;
-            __MCR (15, 0, new_sctlr, 1, 0, 0);
-            printf ("Changed SCTLR 0x%08x -> 0x%08x\n", original_sctlr, new_sctlr);
+            /* Enable propagation of floating-point divide-by-zero exception flag */
+            const uint32_t original_secondary_auxilary_control_register = __MRC (15, 0, 15, 0, 0);
+            const uint32_t dzc = 1 << 9;
+            const uint32_t new_secondary_auxilary_control_register = original_secondary_auxilary_control_register | dzc;
+            __MCR (15, 0, new_secondary_auxilary_control_register, 15, 0, 0);
+            printf ("Changed SCTLR 0x%08x -> 0x%08x\n",
+                    original_secondary_auxilary_control_register, new_secondary_auxilary_control_register);
             first_pass = false;
         }
     }
