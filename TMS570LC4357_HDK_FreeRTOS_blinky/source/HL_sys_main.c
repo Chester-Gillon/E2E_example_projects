@@ -91,6 +91,7 @@ void RTOS_AppConfigureTimerForRuntimeStats(void)
     portRTI_CNT0_UDCP1_REG = ( configCPU_CLOCK_HZ / 2 ) / configTICK_RATE_HZ / 10; //QJ
 }
 
+#pragma CODE_STATE(vPortRTOSRunTimeISR, 32)
 #pragma INTERRUPT(vPortRTOSRunTimeISR, IRQ)
 void vPortRTOSRunTimeISR(void)
 {
