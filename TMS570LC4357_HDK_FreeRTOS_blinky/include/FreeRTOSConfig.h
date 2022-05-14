@@ -89,6 +89,10 @@
  *----------------------------------------------------------*/
 
 /* USER CODE BEGIN (0) */
+extern void RTOS_AppConfigureTimerForRuntimeStats(void);
+#define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS() RTOS_AppConfigureTimerForRuntimeStats()
+extern uint32_t RTOS_AppGetRuntimeCounterValueFromISR(void);
+#define portGET_RUN_TIME_COUNTER_VALUE() RTOS_AppGetRuntimeCounterValueFromISR()
 /* USER CODE END */
 #define configUSE_PREEMPTION		  1
 #define configUSE_PORT_OPTIMISED_TASK_SELECTION	1
@@ -104,7 +108,7 @@
 #define configTOTAL_HEAP_SIZE		  ( ( size_t ) 8192 )
 #define configMAX_TASK_NAME_LEN		  ( 16 )
 #define configIDLE_SHOULD_YIELD		  1
-#define configGENERATE_RUN_TIME_STATS 0
+#define configGENERATE_RUN_TIME_STATS 1
 #define configUSE_MALLOC_FAILED_HOOK  0
 
 /* USER CODE BEGIN (1) */

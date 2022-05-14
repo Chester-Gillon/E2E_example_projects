@@ -58,6 +58,58 @@
 #include "HL_het.h"
 #include "HL_gio.h"
 
+static uint32_t RTOS_RunTimeCounter; /* runtime counter, used for configGENERATE_RUNTIME_STATS */
+
+
+/* This is a variation of the suggestion in
+ * https://e2e.ti.com/support/microcontrollers/arm-based-microcontrollers-group/arm-based-microcontrollers/f/arm-based-microcontrollers-forum/1078724/tms570lc4357-configgenerate_run_time_stats/3993182#3993182
+ * which configures RTI compare 1 compare register and compare 1 update compare register to use 10*configTICK_RATE_HZ
+ * for run time counter.
+ *
+ * The suggestion in the thread was to modify the HALGoGen modified prvSetupTimerInterrupt function in os_port.c.
+ * However, the suggested modification would be overwritten when HALCoGen re-generates the code as there are no
+ * USER CODE blocks in the generated prvSetupTimerInterrupt().
+ *
+ * The split is:
+ * a. RTOS_AppConfigureTimerForRuntimeStats() set the RTI1 compare registers.
+ *    This is called prior to prvSetupTimerInterrupt() which initialises the portRTI_SETINTENA_REG register with a fixed value.
+ *    Therefore, any change to portRTI_SETINTENA_REG in RTOS_AppConfigureTimerForRuntimeStats() gets overwritten when
+ *    prvSetupTimerInterrupt runs ()
+ * b. RTOS_AppGetRuntimeCounterValueFromISR() enables the RTI1 compare interrupt on the first call.
+ *
+ * @todo Add the RTI driver to the HALCoGen project so can use it's register definitions rather than the following #defines taken
+ *       from the thread.
+ */
+#define portRTI_CNT0_COMP1_REG  ( * ( ( volatile uint32_t * ) 0xFFFFFC5C ) )
+#define portRTI_CNT0_UDCP1_REG  ( * ( ( volatile uint32_t * ) 0xFFFFFC60 ) )
+#define portRTI_SETINTENA_REG   ( * ( ( volatile uint32_t * ) 0xFFFFFC80 ) )
+
+void RTOS_AppConfigureTimerForRuntimeStats(void)
+{
+    RTOS_RunTimeCounter = 0;
+    portRTI_CNT0_COMP1_REG = ( configCPU_CLOCK_HZ / 2 ) / configTICK_RATE_HZ / 10; //QJ
+    portRTI_CNT0_UDCP1_REG = ( configCPU_CLOCK_HZ / 2 ) / configTICK_RATE_HZ / 10; //QJ
+}
+
+#pragma INTERRUPT(vPortRTOSRunTimeISR, IRQ)
+void vPortRTOSRunTimeISR(void)
+{
+    /* Clear interrupt flag.*/
+    //rtiREG1->INTFLAG = 2U;
+    *((volatile uint32_t *) 0xFFFFFC88) = 2U;
+    RTOS_RunTimeCounter++;    /* increment runtime counter */
+}
+
+uint32_t RTOS_AppGetRuntimeCounterValueFromISR(void)
+{
+    if ((portRTI_SETINTENA_REG & 2) == 0)
+    {
+        portRTI_SETINTENA_REG |= 0x00000002U; //QJ
+    }
+
+    return RTOS_RunTimeCounter;
+}
+
 /* Define Task Handles */
 xTaskHandle xTask1Handle;
 
