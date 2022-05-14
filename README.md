@@ -1193,6 +1193,18 @@ MSP430G2553_TLV
 
 For https://e2e.ti.com/support/microcontrollers/msp-low-power-microcontrollers-group/msp430/f/msp-low-power-microcontroller-forum/1077422/msp430g2553-gcc-vs-tlv-data
 
+Developed using:
 - CCS 11.1.0
 - GNU MSP430 Compiler 9.3.0.31
+
+
+TMS570LC4357_HDK_FreeRTOS_blinky
+================================
+
+For https://e2e.ti.com/support/microcontrollers/arm-based-microcontrollers-group/arm-based-microcontrollers/f/arm-based-microcontrollers-forum/1078724/tms570lc4357-configgenerate_run_time_stats
+
+Developed using:
+- CCS 11.2.0
+- HALCoGen 04.07.01
+- TI ARM v20.2.6
 
