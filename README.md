@@ -1208,3 +1208,24 @@ Developed using:
 - HALCoGen 04.07.01
 - TI ARM v20.2.6
 
+
+MSP432P401R_hello_bricker
+=========================
+
+For https://e2e.ti.com/support/microcontrollers/arm-based-microcontrollers-group/arm-based-microcontrollers/f/arm-based-microcontrollers-forum/1102506/msp432-debuggers-the-launchpad-401r-i-ve-been-using-has-been-discontinued-need-a-development-board-to-support-production-asap
+
+Developed using:
+- CCS 11.2.0
+- TI ARM v20.2.6
+
+Warning: The SystemInit() function in system_msp432p401r.c creates an invalid device configuration which after being flashed
+causes any further attempt to start a debug session to fail with the following errors:
+CORTEX_M4_0: * WARNING *: The connected device is not MSP432P401R
+CORTEX_M4_0: GEL Output: Memory Map Initialization Complete
+CORTEX_M4_0: GEL Output: Halting Watchdog Timer
+CORTEX_M4_0: Flash Programmer: Reading device TLV failed.
+CORTEX_M4_0: Error initializing flash programming: Your XMS432P401R material is no longer supported. We recommend you moving to production-quality MSP432P401R/M silicon by ordering samples at www.ti.com/product/MSP432P401R.
+
+This is example was created to test how to recover such a device failure.
+
+
