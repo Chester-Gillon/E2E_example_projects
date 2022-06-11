@@ -1229,3 +1229,12 @@ CORTEX_M4_0: Error initializing flash programming: Your XMS432P401R material is 
 This is example was created to test how to recover such a device failure.
 
 
+TM4C123_GNU_malloc_uartprintf
+=============================
+
+For https://e2e.ti.com/support/microcontrollers/arm-based-microcontrollers-group/arm-based-microcontrollers/f/arm-based-microcontrollers-forum/479812/ccs-gnu-c-compiler-and-linker-setup
+
+Developed using:
+- CCS 11.2.0
+- TivaWare 2.1.4.178
+- GNU ARM v4.9.3
