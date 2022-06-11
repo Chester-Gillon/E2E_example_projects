@@ -1,0 +1,4 @@
+This is an initialised string in the data segment at address 0x20000004
+global_instance at 0x2000101c initialised=0x0
+stack_instance at 0x20004248 initialised=0xfeedabba
+heap_instance at 0x20001a78 initialised=0xfeedabba
