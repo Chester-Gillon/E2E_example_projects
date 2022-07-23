@@ -471,8 +471,8 @@ For https://e2e.ti.com/support/development_tools/compiler/f/343/t/666898
 Developed using CCS 7.4 and TI MSP430 v17.9.0 and v18.1.0
 
 
-tcpEcho_EK_TM4C1294XL_TI_TivaTM4C1294NCPDT
-==========================================
+EK_TM4C1294XL_TI_TivaTM4C1294NCPDT_tcpEcho_dns
+==============================================
 
 For https://e2e.ti.com/support/microcontrollers/tiva_arm/f/908/t/666442
 
