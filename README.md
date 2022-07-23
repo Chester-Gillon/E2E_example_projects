@@ -1238,3 +1238,14 @@ Developed using:
 - CCS 11.2.0
 - TivaWare 2.1.4.178
 - GNU ARM v4.9.3
+
+
+EK_TM4C1294XL_TI_TivaTM4C1294NCPDT_tcpEcho_throughput
+=====================================================
+
+For https://e2e.ti.com/support/microcontrollers/arm-based-microcontrollers-group/arm-based-microcontrollers/f/arm-based-microcontrollers-forum/600028/tm4c1294kcpdt-throughput-test-in-tm4c1294-micro-controller/2206959#2206959
+
+Developed using:
+- CCS 12.0.0
+- tirtos_tivac_2_16_01_14
+- TI ARM compiler v17.3.0.STS
