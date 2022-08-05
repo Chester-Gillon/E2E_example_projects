@@ -65,7 +65,8 @@
 
 /* USER CODE BEGIN (2) */
 
-unsigned int num_interrupts;
+unsigned int num_interrupts_public;
+static unsigned int num_interrupts_static;
 #define CV_LENGTH 54
 unsigned short cv[CV_LENGTH];
 int cv_index;
@@ -125,7 +126,8 @@ void rtiNotification(uint32 notification)
 /*  enter user code between the USER CODE BEGIN and USER CODE END. */
     /* Toggle HET pin 0 */
     gioSetPort(hetPORT1, gioGetPort(hetPORT1) ^ 0x00000001);
-    num_interrupts++;
+    num_interrupts_public++;
+    num_interrupts_static++;
     cv[cv_index] += rtiGetCurrentTick (rtiCOMPARE0);
     cv_index = (cv_index + 1) % CV_LENGTH;
 }
