@@ -51,10 +51,14 @@
 #include <ti/ndk/inc/netmain.h>
 #include <ti/ndk/inc/_stack.h>
 
+#include <ti/ndk/inc/stack/inc/routeif.h>
+
 /* Example/Board Header file */
 #include "Board.h"
 
 #define NUMTCPWORKERS 3
+
+#define MAC_ADDR_LEN 6
 
 /*
  *  ======== tcpWorker ========
@@ -115,6 +119,11 @@ Void tcpHandler(UArg arg0, UArg arg1)
     char               client_ip_str[20];
     int                dns_rc;
     char               dns_buffer[512];
+    HANDLE             route_handle;
+    HANDLE             lli_handle;
+    unsigned char      mac_addr[MAC_ADDR_LEN];
+    uint32_t           lli_status;
+    uint32_t           mac_addr_index;
 
     server = socket(AF_INET, SOCK_STREAMNC, IPPROTO_TCP);
     if (server == INVALID_SOCKET) {
@@ -151,14 +160,37 @@ Void tcpHandler(UArg arg0, UArg arg1)
 
         System_printf("tcpHandler: Creating thread clientfd = %d  client IP=%s\n", clientfd,
                 inet_ntop (AF_INET, &clientAddr.sin_addr, client_ip_str, sizeof (client_ip_str)));
+        System_flush ();
+
+        /* Since want to find the route to obtain the client MAC address find only host routes (i.e. non gateway routes) */
+        route_handle = RtFind (FLG_RTF_HOST, clientAddr.sin_addr.s_addr);
+        if (route_handle != NULL)
+        {
+            /* Lookup the client MAC address Link Layer Information (LLI) Object associated with the link to the host */
+            lli_handle = RtGetLLI (route_handle);
+            if (lli_handle != NULL)
+            {
+                lli_status = LLIGetMacAddr (lli_handle, mac_addr, sizeof (mac_addr));
+                if (lli_status == 1)
+                {
+                    System_printf ("client MAC address=");
+                    for (mac_addr_index = 0; mac_addr_index < MAC_ADDR_LEN; mac_addr_index++)
+                    {
+                        System_printf ("%02x%c", mac_addr[mac_addr_index], (mac_addr_index < (MAC_ADDR_LEN - 1)) ? ':' : '\n');
+                    }
+                    System_flush ();
+                }
+            }
+        }
+
         dns_rc = DNSGetHostByAddr (clientAddr.sin_addr.s_addr, dns_buffer, sizeof (dns_buffer));
         if (dns_rc == 0)
         {
             const HOSTENT *const dns_info = (const HOSTENT *) dns_buffer;
 
             System_printf ("tcpHandler: Connected hostname = %s\n", dns_info->h_name);
+            System_flush ();
         }
-        System_flush ();
 
         /* Init the Error_Block */
         Error_init(&eb);
